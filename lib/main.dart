@@ -53,36 +53,42 @@ class MainBody extends StatelessWidget {
   }
 
   Widget customListView(BuildContext context) {
-    Widget column = Expanded(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Card(
-              child: ListTile(
-                leading: Icon(Icons.computer),
-                title: Text("computer"),
-                subtitle: Text('subtitle'),
-              ),
-            )
-          ],
-        )
-    );
+    return Column(
+      children: [
+        Text(
+          'Title',
+          style: TextStyle(fontSize: 20),
+        ),
+        Expanded(
+            child: ListView.builder(
+                scrollDirection: Axis.horizontal,
 
-    return ListView.builder(
-        itemBuilder: (context, index) {
-          return Card(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  column,
-                  column,
-                  column,
-                ],
-              ),
+                itemBuilder: (context, index) {
+                  return Card(
+                    child: Center(
+                        child: Text('card text$index')),
+                  );
+                }
             ),
-          );
-        }
+        ),
+        Text(
+          'title 2',
+          style: TextStyle(fontSize: 20),
+        ),
+        Expanded(
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemBuilder: (ctx, idx) {
+                  return Card(
+                    child: ListTile(
+                      title: Text('card 2 $idx'),
+                      subtitle: Text('subtitle'),
+                    ),
+                  );
+                }
+            )
+        )
+      ],
     );
   }
 }
