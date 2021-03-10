@@ -1,5 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:podo_words/titleItem.dart';
 
 void main() => runApp(MyApp());
 
@@ -38,36 +38,48 @@ class MainBody extends StatelessWidget {
     return customListView(context);
   }
 
-  Widget exampleListView(BuildContext context) {
-    return ListView.builder(
-      itemCount: list.length,
-      itemBuilder: (context, index) {
-        return Card(
-          child: ListTile(
-            leading: Icon(icons[index]),
-            title: Text(list[index]),
-          ),
-        );
-      },
-    );
-  }
-
   Widget customListView(BuildContext context) {
+
+    Widget titleCard(context, index) {
+      return Container(
+        width: 200,
+        margin: EdgeInsets.only(right: 10.0),
+        child: GestureDetector(
+          onTap: (){print('titleCard clicked : $index');},
+          child: Card(
+            child: Container(
+              color: Colors.yellow,
+              child: Column(
+                children: [
+                  Text('title'),
+                  ListTile(
+                    leading: Icon(Icons.title),
+                    title: Text(list[index]),
+                    subtitle: Text('index$index'),
+                    trailing: Icon(Icons.more_vert),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
     return Column(
       children: [
         Text(
           'Title',
           style: TextStyle(fontSize: 20),
         ),
-        Expanded(
+        Container(
+          margin: EdgeInsets.all(10.0),
+          height: 200,
             child: ListView.builder(
+                itemCount: list.length,
                 scrollDirection: Axis.horizontal,
-
                 itemBuilder: (context, index) {
-                  return Card(
-                    child: Center(
-                        child: Text('card text$index')),
-                  );
+                  return titleCard(context, index);
                 }
             ),
         ),
@@ -77,16 +89,40 @@ class MainBody extends StatelessWidget {
         ),
         Expanded(
             child: ListView.builder(
-              shrinkWrap: true,
               itemBuilder: (ctx, idx) {
-                  return Card(
-                    child: ListTile(
-                      title: Text('card 2 $idx'),
-                      subtitle: Text('subtitle'),
+                  return Container(
+                    margin: EdgeInsets.symmetric(horizontal: 10.0),
+                    height: 80.0,
+                    child: GestureDetector(
+                      onPanUpdate: (detail) {
+                        if(detail.delta.dx > 0) {
+                          print('오른쪽 스와이프 : $idx');
+                        } else {
+                          print('왼쪽 스와이프 : $idx');
+                        }
+                      },
+                      child: Card(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('card 2 $idx'),
+                            Text('subtitle'),
+                          ],
+                        ),
+                      ),
                     ),
                   );
                 }
             )
+        ),
+        Container(
+          margin: EdgeInsets.symmetric(vertical: 10.0),
+          child: ElevatedButton(
+              onPressed: (){
+                print('btn Clicked');
+                },
+              child: Text('learn!')
+          ),
         )
       ],
     );
