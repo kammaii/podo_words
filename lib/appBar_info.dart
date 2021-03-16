@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 
-class AppBarInfo extends StatelessWidget {
+class AppBarInfo {
 
-  AppBarInfo();
-  
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(title:
-    Text('podo_words'),
+  String title;
+
+  AppBarInfo(String title) {
+    this.title = title;
+  }
+
+  AppBar getAppBar() {
+    return AppBar(
+      title: Text(title),
       actions: <Widget>[
         IconButton(
           icon: Icon(
@@ -15,6 +18,7 @@ class AppBarInfo extends StatelessWidget {
             color: Colors.white,
           ),
           onPressed: () {
+
           },
         ),
         IconButton(
