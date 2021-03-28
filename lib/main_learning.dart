@@ -79,6 +79,7 @@ class _MainLearningState extends State<MainLearning> {
       expandedHeight: 200.0,
       pinned: true,
       floating: true,
+      snap: true,
       //flexibleSpace: Image.asset('assets/', fit: BoxFit.cover,),
       title: Text('Seoul'),
       flexibleSpace: titleList(),
@@ -116,6 +117,8 @@ class _MainLearningState extends State<MainLearning> {
     );
   }
 }
+
+// todo: 아래는 삭제하기
 
 class MainBody extends StatelessWidget {
   final list = ['sun', 'mon', 'tue'];

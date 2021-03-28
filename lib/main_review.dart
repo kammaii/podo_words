@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:podo_words/appBar_info.dart';
+import 'package:podo_words/wordListItem.dart';
 
 
 class MainReview extends StatefulWidget {
@@ -11,8 +12,8 @@ class MainReview extends StatefulWidget {
 class _MainReviewState extends State<MainReview> {
   @override
   Widget build(BuildContext context) {
-    List<String> listA = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K'];
-    List<String> listB = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k'];
+    List<String> listA = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N'];
+    List<String> listB = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n'];
 
     return Scaffold(
       appBar: new AppBarInfo('Review').getAppBar(),
@@ -40,7 +41,46 @@ class _MainReviewState extends State<MainReview> {
                 Text('0/0')
               ],
             ),
-
+            Expanded(
+              child: ListView.separated (
+                shrinkWrap: true,
+                itemCount: listA.length,
+                itemBuilder: (context, index) {
+                  return WordListItem(listA[index], listB[index]);
+                },
+                separatorBuilder: (context, index) {
+                  return Divider();
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text('Select learning mode'),
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    child: Text('Flashcard'),
+                  ),
+                ),
+                SizedBox(
+                  width: 10.0,
+                ),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    child: Text('Quiz'),
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),
