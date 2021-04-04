@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:podo_words/main_learning_Sliver.dart';
 import 'package:podo_words/words.dart';
 
 class MainLearning extends StatelessWidget {
-  
-  final List<String> title = Words().getTitle();
+
+  final Words words = new Words();
+
 
   @override
   Widget build(BuildContext context) {
+
+    List<String> title = words.getTitle();
+    List<String> titleImage = words.getTitleImage();
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -28,12 +34,22 @@ class MainLearning extends StatelessWidget {
                       mainAxisSpacing: 10.0,
                     ),
                     itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: (){print('GridView clicked : $index');},
+                      return InkWell(
+                        onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => MainLearningSliver(index, titleImage[index])));},
                         child: Container(
                           color: Colors.yellow,
-                          child: Center(
-                            child: FlutterLogo()),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('$index'),
+                              Expanded(
+                                child: Hero(
+                                  child: Image.network(titleImage[index]),
+                                  tag: 'wordTitleImage$index',
+                                ),
+                              ),
+                            ],
+                          ) ,
                         ),
                       );
                     }

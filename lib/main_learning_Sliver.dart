@@ -2,10 +2,19 @@ import 'package:flutter/material.dart';
 
 class MainLearningSliver extends StatelessWidget {
 
+  final int index;
+  final String titleImage;
+
+  MainLearningSliver(this.index, this.titleImage);
+
+
   Widget wordTitle() {
     return Container(
       height: 200.0,
-      child: FlutterLogo(),
+      child: Hero(
+          tag: 'wordTitleImage$index',
+          child: Image.network(titleImage)
+      ),
     );
   }
 
