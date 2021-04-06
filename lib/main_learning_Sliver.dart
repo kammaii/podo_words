@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:podo_words/main_bottom.dart';
+import 'package:podo_words/main_learning.dart';
 import 'package:podo_words/words.dart';
 
 class MainLearningSliver extends StatefulWidget {
@@ -17,6 +18,7 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
   ScrollController scrollController;
   final double sliverAppBarHeight = 200.0;
   final double sliverAppBarMinimumHeight = 60.0;
+  final double sliverAppBarStretchOffset = 100.0;
 
 
   @override
@@ -24,7 +26,6 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
     super.initState();
     scrollController = new ScrollController();
     scrollController.addListener(() => setState(() {
-      print('setState!');
     }));
   }
 
@@ -40,8 +41,6 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
 
     double topMargin = sliverAppBarHeight - 60.0;
     if(scrollController.hasClients) {
-      print('topMargin: $topMargin');
-      print('offset: ${scrollController.offset}');
       if(sliverAppBarHeight - scrollController.offset > sliverAppBarMinimumHeight) {
         topMargin -= scrollController.offset;
       } else {
@@ -54,6 +53,7 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
         child: Stack(
           children: [
             CustomScrollView(
+              physics: BouncingScrollPhysics(),
               controller: scrollController,
               slivers: [
                 sliverAppBar(),
@@ -81,12 +81,18 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
   }
 
   Widget wordTitle() {
-    return Container(
+    return FlexibleSpaceBar (
+      title: Text('wordTitle'),
       //height: 200.0,
-      child: Hero(
+      background: Hero(
           tag: 'wordTitleImage${widget.index}',
           child: Image.network(widget.titleImage, fit: BoxFit.cover,)
       ),
+      stretchModes: [
+        StretchMode.zoomBackground,
+        StretchMode.fadeTitle,
+        StretchMode.blurBackground
+      ],
     );
   }
 
@@ -117,12 +123,18 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
 
   sliverAppBar() {
     return SliverAppBar(
-      //
-      // backgroundColor: Colors.green,
       expandedHeight: sliverAppBarHeight,
       pinned: true,
       floating: true,
       snap: true,
+      stretch: true,
+      stretchTriggerOffset: sliverAppBarStretchOffset,
+      onStretchTrigger: (){
+        print('스트레치 트리거');
+        //Navigator.pop(context);
+        //todo: 이전 페이지로 넘어가기 안됨
+        return;
+      },
       //flexibleSpace: Image.asset('assets/', fit: BoxFit.cover,),
       title: Text(Words().title[widget.index]),
       flexibleSpace: wordTitle(),
