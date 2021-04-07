@@ -109,12 +109,17 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
           }
         },
         child: Card(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('front $index'),
-              Text('back'),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Icon(Icons.icecream),
+                SizedBox(width: 10.0),
+                Expanded(child: Text('front $index')),
+                Expanded(child: Text('back')),
+              ],
+            ),
           ),
         ),
       ),
