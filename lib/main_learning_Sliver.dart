@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:podo_words/learning_words.dart';
 import 'package:podo_words/main_bottom.dart';
 import 'package:podo_words/main_learning.dart';
+import 'package:podo_words/wordTitles.dart';
 import 'package:podo_words/words.dart';
 
 class MainLearningSliver extends StatefulWidget {
@@ -67,7 +69,9 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
                 width: 50.0,
                 child: FittedBox(
                   child: FloatingActionButton(
-                    onPressed: (){print('FAB clicked');},
+                    onPressed: (){
+                      print('FAB clicked');
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => LearningWords(widget.index)));},
                     child: Icon(Icons.play_arrow, size: 30.0,),
                   ),
                 ),
@@ -141,7 +145,7 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
         return;
       },
       //flexibleSpace: Image.asset('assets/', fit: BoxFit.cover,),
-      title: Text(Words().title[widget.index]),
+      title: Text(WordTitles().title[widget.index]),
       flexibleSpace: wordTitle(),
       bottom: PreferredSize(
         preferredSize: Size.fromHeight(sliverAppBarMinimumHeight),

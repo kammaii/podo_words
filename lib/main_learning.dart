@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:podo_words/main_bottom.dart';
 import 'package:podo_words/main_learning_Sliver.dart';
-import 'package:podo_words/words.dart';
+import 'package:podo_words/wordTitles.dart';
 
 class MainLearning extends StatelessWidget {
 
-  final Words words = new Words();
+  final WordTitles wordTitles = new WordTitles();
 
 
   @override
   Widget build(BuildContext context) {
 
-    List<String> title = words.getTitle();
-    List<String> titleImage = words.getTitleImage();
+    List<String> title = wordTitles.getTitle();
+    List<String> titleImage = wordTitles.getTitleImage();
 
     return Scaffold(
       body: Padding(
