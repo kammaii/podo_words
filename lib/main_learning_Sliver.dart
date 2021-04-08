@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:podo_words/learning_words.dart';
 import 'package:podo_words/main_bottom.dart';
-import 'package:podo_words/main_learning.dart';
+import 'package:podo_words/wordListItem.dart';
 import 'package:podo_words/wordTitles.dart';
 import 'package:podo_words/words.dart';
+import 'package:swipe_to/swipe_to.dart';
 
 class MainLearningSliver extends StatefulWidget {
 
-  final int index;
-  final String titleImage;
+  int index;
+  String titleImage;
+  Words words;
 
-  MainLearningSliver(this.index, this.titleImage);
+  MainLearningSliver(int index, String titleImage) {
+   this.index = index;
+   this.titleImage = titleImage;
+   this.words = Words(index);
+  }
 
   @override
   _MainLearningSliverState createState() => _MainLearningSliverState();
@@ -104,28 +110,13 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 10.0),
       height: 80.0,
-      child: GestureDetector(
-        onPanUpdate: (detail) {
-          if(detail.delta.dx > 0) {
-            print('오른쪽 스와이프 : $index');
-          } else {
-            print('왼쪽 스와이프 : $index');
-          }
-        },
-        child: Card(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Icon(Icons.icecream),
-                SizedBox(width: 10.0),
-                Expanded(child: Text('front $index')),
-                Expanded(child: Text('back')),
-              ],
-            ),
-          ),
-        ),
+      child: SwipeTo(
+        onRightSwipe: () => print('right swipe'),
+        onLeftSwipe: () => print('left swipe'),
+        rightSwipeWidget: Icon(Icons.add),
+        leftSwipeWidget: Icon(Icons.arrow_back),
+
+        child: WordListItem(widget.words.front[index], widget.words.back[index])
       ),
     );
   }
@@ -160,7 +151,7 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
             (context, index) {
           return wordsList(context, index);
         },
-        childCount: 20,
+        childCount: widget.words.front.length,
       ),
     );
   }

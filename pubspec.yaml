@@ -24,6 +24,7 @@ dependencies:
   flutter:
     sdk: flutter
   percent_indicator: "^2.1.7+2"
+  swipe_to: 0.0.1+8
 
 
   # The following adds the Cupertino Icons font to your application.

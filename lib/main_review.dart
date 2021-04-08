@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:podo_words/appBar_info.dart';
 import 'package:podo_words/main_bottom.dart';
 import 'package:podo_words/wordListItem.dart';
+import 'package:podo_words/words_my.dart';
+import 'package:swipe_to/swipe_to.dart';
 
 
 class MainReview extends StatefulWidget {
@@ -13,9 +14,8 @@ class MainReview extends StatefulWidget {
 class _MainReviewState extends State<MainReview> {
   @override
   Widget build(BuildContext context) {
-    List<String> listA = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N'];
-    List<String> listB = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n'];
     List<bool> toggleBtnSelections = List.generate(3, (_) => false);
+    MyWords myWords = MyWords();
 
     return Scaffold(
       body: SafeArea(
@@ -82,22 +82,25 @@ class _MainReviewState extends State<MainReview> {
                 ),
               ),
               Expanded(
-                child: ListView.separated (
-                  shrinkWrap: true,
-                  itemCount: listA.length,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      child: WordListItem(listA[index], listB[index]),
-                      onTap: () {
-                        print('item tapped : $index');
-                      },
-                      onLongPress: () {
-                        print('long pressed : $index');
-                      },
-                    );
-                  },
-                  separatorBuilder: (context, index) {
-                    return Divider();
+                child: GestureDetector(
+                  child: ListView.separated (
+                    shrinkWrap: true,
+                    itemCount: myWords.front.length,
+                    itemBuilder: (context, index) {
+                      return SwipeTo(
+                        child: WordListItem(myWords.front[index], myWords.back[index]),
+                        onRightSwipe: () => print('right swipe'),
+                        onLeftSwipe: () => print('left swipe'),
+                        rightSwipeWidget: Icon(Icons.add),
+                        leftSwipeWidget: Icon(Icons.arrow_back),
+                      );
+                    },
+                    separatorBuilder: (context, index) {
+                      return Divider();
+                    },
+                  ),
+                  onLongPress: () {
+                    print('long pressed');
                   },
                 ),
               ),

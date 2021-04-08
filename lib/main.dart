@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:podo_words/learning_words.dart';
 import 'package:podo_words/main_learning.dart';
 
 
