@@ -1,5 +1,7 @@
 
+// todo: words.dart 와 통합하기
 
+import 'package:podo_words/SamplePictures.dart';
 
 class WordTitles {
 
@@ -13,7 +15,7 @@ class WordTitles {
   void setTitle() {
     for(int i=0; i<20; i++) {
       title.add('title$i');
-      titleImage.add('https://picsum.photos/300/300?image=$i');
+      titleImage = SamplePictures(20).getSamplePictures();
     }
   }
 

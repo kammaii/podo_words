@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:podo_words/SamplePictures.dart';
 import 'package:podo_words/words.dart';
 
 class LearningWords extends StatefulWidget {
@@ -16,12 +18,18 @@ class LearningWords extends StatefulWidget {
 class _LearningWordsState extends State<LearningWords> {
   final List<bool> toggleList = List.generate(2, (_) => false);
   Words words;
-  int wordIndex;
+  int wordIndex = 0;
+  String front;
+  String back;
+  List<String> image;
 
   @override
   Widget build(BuildContext context) {
     words = Words(widget.lessonIndex);
-    wordIndex = 0;
+    front = words.getFront()[wordIndex];
+    back = words.getBack()[wordIndex];
+    image = words.getImage();
+
 
     return Scaffold(
       body: Padding(
@@ -78,9 +86,38 @@ class _LearningWordsState extends State<LearningWords> {
                     )
                   ],
                 ),
-                Image.asset('images/sample.png'),
-                Text(words.getFront()[wordIndex], textScaleFactor: 3,),
-                Text(words.getPronunciation()[wordIndex], textScaleFactor: 2,),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Swiper(
+                      itemBuilder: (context, index) {
+                        return Image.network(image[index]);
+                      },
+                      itemCount: image.length,
+                      pagination: SwiperPagination(),
+                      control: SwiperControl(),
+                      viewportFraction: 0.8,
+                      scale: 0.9,
+                    )
+
+
+                  ),
+                ),
+                AnimatedSwitcher(
+                  child: Text(
+                    front,
+                    textScaleFactor: 3,
+                    key: ValueKey<String>(front),
+                  ),
+                  duration: const Duration(milliseconds: 500),
+                  transitionBuilder: (Widget child, Animation<double> animation) {
+                    return ScaleTransition(child: child, scale: animation);
+                  },
+                ),
+                Text(
+                  words.getPronunciation()[wordIndex],
+                  textScaleFactor: 2,
+                ),
                 IconButton(
                   icon: Icon(Icons.play_circle_outline),
                   iconSize: 150.0,
@@ -90,20 +127,24 @@ class _LearningWordsState extends State<LearningWords> {
             ),
             onPanUpdate: (detail) {
               if (detail.delta.dx > 0) {
-                print('오른쪽 스와이프');
-                if(wordIndex < words.getFront().length - 1) {
-                  wordIndex++;
+
+                if(wordIndex > 0) {
+                  wordIndex--;
+                  print('오른쪽 스와이프');
+
                 } else {
                   //todo: 퀴즈로 이동
                 }
+
               } else {
-                print('왼쪽 스와이프');
-                if(wordIndex > 0) {
-                  wordIndex--;
+                if(wordIndex < words.getFront().length - 1) {
+                  wordIndex++;
+                  print('왼쪽 스와이프');
                 }
               }
               setState(() {
                 //todo: 단어 변경
+                front = words.getFront()[wordIndex];
               });
             },
           ),
