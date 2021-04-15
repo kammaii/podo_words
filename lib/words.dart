@@ -54,7 +54,7 @@ class Words {
       String testPronunciation = "";
       String testImage = "";
 
-      for(int j=0; j<5; j++) {
+      for(int j=0; j<10; j++) {
         testFront += '$FRONT$i$j ';
         testBack += '$BACK$i$j ';
         testPronunciation += '$PRONUNCIATION$i$j ';

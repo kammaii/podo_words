@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:podo_words/main_bottom.dart';
@@ -108,7 +109,32 @@ class _MainReviewState extends State<MainReview> {
           ),
         ),
       ),
-      bottomNavigationBar: MainBottom(context).getMainBottom()
+      bottomNavigationBar: MainBottom(context).getMainBottom(),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.play_arrow),
+        onPressed: (){
+          showCupertinoModalPopup(
+            context: context,
+            builder: (_) => CupertinoActionSheet(
+              message: Text('Select review mode', textScaleFactor: 2,),
+              actions: [
+                CupertinoActionSheetAction(
+                  child: Text('quiz'),
+                  onPressed: (){},
+                ),
+                CupertinoActionSheetAction(
+                  child: Text('flash card'),
+                  onPressed: (){},
+                )
+              ],
+              cancelButton: CupertinoActionSheetAction(
+                child: Text('cancel'),
+                onPressed: (){Navigator.pop(context);},
+              ),
+            )
+          );
+        },
+      ),
     );
   }
 }
