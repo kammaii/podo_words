@@ -1,71 +1,102 @@
-
-
-
-import 'package:podo_words/SamplePictures.dart';
+import 'dart:core';
 
 class Words {
 
-  int titleLength = 20; // todo: title.length 로 변경하기
-  List<String> title = []; //todo: title 과 titleImage 넣기
-  List<String> titleImage = [];
-
-  int index;
-  List<String> image;
+  String title;
+  String titleImage;
   List<String> front;
   List<String> back;
+  List<String> image;
   List<String> pronunciation;
-  List<String> audio;
 
-  Words(this.index) {
-    //setTitle(); //todo: 삭제하기
+  static const TITLE = 'title';
+  static const TITLE_IMAGE = 'titleImage';
+  static const FRONT = 'front';
+  static const BACK = 'back';
+  static const IMAGE = 'image';
+  static const PRONUNCIATION = 'pronunciation';
 
-    if(index != null) {
-      switch(index) {
-        case 0 :
-          front = ['f0_0', 'f0_1', 'f0_2'];
-          back = ['b0_0', 'b0_1', "b0_2"];
-          pronunciation = ['p0_0', 'p0_1', 'p0_2'];
-          image = SamplePictures(3).getSamplePictures();
-          break;
+  List<Map<String, String>> words = [];
+    /*
+    {
+      'title' : 'title0',
+      'titleImage' : 'titleImage0',
+      'front' : 'front0 front1 front2',
+      'back' : 'back0 back1 back2',
+      'image' : 'image0 image1 image2',
+      'pronunciation' : 'pro0 pro1 pro2'
+    },
+    {
+      'title' : 'title0',
+      'titleImage' : 'titleImage0',
+      'front' : 'front0 front1 front2',
+      'back' : 'back0 back1 back2',
+      'image' : 'image0 image1 image2',
+      'pronunciation' : 'pro0 pro1 pro2'
+    },
+  ];
 
-        case 1 :
-          front = ['f1_0', 'f1_1', 'f1_2'];
-          back = ['b1_0', 'b1_1', "b1_2"];
-          pronunciation = ['p1_0', 'p1_1', 'p1_2'];
-          image = SamplePictures(3).getSamplePictures();
-          break;
+     */
+
+  // todo: 테스트용임. 삭제할 것
+  Words() {
+    setWords();
+  }
+
+  // todo: 테스트용임. 삭제할 것
+  void setWords() {
+    for(int i=0; i<20; i++) {
+      Map<String, String> title = {TITLE : '$TITLE$i', TITLE_IMAGE : 'https://picsum.photos/300/300?image=${i+50}'};
+      words.add(title);
+
+      String testFront = "";
+      String testBack = "";
+      String testPronunciation = "";
+      String testImage = "";
+
+      for(int j=0; j<5; j++) {
+        testFront += '$FRONT$i$j ';
+        testBack += '$BACK$i$j ';
+        testPronunciation += '$PRONUNCIATION$i$j ';
+        testImage += 'https://picsum.photos/300/300?image=${j+50} ';
       }
+      words[i][FRONT] = testFront;
+      words[i][BACK] = testBack;
+      words[i][PRONUNCIATION] = testPronunciation;
+      words[i][IMAGE] = testImage;
     }
   }
 
-  void setTitle() {
-    for(int i=0; i < titleLength; i++) {
-      title.add('title$i');
+  List<String> titles = [];
+  List<String> titleImages = [];
+
+  List<String> getTitles() {
+    for(int i=0; i< words.length; i++) {
+      titles.add(words[i][TITLE]);
     }
-    titleImage = SamplePictures(titleLength).getSamplePictures();
+    return titles;
   }
 
-  List<String> getTitle() {
-    return title;
+  List<String> getTitleImages() {
+    for(int i=0; i< words.length; i++) {
+      titleImages.add(words[i][TITLE_IMAGE]);
+    }
+    return titleImages;
   }
 
-  List<String> getTitleImage() {
-    return titleImage;
-  }
 
-  List<String> getFront() {
-    return front;
-  }
 
-  List<String> getBack() {
-    return back;
-  }
-
-  List<String> getImage() {
-    return image;
-  }
-
-  List<String> getPronunciation() {
-    return pronunciation;
+  Words getWords(int index) {
+    this.front = words[index][FRONT].split(" ");
+    this.back = words[index][BACK].split(" ");
+    this.image = words[index][IMAGE].split(" ");
+    this.pronunciation = words[index][PRONUNCIATION].split(" ");
+    this.title = words[index][TITLE];
+    this.titleImage = words[index][TITLE_IMAGE];
+    this.front.removeAt(front.length-1);
+    this.back.removeAt(back.length-1);
+    this.image.removeAt(image.length-1);
+    this.pronunciation.removeAt(pronunciation.length-1);
+    return this;
   }
 }

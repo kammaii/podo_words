@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
-import 'package:podo_words/SamplePictures.dart';
 import 'package:podo_words/words.dart';
 
 class LearningWords extends StatefulWidget {
@@ -25,11 +24,10 @@ class _LearningWordsState extends State<LearningWords> {
 
   @override
   Widget build(BuildContext context) {
-    words = Words(widget.lessonIndex);
-    front = words.getFront()[wordIndex];
-    back = words.getBack()[wordIndex];
-    image = words.getImage();
-
+    words = Words().getWords(widget.lessonIndex);
+    front = words.front[wordIndex];
+    back = words.back[wordIndex];
+    image = words.image;
 
     return Scaffold(
       body: Padding(
@@ -98,6 +96,12 @@ class _LearningWordsState extends State<LearningWords> {
                       control: SwiperControl(),
                       viewportFraction: 0.8,
                       scale: 0.9,
+                      onIndexChanged: (index) {
+                        setState(() {
+                          //todo: 단어 변경
+                          wordIndex = index;
+                        });
+                      },
                     )
 
 
@@ -115,7 +119,7 @@ class _LearningWordsState extends State<LearningWords> {
                   },
                 ),
                 Text(
-                  words.getPronunciation()[wordIndex],
+                  back,
                   textScaleFactor: 2,
                 ),
                 IconButton(
@@ -137,15 +141,11 @@ class _LearningWordsState extends State<LearningWords> {
                 }
 
               } else {
-                if(wordIndex < words.getFront().length - 1) {
+                if(wordIndex < words.front.length - 1) {
                   wordIndex++;
                   print('왼쪽 스와이프');
                 }
               }
-              setState(() {
-                //todo: 단어 변경
-                front = words.getFront()[wordIndex];
-              });
             },
           ),
         ),

@@ -2,21 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:podo_words/learning_words.dart';
 import 'package:podo_words/main_bottom.dart';
 import 'package:podo_words/wordListItem.dart';
-import 'package:podo_words/wordTitles.dart';
 import 'package:podo_words/words.dart';
 import 'package:swipe_to/swipe_to.dart';
 
 class MainLearningSliver extends StatefulWidget {
 
-  int index;
-  String titleImage;
-  Words words;
+  final int index;
 
-  MainLearningSliver(int index, String titleImage) {
-   this.index = index;
-   this.titleImage = titleImage;
-   this.words = Words(index);
-  }
+  MainLearningSliver(this.index);
 
   @override
   _MainLearningSliverState createState() => _MainLearningSliverState();
@@ -27,6 +20,8 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
   final double sliverAppBarHeight = 200.0;
   final double sliverAppBarMinimumHeight = 60.0;
   final double sliverAppBarStretchOffset = 100.0;
+
+  Words words;
 
 
   @override
@@ -46,6 +41,8 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
 
   @override
   Widget build(BuildContext context) {
+
+    words = Words().getWords(widget.index);
 
     double topMargin = sliverAppBarHeight - 60.0;
     if(scrollController.hasClients) {
@@ -96,7 +93,7 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
       //height: 200.0,
       background: Hero(
           tag: 'wordTitleImage${widget.index}',
-          child: Image.network(widget.titleImage, fit: BoxFit.cover,)
+          child: Image.network(words.titleImage, fit: BoxFit.cover,)
       ),
       stretchModes: [
         StretchMode.zoomBackground,
@@ -116,7 +113,7 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
         rightSwipeWidget: Icon(Icons.add),
         leftSwipeWidget: Icon(Icons.arrow_back),
 
-        child: WordListItem(widget.words.front[index], widget.words.back[index])
+        child: WordListItem(words.front[index], words.back[index])
       ),
     );
   }
@@ -136,7 +133,7 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
         return;
       },
       //flexibleSpace: Image.asset('assets/', fit: BoxFit.cover,),
-      title: Text(WordTitles().title[widget.index]),
+      title: Text(words.title),
       flexibleSpace: wordTitle(),
       bottom: PreferredSize(
         preferredSize: Size.fromHeight(sliverAppBarMinimumHeight),
@@ -151,7 +148,7 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
             (context, index) {
           return wordsList(context, index);
         },
-        childCount: widget.words.front.length,
+        childCount: words.getWords(widget.index).front.length,
       ),
     );
   }
