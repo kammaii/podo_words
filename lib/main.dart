@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:podo_words/learning_words_complete.dart';
+import 'package:podo_words/learning_words_quiz1.dart';
+import 'package:podo_words/learning_words_quiz2.dart';
+import 'package:podo_words/learning_words_quiz3.dart';
 import 'package:podo_words/main_learning.dart';
 
 
@@ -12,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue
       ),
-      home: new MainLearning(),
+      home: new LearningWordsComplete(),
     );
   }
 }
