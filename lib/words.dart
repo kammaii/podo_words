@@ -16,7 +16,7 @@ class Words {
   static const IMAGE = 'image';
   static const PRONUNCIATION = 'pronunciation';
 
-  List<Map<String, String>> words = [];
+  List<Map<String, List<String>>> words = [];
     /*
     {
       'title' : 'title0',
@@ -46,19 +46,21 @@ class Words {
   // todo: 테스트용임. 삭제할 것
   void setWords() {
     for(int i=0; i<20; i++) {
-      Map<String, String> title = {TITLE : '$TITLE$i', TITLE_IMAGE : 'https://picsum.photos/300/300?image=${i+50}'};
-      words.add(title);
+      List<String> title = ['$TITLE$i'];
+      List<String> titleImage = ['https://picsum.photos/300/300?image=${i+50}'];
+      Map<String, List<String>> titleInfo = {TITLE : title, TITLE_IMAGE : titleImage};
+      words.add(titleInfo);
 
-      String testFront = "";
-      String testBack = "";
-      String testPronunciation = "";
-      String testImage = "";
+      List<String> testFront = [];
+      List<String> testBack = [];
+      List<String> testPronunciation = [];
+      List<String> testImage = [];
 
       for(int j=0; j<10; j++) {
-        testFront += '$FRONT$i$j ';
-        testBack += '$BACK$i$j ';
-        testPronunciation += '$PRONUNCIATION$i$j ';
-        testImage += 'https://picsum.photos/300/300?image=${j+50} ';
+        testFront.add('$FRONT$i$j');
+        testBack.add('$BACK$i$j');
+        testPronunciation.add('$PRONUNCIATION$i$j');
+        testImage.add('https://picsum.photos/300/300?image=${j+50}');
       }
       words[i][FRONT] = testFront;
       words[i][BACK] = testBack;
@@ -72,14 +74,14 @@ class Words {
 
   List<String> getTitles() {
     for(int i=0; i< words.length; i++) {
-      titles.add(words[i][TITLE]);
+      titles.add(words[i][TITLE][0]);
     }
     return titles;
   }
 
   List<String> getTitleImages() {
     for(int i=0; i< words.length; i++) {
-      titleImages.add(words[i][TITLE_IMAGE]);
+      titleImages.add(words[i][TITLE_IMAGE][0]);
     }
     return titleImages;
   }
@@ -87,16 +89,12 @@ class Words {
 
 
   Words getWords(int index) {
-    this.front = words[index][FRONT].split(" ");
-    this.back = words[index][BACK].split(" ");
-    this.image = words[index][IMAGE].split(" ");
-    this.pronunciation = words[index][PRONUNCIATION].split(" ");
-    this.title = words[index][TITLE];
-    this.titleImage = words[index][TITLE_IMAGE];
-    this.front.removeAt(front.length-1);
-    this.back.removeAt(back.length-1);
-    this.image.removeAt(image.length-1);
-    this.pronunciation.removeAt(pronunciation.length-1);
+    this.front = words[index][FRONT];
+    this.back = words[index][BACK];
+    this.image = words[index][IMAGE];
+    this.pronunciation = words[index][PRONUNCIATION];
+    this.title = words[index][TITLE][0];
+    this.titleImage = words[index][TITLE_IMAGE][0];
     return this;
   }
 }
