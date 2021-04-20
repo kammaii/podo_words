@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:podo_words/active_words.dart';
 import 'package:podo_words/main_bottom.dart';
 import 'package:podo_words/wordListItem.dart';
 import 'package:podo_words/words_my.dart';
@@ -13,10 +14,14 @@ class MainReview extends StatefulWidget {
 }
 
 class _MainReviewState extends State<MainReview> {
+
+  List<bool> activeList;
+
   @override
   Widget build(BuildContext context) {
     List<bool> toggleBtnSelections = List.generate(3, (_) => false);
     MyWords myWords = MyWords();
+    activeList = ActiveWords().getWordsActiveList(myWords.front);
 
     return Scaffold(
       body: SafeArea(
@@ -89,7 +94,7 @@ class _MainReviewState extends State<MainReview> {
                     itemCount: myWords.front.length,
                     itemBuilder: (context, index) {
                       return SwipeTo(
-                        child: WordListItem(myWords.front[index], myWords.back[index]),
+                        child: WordListItem(myWords.front[index], myWords.back[index], activeList[index]),
                         onRightSwipe: () => print('right swipe'),
                         onLeftSwipe: () => print('left swipe'),
                         rightSwipeWidget: Icon(Icons.add),

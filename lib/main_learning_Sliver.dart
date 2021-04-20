@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:podo_words/active_words.dart';
 import 'package:podo_words/learning_words.dart';
 import 'package:podo_words/main_bottom.dart';
 import 'package:podo_words/wordListItem.dart';
@@ -22,6 +23,8 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
   final double sliverAppBarStretchOffset = 100.0;
 
   Words words;
+  ActiveWords activeWords;
+  List<bool> activeList;
 
 
   @override
@@ -43,6 +46,8 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
   Widget build(BuildContext context) {
 
     words = Words().getWords(widget.index);
+    activeWords = ActiveWords();
+    activeList = activeWords.getWordsActiveList(words.front);
 
     double topMargin = sliverAppBarHeight - 60.0;
     if(scrollController.hasClients) {
@@ -108,12 +113,22 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
       margin: EdgeInsets.symmetric(horizontal: 10.0),
       height: 80.0,
       child: SwipeTo(
-        onRightSwipe: () => print('right swipe'),
-        onLeftSwipe: () => print('left swipe'),
+        onRightSwipe: () {
+          activeWords.addInActiveWord(words.front[index]);
+          setState(() {
+
+          });
+        },
+        onLeftSwipe: () {
+          activeWords.removeInActiveWord(words.front[index]);
+          setState(() {
+
+          });
+        },
         rightSwipeWidget: Icon(Icons.add),
         leftSwipeWidget: Icon(Icons.arrow_back),
 
-        child: WordListItem(words.front[index], words.back[index])
+        child: WordListItem(words.front[index], words.back[index], activeList[index])
       ),
     );
   }
