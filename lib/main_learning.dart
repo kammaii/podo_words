@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:podo_words/main_bottom.dart';
-import 'package:podo_words/main_learning_Sliver.dart';
+import 'package:podo_words/main_learning_sliver.dart';
 import 'package:podo_words/words.dart';
 
 class MainLearning extends StatelessWidget {

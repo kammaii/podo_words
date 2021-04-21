@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:podo_words/active_words.dart';
+import 'package:podo_words/check_active_words.dart';
 import 'package:podo_words/learning_words.dart';
 import 'package:podo_words/main_bottom.dart';
 import 'package:podo_words/wordListItem.dart';
@@ -18,14 +18,14 @@ class MainLearningSliver extends StatefulWidget {
 
 class _MainLearningSliverState extends State<MainLearningSliver> {
   ScrollController scrollController;
-  final double sliverAppBarHeight = 200.0;
-  final double sliverAppBarMinimumHeight = 60.0;
-  final double sliverAppBarStretchOffset = 100.0;
+  static const double sliverAppBarHeight = 200.0;
+  static const double sliverAppBarMinimumHeight = 60.0;
+  static const double sliverAppBarStretchOffset = 100.0;
+  static const String KEY_LESSON_WORDS = 'lessonWords';
 
   Words words;
-  ActiveWords activeWords;
-  List<bool> activeList;
-
+  CheckActiveWords checkActiveWords;
+  Future<List<bool>> activeList;
 
   @override
   void initState() {
@@ -46,8 +46,8 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
   Widget build(BuildContext context) {
 
     words = Words().getWords(widget.index);
-    activeWords = ActiveWords();
-    activeList = activeWords.getWordsActiveList(words.front);
+    checkActiveWords = CheckActiveWords(words.front);
+    activeList = checkActiveWords.getBoolList(KEY_LESSON_WORDS);
 
     double topMargin = sliverAppBarHeight - 60.0;
     if(scrollController.hasClients) {
@@ -112,26 +112,39 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 10.0),
       height: 80.0,
-      child: SwipeTo(
-        onRightSwipe: () {
-          activeWords.addInActiveWord(words.front[index]);
-          setState(() {
-
-          });
-        },
-        onLeftSwipe: () {
-          activeWords.removeInActiveWord(words.front[index]);
-          setState(() {
-
-          });
-        },
-        rightSwipeWidget: Icon(Icons.add),
-        leftSwipeWidget: Icon(Icons.arrow_back),
-
-        child: WordListItem(words.front[index], words.back[index], activeList[index])
+      child: FutureBuilder <List<bool>> (
+        future: activeList,
+        builder: (BuildContext context, AsyncSnapshot<List<bool>> snapshot) {
+          Widget widget;
+          if(snapshot.hasData) {
+            print('snapshop has data!');
+            widget = WordListItem(words.front[index], words.back[index], snapshot.data[index]);
+          } else if(snapshot.hasError){
+            print('snapshop has error!');
+          } else {
+            print('snapshop has no data!');
+            widget = CircularProgressIndicator();
+          }
+          return SwipeTo(
+            onLeftSwipe: () {
+              setState(() {
+                checkActiveWords.addInActiveWord(KEY_LESSON_WORDS, words.front[index]);
+              });
+            },
+            onRightSwipe: () {
+              setState(() {
+                checkActiveWords.removeInActiveWord(KEY_LESSON_WORDS, words.front[index]);
+              });
+            },
+            rightSwipeWidget: Icon(Icons.add),
+            leftSwipeWidget: Icon(Icons.arrow_back),
+            child: widget,
+          );
+        }
       ),
     );
   }
+
 
   sliverAppBar() {
     return SliverAppBar(

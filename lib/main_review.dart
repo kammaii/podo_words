@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:podo_words/active_words.dart';
+import 'package:podo_words/check_active_words.dart';
 import 'package:podo_words/main_bottom.dart';
 import 'package:podo_words/wordListItem.dart';
 import 'package:podo_words/words_my.dart';
@@ -15,13 +15,17 @@ class MainReview extends StatefulWidget {
 
 class _MainReviewState extends State<MainReview> {
 
-  List<bool> activeList;
+  CheckActiveWords checkActiveWords;
+  Future<List<bool>> activeList;
+  static const String KEY_MY_WORDS = 'myWords';
+
 
   @override
   Widget build(BuildContext context) {
     List<bool> toggleBtnSelections = List.generate(3, (_) => false);
     MyWords myWords = MyWords();
-    activeList = ActiveWords().getWordsActiveList(myWords.front);
+    checkActiveWords = CheckActiveWords(myWords.front);
+    activeList = checkActiveWords.getBoolList(KEY_MY_WORDS);
 
     return Scaffold(
       body: SafeArea(
@@ -93,12 +97,35 @@ class _MainReviewState extends State<MainReview> {
                     shrinkWrap: true,
                     itemCount: myWords.front.length,
                     itemBuilder: (context, index) {
-                      return SwipeTo(
-                        child: WordListItem(myWords.front[index], myWords.back[index], activeList[index]),
-                        onRightSwipe: () => print('right swipe'),
-                        onLeftSwipe: () => print('left swipe'),
-                        rightSwipeWidget: Icon(Icons.add),
-                        leftSwipeWidget: Icon(Icons.arrow_back),
+                      return FutureBuilder <List<bool>> (
+                          future: activeList,
+                          builder: (BuildContext context, AsyncSnapshot<List<bool>> snapshot) {
+                            Widget widget;
+                            if(snapshot.hasData) {
+                              print('snapshop has data!');
+                              widget = WordListItem(myWords.front[index], myWords.back[index], snapshot.data[index]);
+                            } else if(snapshot.hasError){
+                              print('snapshop has error!');
+                            } else {
+                              print('snapshop has no data!');
+                              widget = CircularProgressIndicator();
+                            }
+                            return SwipeTo(
+                              onLeftSwipe: () {
+                                setState(() {
+                                  checkActiveWords.addInActiveWord(KEY_MY_WORDS, myWords.front[index]);
+                                });
+                              },
+                              onRightSwipe: () {
+                                setState(() {
+                                  checkActiveWords.removeInActiveWord(KEY_MY_WORDS, myWords.front[index]);
+                                });
+                              },
+                              rightSwipeWidget: Icon(Icons.add),
+                              leftSwipeWidget: Icon(Icons.arrow_back),
+                              child: widget,
+                            );
+                          }
                       );
                     },
                     separatorBuilder: (context, index) {
