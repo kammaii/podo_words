@@ -1,3 +1,4 @@
+import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:podo_words/main_bottom.dart';
 import 'package:podo_words/main_learning_sliver.dart';
@@ -10,6 +11,7 @@ class MainLearning extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Words words = new Words();
+    List<Color> colors = [Color(0xffE0E3FF), Color(0xffFFEAAC), Color(0xffC4F6EF), Color(0xffFFDBDD)];
 
 
     //List<String> title = wordTitles.getTitle();
@@ -17,13 +19,29 @@ class MainLearning extends StatelessWidget {
 
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 30.0),
         child: SafeArea(
           child: Column(
             children: [
               Container(
-                margin: EdgeInsets.all(10.0),
-                  child: Text('Select word title')
+                  child: Text(
+                    'Select word title',
+                    style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.deepPurpleAccent,
+                        fontWeight: FontWeight.bold
+                    ),
+                  ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 10.0, bottom: 20.0),
+                child: DottedLine(
+                  lineThickness: 3.0,
+                  dashColor: Colors.grey,
+                  lineLength: 200.0,
+                  dashRadius: 3.0,
+                  dashGapLength: 5.0,
+                ),
               ),
               Expanded(
                 child: GridView.builder(
@@ -32,24 +50,55 @@ class MainLearning extends StatelessWidget {
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount (
                       crossAxisCount: 2,
                       childAspectRatio: 1,
-                      crossAxisSpacing: 10.0,
-                      mainAxisSpacing: 10.0,
+                      crossAxisSpacing: 30.0,
+                      mainAxisSpacing: 30.0,
                     ),
                     itemBuilder: (context, index) {
                       return InkWell(
-                        onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => MainLearningSliver(index)));},
+                        onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => MainLearningSliver(index, colors[index%4])));},
                         child: Container(
-                          color: Colors.yellow,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                          color: colors[index % 4],
+                          child: Column(
                             children: [
-                              Text('$index'),
                               Expanded(
-                                child: Hero(
-                                  child: Image.network(words.getTitleImages()[index]),
-                                  tag: 'wordTitleImage$index',
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(20.0),
+                                      child: Text('$index',
+                                        style: TextStyle(
+                                          fontSize: 40.0,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Hero(
+                                        child: Icon(
+                                          Icons.people,
+                                          color: Colors.black,
+                                          ),
+                                        tag: 'wordTitleImage$index',
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                                  child: Row(
+                                    children: [
+                                      Text('title', style: TextStyle(
+                                        fontSize: 20.0,
+                                        color: Colors.deepPurpleAccent
+                                      ),)
+                                    ],
+                                  ),
+                                ),
+                              )
                             ],
                           ) ,
                         ),

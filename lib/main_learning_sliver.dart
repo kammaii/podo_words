@@ -9,8 +9,9 @@ import 'package:swipe_to/swipe_to.dart';
 class MainLearningSliver extends StatefulWidget {
 
   final int index;
+  final Color color;
 
-  MainLearningSliver(this.index);
+  MainLearningSliver(this.index, this.color);
 
   @override
   _MainLearningSliverState createState() => _MainLearningSliverState();
@@ -26,6 +27,7 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
   Words words;
   CheckActiveWords checkActiveWords;
   Future<List<bool>> activeList;
+
 
   @override
   void initState() {
@@ -96,9 +98,17 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
     return FlexibleSpaceBar (
       title: Text('wordTitle'),
       //height: 200.0,
-      background: Hero(
-          tag: 'wordTitleImage${widget.index}',
-          child: Image.network(words.titleImage, fit: BoxFit.cover,)
+      background: Stack(
+        children: [
+          Positioned(
+            child: Hero(
+              tag: 'wordTitleImage${widget.index}',
+              child: Icon(Icons.people,size: 250.0, color: Colors.white,)
+            ),
+            bottom: -50.0,
+            right: -50.0,
+          )
+        ],
       ),
       stretchModes: [
         StretchMode.zoomBackground,
@@ -148,6 +158,7 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
 
   sliverAppBar() {
     return SliverAppBar(
+      backgroundColor: widget.color,
       expandedHeight: sliverAppBarHeight,
       pinned: true,
       floating: true,

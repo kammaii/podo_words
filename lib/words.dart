@@ -20,7 +20,7 @@ class Words {
     /*
     {
       'title' : 'title0',
-      'titleImage' : 'titleImage0',
+      'titleIcon' : 'titleImage0',
       'front' : 'front0 front1 front2',
       'back' : 'back0 back1 back2',
       'image' : 'image0 image1 image2',
@@ -28,7 +28,7 @@ class Words {
     },
     {
       'title' : 'title0',
-      'titleImage' : 'titleImage0',
+      'titleIcon' : 'titleImage0',
       'front' : 'front0 front1 front2',
       'back' : 'back0 back1 back2',
       'image' : 'image0 image1 image2',

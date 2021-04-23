@@ -27,6 +27,7 @@ dependencies:
   swipe_to: 0.0.1+8
   flutter_swiper : ^1.1.6
   shared_preferences: ^2.0.5
+  dotted_line: ^3.0.0
 
 
   # The following adds the Cupertino Icons font to your application.
