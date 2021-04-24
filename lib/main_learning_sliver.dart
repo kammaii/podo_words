@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:podo_words/check_active_words.dart';
 import 'package:podo_words/learning_words.dart';
@@ -63,6 +64,7 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
     return Scaffold(
       body: SafeArea(
         child: Stack(
+          alignment: Alignment.center,
           children: [
             CustomScrollView(
               physics: BouncingScrollPhysics(),
@@ -74,16 +76,40 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
             ),
             Positioned(
               top: topMargin,
-              right: 20.0,
               child: Container(
-                width: 50.0,
-                child: FittedBox(
-                  child: FloatingActionButton(
-                    onPressed: (){
-                      print('FAB clicked');
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => LearningWords(widget.index)));},
-                    child: Icon(Icons.play_arrow, size: 30.0,),
-                  ),
+                padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
+                decoration: BoxDecoration(
+                  color: Colors.deepPurpleAccent,
+                  borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                ),
+                child: Row(
+                  children: [
+                    Column(
+                      children: [
+                        Text('Total', style: TextStyle(color: Colors.white, fontSize: 17.0),),
+                        Text('50', style: TextStyle(color: Colors.white, fontSize: 25.0, fontWeight: FontWeight.bold),),
+                      ],
+                    ),
+                    SizedBox(width: 40.0,),
+                    Column(
+                      children: [
+                        Text('Active', style: TextStyle(color: Colors.white, fontSize: 17.0),),
+                        Text('50', style: TextStyle(color: Colors.white, fontSize: 25.0, fontWeight: FontWeight.bold),),
+                      ],
+                    ),
+                    SizedBox(width: 50.0,),
+                    Container(
+                      width: 50.0,
+                      child: FittedBox(
+                        child: FloatingActionButton(
+                          onPressed: (){
+                            print('FAB clicked');
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => LearningWords(widget.index)));},
+                          child: Icon(Icons.play_arrow, size: 30.0,),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             )
@@ -96,8 +122,6 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
 
   Widget wordTitle() {
     return FlexibleSpaceBar (
-      title: Text('wordTitle'),
-      //height: 200.0,
       background: Stack(
         children: [
           Positioned(
@@ -120,7 +144,7 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
 
   Widget wordsList(context, index) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 10.0),
+      padding: EdgeInsets.symmetric(horizontal: 10.0),
       height: 80.0,
       child: FutureBuilder <List<bool>> (
         future: activeList,
@@ -174,10 +198,6 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
       //flexibleSpace: Image.asset('assets/', fit: BoxFit.cover,),
       title: Text(words.title),
       flexibleSpace: wordTitle(),
-      bottom: PreferredSize(
-        preferredSize: Size.fromHeight(sliverAppBarMinimumHeight),
-        child: Text('프레뻘드'),
-      ),
     );
   }
 
