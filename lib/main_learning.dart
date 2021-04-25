@@ -2,6 +2,7 @@ import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:podo_words/main_bottom.dart';
 import 'package:podo_words/main_learning_sliver.dart';
+import 'package:podo_words/my_colors.dart';
 import 'package:podo_words/words.dart';
 
 class MainLearning extends StatelessWidget {
@@ -11,7 +12,8 @@ class MainLearning extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Words words = new Words();
-    List<Color> colors = [Color(0xffE0E3FF), Color(0xffFFEAAC), Color(0xffC4F6EF), Color(0xffFFDBDD)];
+    List<Color> bgColors = [MyColors().navyLight, MyColors().mustardLight, MyColors().greenLight, MyColors().pink];
+    List<Color> iconColors = [MyColors().navy, MyColors().mustard, MyColors().greenDark, MyColors().wine];
 
 
     //List<String> title = wordTitles.getTitle();
@@ -55,9 +57,9 @@ class MainLearning extends StatelessWidget {
                     ),
                     itemBuilder: (context, index) {
                       return InkWell(
-                        onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => MainLearningSliver(index, colors[index%4])));},
+                        onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => MainLearningSliver(index, bgColors[index%4])));},
                         child: Container(
-                          color: colors[index % 4],
+                          color: bgColors[index % 4],
                           child: Column(
                             children: [
                               Expanded(
@@ -78,7 +80,8 @@ class MainLearning extends StatelessWidget {
                                       child: Hero(
                                         child: Icon(
                                           Icons.people,
-                                          color: Colors.black,
+                                          color: iconColors[index % 4],
+                                          size: 40.0,
                                           ),
                                         tag: 'wordTitleImage$index',
                                       ),
