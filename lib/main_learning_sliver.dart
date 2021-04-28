@@ -142,7 +142,7 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
           ],
         ),
       ),
-      bottomNavigationBar: MainBottom(context).getMainBottom(),
+      bottomNavigationBar: MainBottom(context, 0),
     );
   }
 

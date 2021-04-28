@@ -176,7 +176,7 @@ class _MainReviewState extends State<MainReview> {
           ),
         ),
       ),
-      bottomNavigationBar: MainBottom(context).getMainBottom(),
+      bottomNavigationBar: MainBottom(context, 1),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.play_arrow),
         onPressed: (){

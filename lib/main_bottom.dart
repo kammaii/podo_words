@@ -1,34 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:podo_words/main_learning.dart';
 import 'package:podo_words/main_review.dart';
+import 'package:podo_words/my_colors.dart';
 
-class MainBottom {
+class MainBottom extends StatefulWidget {
 
-  BuildContext context;
-  MainBottom(this.context);
+  final BuildContext context;
+  final int selectedIndex;
+  MainBottom(this.context, this.selectedIndex);
 
-  Widget getMainBottom() {
-    return Padding(
-      padding: EdgeInsets.all(5.0),
-      child: Row(
-        children: [
-          Expanded(
-            child: ElevatedButton(
-                onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => MainLearning()));},
-                child: Text('Learning')
-            ),
-          ),
-          SizedBox(
-            width: 10.0,
-          ),
-          Expanded(
-            child: ElevatedButton(
-                onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => MainReview()));},
-                child: Text('Reviewing')
-            ),
-          )
-        ],
-      ),
+  @override
+  _MainBottomState createState() => _MainBottomState();
+}
+
+class _MainBottomState extends State<MainBottom> {
+
+  @override
+  Widget build(BuildContext context) {
+    return BottomNavigationBar(
+      items: [
+        BottomNavigationBarItem(
+            icon: Icon(Icons.article_outlined, size: 30.0,),
+            label: 'Learning'
+        ),
+        BottomNavigationBarItem(
+            icon: Icon(Icons.rate_review_outlined, size: 30.0,),
+            label: 'Reviewing'
+        ),
+      ],
+      selectedItemColor: MyColors().purple,
+      currentIndex: widget.selectedIndex,
+      backgroundColor: MyColors().navyLightLight,
+      onTap: (int index){
+        setState(() {
+          switch (index) {
+            case 0 :
+              Navigator.push(context, MaterialPageRoute(builder: (context) => MainLearning()));
+              break;
+            case 1 :
+              Navigator.push(context, MaterialPageRoute(builder: (context) => MainReview()));
+              break;
+          }
+        });
+      },
     );
   }
 }

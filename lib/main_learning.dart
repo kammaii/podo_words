@@ -113,7 +113,7 @@ class MainLearning extends StatelessWidget {
           )
         ),
       ),
-      bottomNavigationBar: MainBottom(context).getMainBottom(),
+      bottomNavigationBar: MainBottom(context, 0),
     );
   }
 }
