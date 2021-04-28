@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:podo_words/check_active_words.dart';
 import 'package:podo_words/main_bottom.dart';
+import 'package:podo_words/my_colors.dart';
 import 'package:podo_words/wordListItem.dart';
 import 'package:podo_words/words_my.dart';
 import 'package:swipe_to/swipe_to.dart';
@@ -16,16 +17,67 @@ class MainReview extends StatefulWidget {
 class _MainReviewState extends State<MainReview> {
 
   CheckActiveWords checkActiveWords;
-  Future<List<bool>> activeList;
+  Future<List<bool>> futureActiveList;
+  List<bool> activeList;
   static const String KEY_MY_WORDS = 'myWords';
+  List<bool> toggleSelections = [true, false, false];
+  MyWords myWords;
+
 
 
   @override
   Widget build(BuildContext context) {
-    List<bool> toggleBtnSelections = List.generate(3, (_) => false);
-    MyWords myWords = MyWords();
+    myWords = MyWords();
     checkActiveWords = CheckActiveWords(myWords.front);
-    activeList = checkActiveWords.getBoolList(KEY_MY_WORDS);
+    futureActiveList = checkActiveWords.getBoolList(KEY_MY_WORDS);
+
+    Widget toggleButtons(IconData icon, int toggleIndex) {
+      return Expanded(
+        child: Padding(
+          padding: const EdgeInsets.all(1.0),
+          child: OutlinedButton(
+            style: ButtonStyle(
+                shape: MaterialStateProperty.all(
+                    RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0)
+                    )
+                ),
+                backgroundColor: MaterialStateProperty.resolveWith((_) {
+                  if(toggleSelections[toggleIndex]) {
+                    return MyColors().navyDark;
+                  } else {
+                    return Colors.white;
+                  }
+                }),
+                foregroundColor: MaterialStateProperty.resolveWith((_) {
+                  if(toggleSelections[toggleIndex]) {
+                    return Colors.white;
+                  } else {
+                    return MyColors().navyLight;
+                  }
+                }),
+                side: MaterialStateProperty.resolveWith((_) {
+                  return BorderSide(color: Colors.transparent);
+                })
+            ),
+            child: Icon(icon),
+            onPressed: (){
+              setState(() {
+                for(int i=0; i<toggleSelections.length; i++) {
+                  if(i == toggleIndex) {
+                    toggleSelections[i] = true;
+                  } else {
+                    toggleSelections[i] = false;
+                  }
+                }
+                //todo: 토글버튼 액션 실행1
+
+              });
+            },
+          ),
+        ),
+      );
+    }
 
     return Scaffold(
       body: SafeArea(
@@ -33,63 +85,45 @@ class _MainReviewState extends State<MainReview> {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              TextField(
-                decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                    borderSide: BorderSide(color: Colors.grey, width: 2.0),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                    borderSide: BorderSide(color: Colors.red, width: 2.0),
-                  ),
-                  hintText: 'Search'
+              Container(
+                decoration: BoxDecoration(
+                  color: MyColors().navyLight,
+                  borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                ),
+                child: Column(
+                  children: [
+                    TextField(
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.search),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                          borderSide: BorderSide(color: MyColors().navyLight, width: 2.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                          borderSide: BorderSide(color: MyColors().navyLight, width: 2.0),
+                        ),
+                        hintText: 'Search your words',
+                        filled: true,
+                        fillColor: Colors.white
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Row(
+                        children: [
+                          toggleButtons(Icons.all_inclusive, 0),
+                          toggleButtons(Icons.check, 1),
+                          toggleButtons(Icons.close, 2),
+                        ]
+                      )
+                    ),
+                  ],
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('0 words'),
-                    ToggleButtons(
-                      children: <Widget>[
-                        Icon(Icons.ac_unit),
-                        Icon(Icons.call),
-                        Icon(Icons.cake),
-                      ],
-                      onPressed: (int index) {
-                        print('index: $index');
-                        setState(() {
-                          for (int i=0; i<toggleBtnSelections.length; i++) {
-                            if (i == index) {
-                              toggleBtnSelections[i] = true;
-                            } else {
-                              toggleBtnSelections[i] = false;
-                            }
-                          }
-                          switch (index) {
-                            case 0 :
-                              //todo: inactive만 표시
-                              break;
-
-                            case 1 :
-                            //todo: 모두 표시
-                              break;
-
-                            case 2 :
-                            //todo: active만 표시
-                              break;
-                          }
-                        });
-                        print('selection : $toggleBtnSelections');
-                      },
-                      isSelected: toggleBtnSelections,
-                      color: Colors.grey,
-                      selectedColor: Colors.purple,
-                    ),
-                  ],
-                ),
+                child: Text('0 words'),
               ),
               Expanded(
                 child: GestureDetector(
@@ -98,8 +132,9 @@ class _MainReviewState extends State<MainReview> {
                     itemCount: myWords.front.length,
                     itemBuilder: (context, index) {
                       return FutureBuilder <List<bool>> (
-                          future: activeList,
+                          future: futureActiveList,
                           builder: (BuildContext context, AsyncSnapshot<List<bool>> snapshot) {
+                            activeList = snapshot.data;
                             Widget widget;
                             if(snapshot.hasData) {
                               print('snapshop has data!');

@@ -5,6 +5,7 @@ class MyColors {
   final Color navy = Color(0xff8389BE);
   final Color navyLight = Color(0xffE0E3FF);
   final Color navyLightLight = Color(0xffF5F5F5);
+  final Color navyDark = Color(0xff432AA3);
   final Color mustard = Color(0xffDEA34A);
   final Color mustardLight = Color(0xffFFEAAC);
   final Color greenDark = Color(0xff579D93);

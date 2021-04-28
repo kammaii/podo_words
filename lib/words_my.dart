@@ -1,14 +1,15 @@
 
 class MyWords {
 
-  List<String> front = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N'];
-  List<String> back = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n'];
+  List<String> front;
+  List<String> back;
   List<String> image;
   List<String> audio;
-  List<bool> isActive;
 
   MyWords() {
     //todo: 저장된 단어를 앱 DB에서 가져오기
+    front = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N'];
+    back = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n'];
   }
 
 
@@ -17,7 +18,6 @@ class MyWords {
     this.back.add(back);
     this.image.add(image);
     this.audio.add(audio);
-    this.isActive.add(true);
   }
 
   deleteMyWords(int index) {
@@ -25,10 +25,30 @@ class MyWords {
     this.back.removeAt(index);
     this.image.removeAt(index);
     this.audio.removeAt(index);
-    this.isActive.removeAt(index);
   }
 
-  setIsActiveMyWords(int index, bool isActive) {
-    this.isActive[index] = isActive;
+  getActiveMyWords(List<bool> isActive) {
+    for(int i=0; i<front.length; i++) {
+      if(!isActive[i]) {
+        removeWord(i);
+      }
+    }
   }
+
+  getInActiveMyWords(List<bool> isActive) {
+    for(int i=0; i<front.length; i++) {
+      if(isActive[i]) {
+        removeWord(i);
+      }
+    }
+  }
+
+  removeWord(int index) {
+    front.removeAt(index);
+    back.removeAt(index);
+    //image.removeAt(index);
+    //audio.removeAt(index);
+  }
+
+
 }

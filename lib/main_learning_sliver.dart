@@ -90,7 +90,7 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
                 margin: EdgeInsets.symmetric(horizontal: 30.0),
                 padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
                 decoration: BoxDecoration(
-                  color: Colors.deepPurpleAccent,
+                  color: MyColors().navy,
                   borderRadius: BorderRadius.all(Radius.circular(15.0)),
                 ),
                 child: Row(
@@ -205,7 +205,8 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
               padding: EdgeInsets.all(10.0),
               child: Icon(Icons.cancel_outlined, color: MyColors().red,),
               color: MyColors().pink,
-            ),            child: widget,
+            ),
+            child: widget,
           );
         }
       ),
