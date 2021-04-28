@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:podo_words/my_colors.dart';
 
 class LearningWordsBar extends StatefulWidget {
   @override
@@ -8,7 +9,7 @@ class LearningWordsBar extends StatefulWidget {
 
 class _LearningWordsBarState extends State<LearningWordsBar> {
 
-  final List<bool> toggleList = List.generate(2, (_) => false);
+  bool isSwitched = true; //todo: DB에서 가져오기
 
   @override
   Widget build(BuildContext context) {
@@ -29,34 +30,20 @@ class _LearningWordsBarState extends State<LearningWordsBar> {
         ),
         Text('Eng'),
         SizedBox(width: 10.0,),
-        ToggleButtons(
-          children: [
-            Text('ON'),
-            Text('OFF'),
-          ],
-          onPressed: (int index) {
+        Switch(
+          value: isSwitched,
+          activeTrackColor: MyColors().navyLightLight,
+          activeColor: MyColors().purple,
+          onChanged: (value) {
             setState(() {
-              for (int i=0; i<toggleList.length; i++) {
-                if (i == index) {
-                  toggleList[i] = true;
-                } else {
-                  toggleList[i] = false;
-                }
-              }
-              switch (index) {
-                case 0 :
-                //todo: on 클릭
-                  break;
-
-                case 1 :
-                //todo: off 클릭
-                  break;
+              isSwitched = value;
+              if(value) {
+                //todo: 영어 켜기
+              } else {
+                //todo: 영어 끄기
               }
             });
           },
-          isSelected: toggleList,
-          color: Colors.grey,
-          selectedColor: Colors.purple,
         )
       ],
     );
