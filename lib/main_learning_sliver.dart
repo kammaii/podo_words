@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:podo_words/check_active_words.dart';
+import 'package:podo_words/data_storage.dart';
 import 'package:podo_words/learning_words.dart';
 import 'package:podo_words/main_bottom.dart';
 import 'package:podo_words/my_colors.dart';
@@ -29,8 +30,7 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
   static const String KEY_LESSON_WORDS = 'lessonWords';
 
   Words words;
-  CheckActiveWords checkActiveWords;
-  Future<List<bool>> activeList;
+  List<bool> activeList;
 
 
   @override
@@ -52,8 +52,7 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
   Widget build(BuildContext context) {
 
     words = Words().getWords(widget.index);
-    checkActiveWords = CheckActiveWords(words.front);
-    activeList = checkActiveWords.getBoolList(KEY_LESSON_WORDS);
+    activeList = DataStorage().getBoolList(words.front);
 
     double topMargin = sliverAppBarHeight - 30.0;
     double topMarginPlayBtn = sliverAppBarHeight - 25.0;
@@ -105,23 +104,10 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
                     Column(
                       children: [
                         Text('Active', style: TextStyle(color: Colors.white, fontSize: 17.0),),
-                        FutureBuilder(
-                          future: activeList,
-                          builder: (BuildContext context, AsyncSnapshot<List<bool>> snapshot) {                              int count = 0;
-                          int activeWordCount = 0;
-                          if(snapshot.hasData) {
-                              for (bool b in snapshot.data) {
-                                if (b) {
-                                  activeWordCount ++;
-                                }
-                              }
-                            }
-                            return Text(
-                            activeWordCount.toString(),
-                            style: TextStyle(color: Colors.white, fontSize: 25.0, fontWeight: FontWeight.bold),
-                            );
-                          },
-                        ),
+                        Text(
+                          'count', //todo: 카운팅 코드 추가
+                          style: TextStyle(color: Colors.white, fontSize: 25.0, fontWeight: FontWeight.bold),
+                        )
                       ],
                     ),
                   ],
@@ -172,43 +158,28 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10.0),
       height: 80.0,
-      child: FutureBuilder <List<bool>> (
-        future: activeList,
-        builder: (BuildContext context, AsyncSnapshot<List<bool>> snapshot) {
-          Widget widget;
-          if(snapshot.hasData) {
-            print('snapshop has data!');
-            widget = WordListItem(words.front[index], words.back[index], snapshot.data[index]);
-          } else if(snapshot.hasError){
-            print('snapshop has error!');
-          } else {
-            print('snapshop has no data!');
-            widget = CircularProgressIndicator();
-          }
-          return SwipeTo(
-            onLeftSwipe: () {
-              setState(() {
-                checkActiveWords.addInActiveWord(KEY_LESSON_WORDS, words.front[index]);
-              });
-            },
-            onRightSwipe: () {
-              setState(() {
-                checkActiveWords.removeInActiveWord(KEY_LESSON_WORDS, words.front[index]);
-              });
-            },
-            rightSwipeWidget: Container(
-              padding: EdgeInsets.all(10.0),
-              child: Icon(Icons.check, color: Colors.blue,),
-              color: Colors.greenAccent,
-            ),
-            leftSwipeWidget: Container(
-              padding: EdgeInsets.all(10.0),
-              child: Icon(Icons.cancel_outlined, color: MyColors().red,),
-              color: MyColors().pink,
-            ),
-            child: widget,
-          );
-        }
+      child: SwipeTo(
+        onLeftSwipe: () {
+          setState(() {
+            DataStorage().addInActiveWord(KEY_LESSON_WORDS, words.front[index]);
+          });
+        },
+        onRightSwipe: () {
+          setState(() {
+            DataStorage().removeInActiveWord(KEY_LESSON_WORDS, words.front[index]);
+          });
+        },
+        rightSwipeWidget: Container(
+          padding: EdgeInsets.all(10.0),
+          child: Icon(Icons.check, color: Colors.blue,),
+          color: Colors.greenAccent,
+        ),
+        leftSwipeWidget: Container(
+          padding: EdgeInsets.all(10.0),
+          child: Icon(Icons.cancel_outlined, color: MyColors().red,),
+          color: MyColors().pink,
+        ),
+        child: WordListItem(words.front[index], words.back[index], activeList[index]),
       ),
     );
   }

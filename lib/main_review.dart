@@ -8,6 +8,8 @@ import 'package:podo_words/wordListItem.dart';
 import 'package:podo_words/words_my.dart';
 import 'package:swipe_to/swipe_to.dart';
 
+import 'data_storage.dart';
+
 
 class MainReview extends StatefulWidget {
   @override
@@ -16,10 +18,7 @@ class MainReview extends StatefulWidget {
 
 class _MainReviewState extends State<MainReview> {
 
-  CheckActiveWords checkActiveWords;
-  Future<List<bool>> futureActiveList;
   List<bool> activeList;
-  static const String KEY_MY_WORDS = 'myWords';
   List<bool> toggleSelections = [true, false, false];
   MyWords myWords;
 
@@ -28,8 +27,7 @@ class _MainReviewState extends State<MainReview> {
   @override
   Widget build(BuildContext context) {
     myWords = MyWords();
-    checkActiveWords = CheckActiveWords(myWords.front);
-    futureActiveList = checkActiveWords.getBoolList(KEY_MY_WORDS);
+    activeList = DataStorage().getMyBoolList();
 
     Widget toggleButtons(IconData icon, int toggleIndex) {
       return Expanded(
@@ -131,36 +129,20 @@ class _MainReviewState extends State<MainReview> {
                     shrinkWrap: true,
                     itemCount: myWords.front.length,
                     itemBuilder: (context, index) {
-                      return FutureBuilder <List<bool>> (
-                          future: futureActiveList,
-                          builder: (BuildContext context, AsyncSnapshot<List<bool>> snapshot) {
-                            activeList = snapshot.data;
-                            Widget widget;
-                            if(snapshot.hasData) {
-                              print('snapshop has data!');
-                              widget = WordListItem(myWords.front[index], myWords.back[index], snapshot.data[index]);
-                            } else if(snapshot.hasError){
-                              print('snapshop has error!');
-                            } else {
-                              print('snapshop has no data!');
-                              widget = CircularProgressIndicator();
-                            }
-                            return SwipeTo(
-                              onLeftSwipe: () {
-                                setState(() {
-                                  checkActiveWords.addInActiveWord(KEY_MY_WORDS, myWords.front[index]);
-                                });
-                              },
-                              onRightSwipe: () {
-                                setState(() {
-                                  checkActiveWords.removeInActiveWord(KEY_MY_WORDS, myWords.front[index]);
-                                });
-                              },
-                              rightSwipeWidget: Icon(Icons.add),
-                              leftSwipeWidget: Icon(Icons.arrow_back),
-                              child: widget,
-                            );
-                          }
+                      return SwipeTo(
+                        onLeftSwipe: () {
+                          setState(() {
+                            DataStorage().addInActiveWord("", myWords.front[index]);
+                          });
+                        },
+                        onRightSwipe: () {
+                          setState(() {
+                            DataStorage().removeInActiveWord("", myWords.front[index]);
+                          });
+                        },
+                        rightSwipeWidget: Icon(Icons.add),
+                        leftSwipeWidget: Icon(Icons.arrow_back),
+                        child: WordListItem(myWords.front[index], myWords.back[index], activeList[index]),
                       );
                     },
                     separatorBuilder: (context, index) {
