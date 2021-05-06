@@ -1,11 +1,13 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:podo_words/learning_words_bar.dart';
+import 'package:podo_words/word_info.dart';
 
 class LearningWordsQuiz1 extends StatefulWidget {
 
-  //final Words words;
-
-  //LearningWordsQuiz1(this.words);
+  List<WordInfo> wordInfoList;
+  LearningWordsQuiz1(this.wordInfoList);
 
   @override
   _LearningWordsQuiz1State createState() => _LearningWordsQuiz1State();
@@ -15,13 +17,13 @@ class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
   int wordIndex = 0;
   String front;
   String back;
-  List<String> image;
+  List<int> mixedIndex;
 
   @override
   Widget build(BuildContext context) {
-    //front = widget.words.front[wordIndex];
-    //back = widget.words.back[wordIndex];
-    //image = widget.words.image;
+    front = widget.wordInfoList[wordIndex].front;
+    back = widget.wordInfoList[wordIndex].back;
+    mixedIndex = MixedIndex();
 
     return Scaffold(
       body: Padding(
@@ -35,7 +37,7 @@ class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    '사과',
+                    front,
                     textScaleFactor: 5,
                   ),
                   IconButton(
@@ -83,4 +85,11 @@ class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
       ),
     );
   }
+}
+
+List<int> MixedIndex() {
+  //todo: 0~3까지 숫자 리스트 섞는 함수
+  int randomNumber = Random().nextInt(4) - 1;
+  List<int> newIndex;
+  return newIndex;
 }

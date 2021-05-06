@@ -9,7 +9,8 @@ class LearningWordsBar extends StatefulWidget {
 
 class _LearningWordsBarState extends State<LearningWordsBar> {
 
-  bool isSwitched = true; //todo: DB에서 가져오기
+  bool isEngOn = true; //todo: DB에서 가져오기
+  int opacity;
 
   @override
   Widget build(BuildContext context) {
@@ -31,14 +32,15 @@ class _LearningWordsBarState extends State<LearningWordsBar> {
         Text('Eng'),
         SizedBox(width: 10.0,),
         Switch(
-          value: isSwitched,
-          activeTrackColor: MyColors().navyLightLight,
+          value: isEngOn,
+          activeTrackColor: MyColors().navyLight,
           activeColor: MyColors().purple,
           onChanged: (value) {
             setState(() {
-              isSwitched = value;
+              isEngOn = value;
               if(value) {
                 //todo: 영어 켜기
+
               } else {
                 //todo: 영어 끄기
               }
