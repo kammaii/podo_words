@@ -1,14 +1,13 @@
+import 'package:podo_words/words_my.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DataStorage {
 
-  static final DataStorage _instance = DataStorage().getData(); // 질문! 이거는 언제 실행되나?
+  static final DataStorage _instance = DataStorage.init();
 
   factory DataStorage() {
     return _instance;
   }
-
-
 
   // key
   // 비활성 단어 저장 : 'inActiveWords'
@@ -16,16 +15,20 @@ class DataStorage {
 
   SharedPreferences sp;
   List<String> inActiveWords;
-  List<String> myWords;
+  MyWords myWords;
 
   static const String KEY_IN_ACTIVE_WORDS = 'inActiveWords';
   static const String KEY_MY_WORDS = 'myWords';
 
+  DataStorage.init() {
+    print('DataStorage 초기화');
+  }
 
-  getData() async {
+  Future<bool> setData() async {
     sp = await SharedPreferences.getInstance();
     inActiveWords = await getStringList(KEY_IN_ACTIVE_WORDS);
     myWords = await getStringList(KEY_MY_WORDS);
+    return true;
   }
 
   // 단어 front 리스트를 입력하면 inActive 단어의 인덱스 리스트를 반환
@@ -34,7 +37,7 @@ class DataStorage {
   }
 
   List<bool> getMyBoolList() {
-    return setBoolList(myWords);
+    return setBoolList(myWords.front);
   }
 
   List<bool> setBoolList(List<String> list) {
@@ -50,7 +53,6 @@ class DataStorage {
   }
 
 
-  // todo : 수정하기
   void addInActiveWord(String key, String word) {
     if(!inActiveWords.contains(word)) {
       inActiveWords.add(word);
@@ -65,7 +67,7 @@ class DataStorage {
       inActiveWords.remove(word);
       DataStorage().setStringList(key, inActiveWords);
     } else {
-      print('이미 제거된 단어입니다.');
+      print('이미 활성화된 단어입니다.');
     }
   }
 

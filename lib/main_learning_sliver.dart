@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:podo_words/check_active_words.dart';
 import 'package:podo_words/data_storage.dart';
 import 'package:podo_words/learning_words.dart';
 import 'package:podo_words/main_bottom.dart';
@@ -23,14 +22,15 @@ class MainLearningSliver extends StatefulWidget {
 
 class _MainLearningSliverState extends State<MainLearningSliver> {
   ScrollController scrollController;
-  static const double sliverAppBarHeight = 200.0;
-  static const double sliverAppBarMinimumHeight = 60.0;
-  static const double sliverAppBarStretchOffset = 100.0;
+  double sliverAppBarHeight = 200.0;
+  double sliverAppBarMinimumHeight = 60.0;
+  double sliverAppBarStretchOffset = 100.0;
   double sliverAppBarStretchOffsetSave;
   static const String KEY_LESSON_WORDS = 'lessonWords';
 
   Words words;
   List<bool> activeList;
+  int activeWordCount;
 
 
   @override
@@ -53,6 +53,13 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
 
     words = Words().getWords(widget.index);
     activeList = DataStorage().getBoolList(words.front);
+    activeWordCount = 0;
+
+    for(bool b in activeList) {
+      if(b) {
+        activeWordCount ++;
+      }
+    }
 
     double topMargin = sliverAppBarHeight - 30.0;
     double topMarginPlayBtn = sliverAppBarHeight - 25.0;
@@ -105,7 +112,7 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
                       children: [
                         Text('Active', style: TextStyle(color: Colors.white, fontSize: 17.0),),
                         Text(
-                          'count', //todo: 카운팅 코드 추가
+                          activeWordCount.toString(), //todo: 카운팅 코드 추가
                           style: TextStyle(color: Colors.white, fontSize: 25.0, fontWeight: FontWeight.bold),
                         )
                       ],

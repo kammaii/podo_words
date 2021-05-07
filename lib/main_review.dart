@@ -26,7 +26,7 @@ class _MainReviewState extends State<MainReview> {
 
   @override
   Widget build(BuildContext context) {
-    myWords = MyWords();
+    myWords = DataStorage().myWords;
     activeList = DataStorage().getMyBoolList();
 
     Widget toggleButtons(IconData icon, int toggleIndex) {
