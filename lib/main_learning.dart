@@ -11,7 +11,6 @@ class MainLearning extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Words words = new Words();
     List<Color> bgColors = [MyColors().navyLight, MyColors().mustardLight, MyColors().greenLight, MyColors().pink];
     List<Color> iconColors = [MyColors().navy, MyColors().mustard, MyColors().greenDark, MyColors().wine];
 
@@ -48,7 +47,7 @@ class MainLearning extends StatelessWidget {
               Expanded(
                 child: GridView.builder(
                     shrinkWrap: true,
-                    itemCount: words.getTitles().length,
+                    itemCount: Words().getTitles().length,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount (
                       crossAxisCount: 2,
                       childAspectRatio: 1,

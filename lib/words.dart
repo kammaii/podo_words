@@ -1,13 +1,14 @@
 import 'dart:core';
 
-class Words {
+import 'package:podo_words/word.dart';
 
-  String title;
-  String titleImage;
-  List<String> front;
-  List<String> back;
-  List<String> image;
-  List<String> pronunciation;
+class Words{
+
+  static final Words _instance = Words.init();
+
+  factory Words() {
+    return _instance;
+  }
 
   static const TITLE = 'title';
   static const TITLE_IMAGE = 'titleImage';
@@ -15,6 +16,11 @@ class Words {
   static const BACK = 'back';
   static const IMAGE = 'image';
   static const PRONUNCIATION = 'pronunciation';
+
+  Words.init() {
+    print('Words 초기화');
+    setWords();
+  }
 
   List<Map<String, List<String>>> words = [];
     /*
@@ -37,11 +43,6 @@ class Words {
   ];
 
      */
-
-  // todo: 테스트용임. 삭제할 것
-  Words() {
-    setWords();
-  }
 
   // todo: 테스트용임. 삭제할 것
   void setWords() {
@@ -69,17 +70,18 @@ class Words {
     }
   }
 
-  List<String> titles = [];
-  List<String> titleImages = [];
 
   List<String> getTitles() {
+    List<String> titles = [];
     for(int i=0; i< words.length; i++) {
       titles.add(words[i][TITLE][0]);
     }
     return titles;
   }
 
+
   List<String> getTitleImages() {
+    List<String> titleImages = [];
     for(int i=0; i< words.length; i++) {
       titleImages.add(words[i][TITLE_IMAGE][0]);
     }
@@ -87,14 +89,13 @@ class Words {
   }
 
 
-
-  Words getWords(int index) {
-    this.front = words[index][FRONT];
-    this.back = words[index][BACK];
-    this.image = words[index][IMAGE];
-    this.pronunciation = words[index][PRONUNCIATION];
-    this.title = words[index][TITLE][0];
-    this.titleImage = words[index][TITLE_IMAGE][0];
-    return this;
+  List<Word> getWords(int index) {
+    Map<String, List<String>> wordsMap = words[index];
+    List<Word> wordList = [];
+    for(int i=0; i<wordsMap[FRONT].length; i++) {
+      Word word = Word(wordsMap[FRONT][i], wordsMap[BACK][i], wordsMap[IMAGE][i]);
+      wordList.add(word);
+    }
+    return wordList;
   }
 }

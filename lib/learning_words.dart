@@ -3,7 +3,7 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:podo_words/learning_words_bar.dart';
 import 'package:podo_words/learning_words_quiz1.dart';
 import 'package:podo_words/my_colors.dart';
-import 'package:podo_words/word_info.dart';
+import 'package:podo_words/word.dart';
 import 'package:podo_words/words.dart';
 
 class LearningWords extends StatefulWidget {
@@ -18,18 +18,22 @@ class LearningWords extends StatefulWidget {
 }
 
 class _LearningWordsState extends State<LearningWords> {
-  Words words;
+  List<Word> words;
   int wordIndex = 0;
   String front;
   String back;
-  List<String> image;
+  List<String> images;
 
   @override
   Widget build(BuildContext context) {
     words = Words().getWords(widget.lessonIndex);
-    front = words.front[wordIndex];
-    back = words.back[wordIndex];
-    image = words.image;
+    front = words[wordIndex].front;
+    back = words[wordIndex].back;
+    images = [];
+    for(int i=0; i<words.length; i++) {
+      String image = words[i].image;
+      images.add(image);
+    }
 
     return Scaffold(
       body: Padding(
@@ -44,9 +48,9 @@ class _LearningWordsState extends State<LearningWords> {
                     padding: const EdgeInsets.all(10.0),
                     child: Swiper(
                       itemBuilder: (context, index) {
-                        return Image.network(image[index]);
+                        return Image.network(images[index]);
                       },
-                      itemCount: image.length,
+                      itemCount: images.length,
                       pagination: SwiperPagination(),
                       control: SwiperControl(),
                       viewportFraction: 0.7,
@@ -57,15 +61,15 @@ class _LearningWordsState extends State<LearningWords> {
 
                           //todo: index가 4의 배수이거나 마지막 index일 때 퀴즈1으로 이동
                           //todo : 마지막 index일 때는 isLastQuiz = true 추가
-                          if(index % 4 == 0 || index == image.length) {
-                            List<WordInfo> wordInfoList = [];
+                          if(index % 4 == 0 || index == images.length) {
+                            List<Word> wordQuizList = [];
 
                             for (int i = 1; i < 5; i++) {
                               int count = index-i;
-                              WordInfo wordInfo = WordInfo(words, count);
-                              wordInfoList.add(wordInfo);
+                              Word word = Word(words[count].front, words[count].back, words[count].image);
+                              wordQuizList.add(word);
                             }
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => LearningWordsQuiz1(wordInfoList)));
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => LearningWordsQuiz1(wordQuizList)));
                           }
                         });
                       },
@@ -110,7 +114,7 @@ class _LearningWordsState extends State<LearningWords> {
                 }
 
               } else {
-                if(wordIndex < words.front.length - 1) {
+                if(wordIndex < words.length - 1) {
                   wordIndex++;
                   print('왼쪽 스와이프');
                 }

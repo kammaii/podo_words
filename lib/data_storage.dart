@@ -1,6 +1,5 @@
 import 'dart:convert';
-
-import 'package:podo_words/word_my.dart';
+import 'package:podo_words/word.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DataStorage {
@@ -17,7 +16,7 @@ class DataStorage {
 
   SharedPreferences sp;
   List<String> inActiveWords;
-  List<MyWord> myWords;
+  List<Word> myWords;
 
   static const String KEY_IN_ACTIVE_WORDS = 'inActiveWords';
   static const String KEY_MY_WORDS = 'myWords';
@@ -32,7 +31,7 @@ class DataStorage {
     List<String> myWordsJson = await getStringList(KEY_MY_WORDS);
     myWords = [];
     for(String myWordJson in myWordsJson) {
-      MyWord myWord = MyWord.fromJson(json.decode(myWordJson));
+      Word myWord = Word.fromJson(json.decode(myWordJson));
       myWords.add(myWord);
     }
     return true;
@@ -45,7 +44,7 @@ class DataStorage {
 
   List<bool> getMyBoolList() {
     List<String> myWordFronts = [];
-    for(MyWord myWord in myWords) {
+    for(Word myWord in myWords) {
       myWordFronts.add(myWord.front);
     }
     return setBoolList(myWordFronts);

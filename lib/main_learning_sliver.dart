@@ -5,6 +5,7 @@ import 'package:podo_words/data_storage.dart';
 import 'package:podo_words/learning_words.dart';
 import 'package:podo_words/main_bottom.dart';
 import 'package:podo_words/my_colors.dart';
+import 'package:podo_words/word.dart';
 import 'package:podo_words/wordListItem.dart';
 import 'package:podo_words/words.dart';
 import 'package:swipe_to/swipe_to.dart';
@@ -27,7 +28,7 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
   double sliverAppBarStretchOffset = 100.0;
   double sliverAppBarStretchOffsetSave;
 
-  Words words;
+  List<Word> words;
   List<bool> activeList;
   int activeWordCount;
 
@@ -51,7 +52,11 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
   Widget build(BuildContext context) {
 
     words = Words().getWords(widget.index);
-    activeList = DataStorage().getBoolList(words.front);
+    List<String> fronts = [];
+    for(int i=0; i<words.length; i++) {
+      fronts.add(words[i].front);
+    }
+    activeList = DataStorage().getBoolList(fronts);
     activeWordCount = 0;
 
     for(bool b in activeList) {
@@ -103,7 +108,7 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
                     Column(
                       children: [
                         Text('Total', style: TextStyle(color: Colors.white, fontSize: 17.0),),
-                        Text(words.front.length.toString(), style: TextStyle(color: Colors.white, fontSize: 25.0, fontWeight: FontWeight.bold),),
+                        Text(words.length.toString(), style: TextStyle(color: Colors.white, fontSize: 25.0, fontWeight: FontWeight.bold),),
                       ],
                     ),
                     SizedBox(width: 40.0,),
@@ -169,12 +174,12 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
       child: SwipeTo(
         onLeftSwipe: () {
           setState(() {
-            DataStorage().addInActiveWord(words.front[index]);
+            DataStorage().addInActiveWord(words[index].front);
           });
         },
         onRightSwipe: () {
           setState(() {
-            DataStorage().removeInActiveWord(words.front[index]);
+            DataStorage().removeInActiveWord(words[index].front);
           });
         },
         rightSwipeWidget: Container(
@@ -187,7 +192,7 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
           child: Icon(Icons.cancel_outlined, color: MyColors().red,),
           color: MyColors().pink,
         ),
-        child: WordListItem(words.front[index], words.back[index], activeList[index]),
+        child: WordListItem(words[index].front, words[index].back, activeList[index]),
       ),
     );
   }
@@ -213,7 +218,7 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
         //todo: 이전 페이지로 넘어가기 안됨
         return;
       },
-      title: Text(words.title, style: TextStyle(
+      title: Text(Words().getTitles()[widget.index], style: TextStyle(
         fontSize: 25.0,
         fontWeight: FontWeight.bold,
         color: MyColors().purple
@@ -234,7 +239,7 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
               (context, index) {
             return wordsList(context, index);
           },
-          childCount: words.getWords(widget.index).front.length,
+          childCount: words.length,
         ),
       ),
     );

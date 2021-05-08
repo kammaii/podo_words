@@ -2,12 +2,12 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:podo_words/learning_words_bar.dart';
-import 'package:podo_words/word_info.dart';
+import 'package:podo_words/word.dart';
 
 class LearningWordsQuiz1 extends StatefulWidget {
 
-  List<WordInfo> wordInfoList;
-  LearningWordsQuiz1(this.wordInfoList);
+  List<Word> wordList;
+  LearningWordsQuiz1(this.wordList);
 
   @override
   _LearningWordsQuiz1State createState() => _LearningWordsQuiz1State();
@@ -21,8 +21,8 @@ class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
 
   @override
   Widget build(BuildContext context) {
-    front = widget.wordInfoList[wordIndex].front;
-    back = widget.wordInfoList[wordIndex].back;
+    front = widget.wordList[wordIndex].front;
+    back = widget.wordList[wordIndex].back;
     mixedIndex = MixedIndex();
 
     return Scaffold(

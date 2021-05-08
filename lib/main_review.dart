@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:podo_words/main_bottom.dart';
 import 'package:podo_words/my_colors.dart';
+import 'package:podo_words/word.dart';
 import 'package:podo_words/wordListItem.dart';
-import 'package:podo_words/word_my.dart';
 import 'package:swipe_to/swipe_to.dart';
 
 import 'data_storage.dart';
@@ -19,7 +19,7 @@ class _MainReviewState extends State<MainReview> {
 
   List<bool> activeList;
   List<bool> toggleSelections = [true, false, false];
-  List<MyWord> myWords;
+  List<Word> myWords;
 
 
 
