@@ -1,4 +1,6 @@
-import 'package:podo_words/words_my.dart';
+import 'dart:convert';
+
+import 'package:podo_words/word_my.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DataStorage {
@@ -15,7 +17,7 @@ class DataStorage {
 
   SharedPreferences sp;
   List<String> inActiveWords;
-  MyWords myWords;
+  List<MyWord> myWords;
 
   static const String KEY_IN_ACTIVE_WORDS = 'inActiveWords';
   static const String KEY_MY_WORDS = 'myWords';
@@ -27,7 +29,12 @@ class DataStorage {
   Future<bool> setData() async {
     sp = await SharedPreferences.getInstance();
     inActiveWords = await getStringList(KEY_IN_ACTIVE_WORDS);
-    myWords = await getStringList(KEY_MY_WORDS);
+    List<String> myWordsJson = await getStringList(KEY_MY_WORDS);
+    myWords = [];
+    for(String myWordJson in myWordsJson) {
+      MyWord myWord = MyWord.fromJson(json.decode(myWordJson));
+      myWords.add(myWord);
+    }
     return true;
   }
 
@@ -37,7 +44,11 @@ class DataStorage {
   }
 
   List<bool> getMyBoolList() {
-    return setBoolList(myWords.front);
+    List<String> myWordFronts = [];
+    for(MyWord myWord in myWords) {
+      myWordFronts.add(myWord.front);
+    }
+    return setBoolList(myWordFronts);
   }
 
   List<bool> setBoolList(List<String> list) {
@@ -53,19 +64,19 @@ class DataStorage {
   }
 
 
-  void addInActiveWord(String key, String word) {
+  void addInActiveWord(String word) {
     if(!inActiveWords.contains(word)) {
       inActiveWords.add(word);
-      DataStorage().setStringList(key, inActiveWords);
+      DataStorage().setStringList(KEY_IN_ACTIVE_WORDS, inActiveWords);
     } else {
       print('이미 비활성화된 단어입니다.');
     }
   }
 
-  void removeInActiveWord(String key, String word) {
+  void removeInActiveWord(String word) {
     if(inActiveWords.contains(word)) {
       inActiveWords.remove(word);
-      DataStorage().setStringList(key, inActiveWords);
+      DataStorage().setStringList(KEY_IN_ACTIVE_WORDS, inActiveWords);
     } else {
       print('이미 활성화된 단어입니다.');
     }

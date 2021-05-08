@@ -26,7 +26,6 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
   double sliverAppBarMinimumHeight = 60.0;
   double sliverAppBarStretchOffset = 100.0;
   double sliverAppBarStretchOffsetSave;
-  static const String KEY_LESSON_WORDS = 'lessonWords';
 
   Words words;
   List<bool> activeList;
@@ -129,6 +128,8 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
                 child: Icon(Icons.play_arrow_rounded, color: MyColors().green, size: 50.0,),
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => LearningWords(widget.index)));
+                  //todo: 활성화된 단어 플래시카드에 추가하기 -> 단어학습 완료 시점으로 옮길 것
+
                 },
               ),
             )
@@ -168,12 +169,12 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
       child: SwipeTo(
         onLeftSwipe: () {
           setState(() {
-            DataStorage().addInActiveWord(KEY_LESSON_WORDS, words.front[index]);
+            DataStorage().addInActiveWord(words.front[index]);
           });
         },
         onRightSwipe: () {
           setState(() {
-            DataStorage().removeInActiveWord(KEY_LESSON_WORDS, words.front[index]);
+            DataStorage().removeInActiveWord(words.front[index]);
           });
         },
         rightSwipeWidget: Container(

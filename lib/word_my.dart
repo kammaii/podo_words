@@ -1,18 +1,31 @@
 
-class MyWords {
+class MyWord {
 
-  List<String> front;
-  List<String> back;
-  List<String> image;
-  List<String> audio;
+  String front;
+  String back;
+  String image;
+  String audio;
 
-  MyWords() {
+  MyWord() {
     //todo: 저장된 단어를 앱 DB에서 가져오기
-    front = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N'];
-    back = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n'];
+    //front = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N'];
+    //back = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n'];
   }
 
+  Map<String, String> toJson() => {
+    'front' : front,
+    'back' : back,
+    'image' : image,
+    'audio' : audio
+  };
 
+  MyWord.fromJson(Map<String, String> json) :
+        front = json['front'],
+        back = json['back'],
+        image = json['image'],
+        audio = json['audio'];
+
+/*
   addMyWords(String front, String back, String image, String audio) {
     this.front.add(front);
     this.back.add(back);
@@ -50,5 +63,7 @@ class MyWords {
     //audio.removeAt(index);
   }
 
+
+ */
 
 }

@@ -1,11 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:podo_words/check_active_words.dart';
 import 'package:podo_words/main_bottom.dart';
 import 'package:podo_words/my_colors.dart';
 import 'package:podo_words/wordListItem.dart';
-import 'package:podo_words/words_my.dart';
+import 'package:podo_words/word_my.dart';
 import 'package:swipe_to/swipe_to.dart';
 
 import 'data_storage.dart';
@@ -20,7 +19,7 @@ class _MainReviewState extends State<MainReview> {
 
   List<bool> activeList;
   List<bool> toggleSelections = [true, false, false];
-  MyWords myWords;
+  List<MyWord> myWords;
 
 
 
@@ -127,22 +126,22 @@ class _MainReviewState extends State<MainReview> {
                 child: GestureDetector(
                   child: ListView.separated (
                     shrinkWrap: true,
-                    itemCount: myWords.front.length,
+                    itemCount: myWords.length,
                     itemBuilder: (context, index) {
                       return SwipeTo(
                         onLeftSwipe: () {
                           setState(() {
-                            DataStorage().addInActiveWord("", myWords.front[index]);
+                            DataStorage().addInActiveWord(myWords[index].front);
                           });
                         },
                         onRightSwipe: () {
                           setState(() {
-                            DataStorage().removeInActiveWord("", myWords.front[index]);
+                            DataStorage().removeInActiveWord(myWords[index].front);
                           });
                         },
                         rightSwipeWidget: Icon(Icons.add),
                         leftSwipeWidget: Icon(Icons.arrow_back),
-                        child: WordListItem(myWords.front[index], myWords.back[index], activeList[index]),
+                        child: WordListItem(myWords[index].front, myWords[index].back, activeList[index]),
                       );
                     },
                     separatorBuilder: (context, index) {
