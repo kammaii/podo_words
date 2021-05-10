@@ -57,7 +57,7 @@ class Words{
       List<String> testPronunciation = [];
       List<String> testImage = [];
 
-      for(int j=0; j<20; j++) {
+      for(int j=0; j<10; j++) {
         testFront.add('$FRONT$i$j');
         testBack.add('$BACK$i$j');
         testPronunciation.add('$PRONUNCIATION$i$j');

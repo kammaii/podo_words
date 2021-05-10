@@ -9,7 +9,7 @@ class Word {
 
   Word(this.front, this.back, this.image);
 
-  Map<String, String> toJson() => {
+  Map<String, dynamic> toJson() => {
     'front' : front,
     'back' : back,
     'image' : image,
@@ -17,7 +17,7 @@ class Word {
     //'audio' : audio
   };
 
-  Word.fromJson(Map<String, String> json) :
+  Word.fromJson(Map<String, dynamic> json) :
         front = json['front'],
         back = json['back'],
         image = json['image'];

@@ -4,9 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:podo_words/main_bottom.dart';
 import 'package:podo_words/my_colors.dart';
 import 'package:podo_words/word.dart';
-import 'package:podo_words/wordListItem.dart';
-import 'package:swipe_to/swipe_to.dart';
-
+import 'package:podo_words/wordList.dart';
 import 'data_storage.dart';
 
 
@@ -128,21 +126,7 @@ class _MainReviewState extends State<MainReview> {
                     shrinkWrap: true,
                     itemCount: myWords.length,
                     itemBuilder: (context, index) {
-                      return SwipeTo(
-                        onLeftSwipe: () {
-                          setState(() {
-                            DataStorage().addInActiveWord(myWords[index].front);
-                          });
-                        },
-                        onRightSwipe: () {
-                          setState(() {
-                            DataStorage().removeInActiveWord(myWords[index].front);
-                          });
-                        },
-                        rightSwipeWidget: Icon(Icons.add),
-                        leftSwipeWidget: Icon(Icons.arrow_back),
-                        child: WordListItem(myWords[index].front, myWords[index].back, activeList[index]),
-                      );
+                      return WordList(myWords[index], activeList[index]);
                     },
                     separatorBuilder: (context, index) {
                       return Divider();

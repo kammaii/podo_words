@@ -12,12 +12,10 @@ class Logo extends StatelessWidget {
 
     return Scaffold(
       body: FutureBuilder(
-        future: dataStorage.setData(),
+        future: dataStorage.initData(),
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
           if(snapshot.hasData) {
             print('데이타 있음');
-            print(dataStorage.inActiveWords);
-            print(dataStorage.myWords);
 
           } else {
             print('데이타 없음');

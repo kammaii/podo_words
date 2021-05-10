@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -6,9 +7,8 @@ import 'package:podo_words/learning_words.dart';
 import 'package:podo_words/main_bottom.dart';
 import 'package:podo_words/my_colors.dart';
 import 'package:podo_words/word.dart';
-import 'package:podo_words/wordListItem.dart';
+import 'package:podo_words/wordList.dart';
 import 'package:podo_words/words.dart';
-import 'package:swipe_to/swipe_to.dart';
 
 class MainLearningSliver extends StatefulWidget {
 
@@ -134,7 +134,17 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => LearningWords(widget.index)));
                   //todo: 활성화된 단어 플래시카드에 추가하기 -> 단어학습 완료 시점으로 옮길 것
-
+                  for(int i=0; i<activeList.length; i++) {
+                    Word newMyWord = words[i];
+                    if(activeList[i] && !DataStorage().myWords.contains(newMyWord)) {
+                      String front = words[i].front;
+                      String back = words[i].back;
+                      String image = words[i].image;
+                      DataStorage().myWordsJson.add(json.encode(Word(front, back, image).toJson()));
+                      DataStorage().myWords.add(words[i]);
+                    }
+                  }
+                  DataStorage().setStringList(DataStorage.KEY_MY_WORDS, DataStorage().myWordsJson);
                 },
               ),
             )
@@ -168,33 +178,7 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
   }
 
   Widget wordsList(context, index) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10.0),
-      height: 80.0,
-      child: SwipeTo(
-        onLeftSwipe: () {
-          setState(() {
-            DataStorage().addInActiveWord(words[index].front);
-          });
-        },
-        onRightSwipe: () {
-          setState(() {
-            DataStorage().removeInActiveWord(words[index].front);
-          });
-        },
-        rightSwipeWidget: Container(
-          padding: EdgeInsets.all(10.0),
-          child: Icon(Icons.check, color: Colors.blue,),
-          color: Colors.greenAccent,
-        ),
-        leftSwipeWidget: Container(
-          padding: EdgeInsets.all(10.0),
-          child: Icon(Icons.cancel_outlined, color: MyColors().red,),
-          color: MyColors().pink,
-        ),
-        child: WordListItem(words[index].front, words[index].back, activeList[index]),
-      ),
-    );
+    return WordList(words[index], activeList[index]);
   }
 
 
