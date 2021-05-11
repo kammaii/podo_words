@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:podo_words/main_learning_sliver.dart';
+import 'package:podo_words/main_review.dart';
 import 'package:podo_words/my_colors.dart';
 import 'package:podo_words/word.dart';
 import 'package:swipe_to/swipe_to.dart';
 import 'data_storage.dart';
 
 
+typedef void StringCallback(String val);
 
 class WordList extends StatefulWidget {
 
   Word word;
   bool isActive;
-  WordList(this.word, this.isActive);
+  bool isFromMainLearning;
+  WordList(this.isFromMainLearning, this.word, this.isActive);
 
   @override
   _WordListState createState() => _WordListState();
@@ -24,6 +28,9 @@ class _WordListState extends State<WordList> {
 
   @override
   Widget build(BuildContext context) {
+    MainReviewState mainReviewState = context.findAncestorStateOfType<MainReviewState>();
+    MainLearningSliverState mainLearningSliverState = context.findAncestorStateOfType<MainLearningSliverState>();
+
 
     if(widget.isActive) {
       textColor = MyColors().purple;
@@ -38,14 +45,26 @@ class _WordListState extends State<WordList> {
       height: itemHeight,
       child: SwipeTo(
         onLeftSwipe: () {
-          setState(() {
-            DataStorage().addInActiveWord(widget.word.front);
-          });
+          if(widget.isFromMainLearning) {
+            mainLearningSliverState.setState(() {
+              DataStorage().addInActiveWord(widget.word.front);
+            });
+          } else {
+            mainReviewState.setState(() {
+              DataStorage().addInActiveWord(widget.word.front);
+            });
+          }
         },
         onRightSwipe: () {
-          setState(() {
-            DataStorage().removeInActiveWord(widget.word.front);
-          });
+          if(widget.isFromMainLearning) {
+            mainLearningSliverState.setState(() {
+              DataStorage().removeInActiveWord(widget.word.front);
+            });
+          } else {
+            mainReviewState.setState(() {
+              DataStorage().removeInActiveWord(widget.word.front);
+            });
+          }
         },
         rightSwipeWidget: Container(
           height: iconHeight,
@@ -82,4 +101,5 @@ class _WordListState extends State<WordList> {
       ),
     );
   }
+
 }

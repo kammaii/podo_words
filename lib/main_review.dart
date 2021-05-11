@@ -10,10 +10,10 @@ import 'data_storage.dart';
 
 class MainReview extends StatefulWidget {
   @override
-  _MainReviewState createState() => _MainReviewState();
+  MainReviewState createState() => MainReviewState();
 }
 
-class _MainReviewState extends State<MainReview> {
+class MainReviewState extends State<MainReview> {
 
   List<bool> activeList;
   List<bool> toggleSelections = [true, false, false];
@@ -22,8 +22,10 @@ class _MainReviewState extends State<MainReview> {
   Icon floatingBtn;
 
 
+
   @override
   Widget build(BuildContext context) {
+
     myWords = DataStorage().myWords;
     activeList = DataStorage().getMyBoolList();
     if(isPlayBtn) {
@@ -128,18 +130,13 @@ class _MainReviewState extends State<MainReview> {
               ),
               Expanded(
                 child: GestureDetector(
-                  child: ListView.separated (
-                    shrinkWrap: true,
+                  child: ListView.builder (
                     itemCount: myWords.length,
                     itemBuilder: (context, index) {
-                      return WordList(myWords[index], activeList[index]);
-                    },
-                    separatorBuilder: (context, index) {
-                      return Divider();
+                      return WordList(false, myWords[index], activeList[index]);
                     },
                   ),
                   onLongPress: () {
-                    //todo: 단어 지우기
                     setState(() {
                       if(isPlayBtn) {
                         isPlayBtn = false;

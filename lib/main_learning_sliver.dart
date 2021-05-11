@@ -18,10 +18,10 @@ class MainLearningSliver extends StatefulWidget {
   MainLearningSliver(this.index, this.color);
 
   @override
-  _MainLearningSliverState createState() => _MainLearningSliverState();
+  MainLearningSliverState createState() => MainLearningSliverState();
 }
 
-class _MainLearningSliverState extends State<MainLearningSliver> {
+class MainLearningSliverState extends State<MainLearningSliver> {
   ScrollController scrollController;
   double sliverAppBarHeight = 200.0;
   double sliverAppBarMinimumHeight = 60.0;
@@ -178,7 +178,7 @@ class _MainLearningSliverState extends State<MainLearningSliver> {
   }
 
   Widget wordsList(context, index) {
-    return WordList(words[index], activeList[index]);
+    return WordList(true, words[index], activeList[index]);
   }
 
 
