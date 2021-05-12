@@ -19,7 +19,7 @@ class MainReviewState extends State<MainReview> {
   List<bool> toggleSelections = [true, false, false];
   List<Word> myWords;
   bool isPlayBtn = true;
-  Icon floatingBtn;
+  Widget floatingBtn;
 
 
 
@@ -126,14 +126,24 @@ class MainReviewState extends State<MainReview> {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text('0 words'),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.assistant_photo_outlined, color: MyColors().purple,),
+                    Text(myWords.length.toString(), style: TextStyle(
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                        color: MyColors().purple)
+                    ),
+                  ],
+                ),
               ),
               Expanded(
                 child: GestureDetector(
                   child: ListView.builder (
                     itemCount: myWords.length,
                     itemBuilder: (context, index) {
-                      return WordList(false, myWords[index], activeList[index]);
+                      return WordList(false, myWords[index], activeList[index], isDeleteMode: !isPlayBtn);
                     },
                   ),
                   onLongPress: () {

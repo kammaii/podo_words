@@ -14,7 +14,8 @@ class WordList extends StatefulWidget {
   Word word;
   bool isActive;
   bool isFromMainLearning;
-  WordList(this.isFromMainLearning, this.word, this.isActive);
+  bool isDeleteMode = false;
+  WordList(this.isFromMainLearning, this.word, this.isActive, {this.isDeleteMode});
 
   @override
   _WordListState createState() => _WordListState();
@@ -25,12 +26,19 @@ class _WordListState extends State<WordList> {
   Color backColor;
   double itemHeight = 80.0;
   double iconHeight = 70.0;
+  double leftMargin;
+  bool checkValue = false;
 
   @override
   Widget build(BuildContext context) {
     MainReviewState mainReviewState = context.findAncestorStateOfType<MainReviewState>();
     MainLearningSliverState mainLearningSliverState = context.findAncestorStateOfType<MainLearningSliverState>();
 
+    if(widget.isDeleteMode) {
+      leftMargin = 50.0;
+    } else {
+      leftMargin = 0.0;
+    }
 
     if(widget.isActive) {
       textColor = MyColors().purple;
@@ -78,25 +86,53 @@ class _WordListState extends State<WordList> {
           child: Icon(Icons.cancel_outlined, color: MyColors().red,),
           color: MyColors().pink,
         ),
-        child: Card(
-          color: backColor,
-          child: InkWell(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(widget.word.front, style: TextStyle(color: textColor, fontSize: 20.0),),
-                    VerticalDivider(color: MyColors().navyLight, thickness: 2.0,),
-                    Text(widget.word.back, style: TextStyle(color: textColor, fontSize: 20.0),)
-                  ]
+        child: Stack(
+          alignment: Alignment.centerLeft,
+          children: [
+            Visibility(
+              visible: widget.isDeleteMode,
+              child: Container(
+                child: Checkbox(
+                  value: checkValue,
+                  onChanged: (value){
+                    setState(() {
+                      checkValue = value;
+                    });
+                  },
+                ),
               ),
             ),
-            onTap: (){
-              //todo: 오디오 플레이
-              print('audio play');
-            },
-          ),
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              margin: EdgeInsets.only(left: leftMargin),
+              child: Card(
+                color: backColor,
+                child: InkWell(
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(widget.word.front, style: TextStyle(color: textColor, fontSize: 20.0),),
+                          VerticalDivider(color: MyColors().navyLight, thickness: 2.0,),
+                          Text(widget.word.back, style: TextStyle(color: textColor, fontSize: 20.0),)
+                        ]
+                    ),
+                  ),
+                  onTap: (){
+                    //todo: 오디오 플레이
+                    if(widget.isDeleteMode) {
+                      setState(() {
+                        checkValue = !checkValue;
+                      });
+                    } else {
+                      print('audio play');
+                    }
+                  },
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
