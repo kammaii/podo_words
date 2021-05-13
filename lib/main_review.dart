@@ -27,6 +27,11 @@ class MainReviewState extends State<MainReview> {
   Widget build(BuildContext context) {
 
     myWords = DataStorage().myWords;
+    for(int i=0; i<myWords.length; i++) {
+      myWords[i].wordId = i;
+      myWords[i].isSelected = false;
+    }
+
     activeList = DataStorage().getMyBoolList();
     if(isPlayBtn) {
       floatingBtn = Icon(Icons.play_arrow_rounded, color: MyColors().green, size: 50.0);
@@ -143,7 +148,7 @@ class MainReviewState extends State<MainReview> {
                   child: ListView.builder (
                     itemCount: myWords.length,
                     itemBuilder: (context, index) {
-                      return WordList(false, myWords[index], activeList[index], isDeleteMode: !isPlayBtn);
+                      return WordList(false, myWords[index], activeList[index], !isPlayBtn);
                     },
                   ),
                   onLongPress: () {
@@ -220,7 +225,12 @@ class MainReviewState extends State<MainReview> {
             'Delete',
             style: TextStyle(color: MyColors().wine, fontWeight: FontWeight.bold),
           ),
-          onPressed: (){},
+          onPressed: (){
+            setState(() {
+              DataStorage().removeMyWords();
+              Navigator.of(context).pop();
+            });
+          },
         )
       ],
     );

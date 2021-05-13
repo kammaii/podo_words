@@ -134,17 +134,13 @@ class MainLearningSliverState extends State<MainLearningSliver> {
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => LearningWords(widget.index)));
                   //todo: 활성화된 단어 플래시카드에 추가하기 -> 단어학습 완료 시점으로 옮길 것
+                  List<Word> newMyWords = [];
                   for(int i=0; i<activeList.length; i++) {
-                    Word newMyWord = words[i];
-                    if(activeList[i] && !DataStorage().myWords.contains(newMyWord)) {
-                      String front = words[i].front;
-                      String back = words[i].back;
-                      String image = words[i].image;
-                      DataStorage().myWordsJson.add(json.encode(Word(front, back, image).toJson()));
-                      DataStorage().myWords.add(words[i]);
+                    if(activeList[i]) {
+                      newMyWords.add(words[i]);
                     }
                   }
-                  DataStorage().setStringList(DataStorage.KEY_MY_WORDS, DataStorage().myWordsJson);
+                  DataStorage().addMyWords(newMyWords);
                 },
               ),
             )
@@ -178,7 +174,7 @@ class MainLearningSliverState extends State<MainLearningSliver> {
   }
 
   Widget wordsList(context, index) {
-    return WordList(true, words[index], activeList[index]);
+    return WordList(true, words[index], activeList[index], false);
   }
 
 

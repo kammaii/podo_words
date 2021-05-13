@@ -17,7 +17,6 @@ class DataStorage {
   SharedPreferences sp;
   List<String> inActiveWords;
   List<Word> myWords;
-  List<String> myWordsJson;
 
   static const String KEY_IN_ACTIVE_WORDS = 'inActiveWords';
   static const String KEY_MY_WORDS = 'myWords';
@@ -29,17 +28,58 @@ class DataStorage {
   Future<bool> initData() async {
     sp = await SharedPreferences.getInstance();
     inActiveWords = await getStringList(KEY_IN_ACTIVE_WORDS);
-    myWordsJson = await getStringList(KEY_MY_WORDS);
+    List<String> myWordsJson = await getStringList(KEY_MY_WORDS);
     print(myWordsJson);
 
     myWords = [];
-    for(String myWordJson in myWordsJson) {
-      Word myWord = Word.fromJson(json.decode(myWordJson));
+    for(int i=0; i<myWordsJson.length; i++) {
+      Word myWord = Word.fromJson(json.decode(myWordsJson[i]));
       myWords.add(myWord);
     }
-
     return true;
   }
+
+  void removeMyWords() {
+    List<int> selectedId = [];
+    for(Word myWord in myWords) {
+      if(myWord.isSelected) {
+        selectedId.add(myWord.wordId);
+      }
+    }
+    for(int id in selectedId) {
+      myWords.removeAt(id);
+    }
+    setMyWords();
+  }
+
+  void addMyWords(List<Word> wordList) {
+    List<Word> newWords = [];
+    for(Word word in wordList) {
+      String front = word.front;
+      bool isNew = true;
+      for(Word myWord in myWords) {
+        if(front == myWord.front) {
+          isNew = false;
+        }
+      }
+      if(isNew) {
+        newWords.add(word);
+      }
+    }
+    for(Word newWord in newWords ) {
+      myWords.add(newWord);
+    }
+    setMyWords();
+  }
+
+  void setMyWords() {
+    List<String> myWordsJson = [];
+    for(Word word in myWords) {
+      myWordsJson.add(json.encode(word.toJson()));
+    }
+    DataStorage().setStringList(KEY_MY_WORDS, myWordsJson);
+  }
+
 
   // 단어 front 리스트를 입력하면 inActive 단어의 인덱스 리스트를 반환
   List<bool> getBoolList(List<String> frontList) {

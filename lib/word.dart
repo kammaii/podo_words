@@ -7,6 +7,9 @@ class Word {
   //String pronunciation;
   //String audio;
 
+  int wordId;
+  bool isSelected = false;
+
   Word(this.front, this.back, this.image);
 
   Map<String, dynamic> toJson() => {
