@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -18,10 +20,24 @@ class MainReviewState extends State<MainReview> {
   List<Word> myWords;
   List<Word> myWordsInList;
   List<bool> toggleSelections = [true, false, false];
+  String searchInput;
 
   bool isPlayBtn = true;
   Widget floatingBtn;
 
+  final textFieldController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    textFieldController.addListener(() {setTextField();});
+  }
+
+  void setTextField() {
+    setState(() {
+      searchInput = textFieldController.text;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,14 +49,23 @@ class MainReviewState extends State<MainReview> {
     }
 
     myWordsInList = [];
-    if(toggleSelections[0]) {
+    if(searchInput != null && searchInput.length > 0) {
+      for(Word myWord in myWords) {
+        if(myWord.front.contains(searchInput) || myWord.back.contains(searchInput)) {
+          myWordsInList.add(myWord);
+        }
+      }
+
+    } else if(toggleSelections[0]) {
       myWordsInList = myWords;
+
     } else if(toggleSelections[1]) {
       for(Word myWord in myWords) {
         if(myWord.isActive) {
           myWordsInList.add(myWord);
         }
       }
+
     } else {
       for(Word myWord in myWords) {
         if(!myWord.isActive) {
@@ -87,6 +112,7 @@ class MainReviewState extends State<MainReview> {
             child: Icon(icon),
             onPressed: (){
               setState(() {
+                textFieldController.clear();
                 for(int i=0; i<toggleSelections.length; i++) {
                   if(i == toggleIndex) {
                     toggleSelections[i] = true;
@@ -129,6 +155,7 @@ class MainReviewState extends State<MainReview> {
                         filled: true,
                         fillColor: Colors.white
                       ),
+                      controller: textFieldController,
                     ),
                     Padding(
                       padding: const EdgeInsets.all(10.0),
