@@ -47,7 +47,6 @@ class _WordListState extends State<WordList> {
     }
 
     void setChecked(bool b) {
-      print(DataStorage().myWords[widget.word.wordId].front);
       DataStorage().myWords[widget.word.wordId].isChecked = b;
     }
 

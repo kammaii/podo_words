@@ -15,11 +15,12 @@ class MainReview extends StatefulWidget {
 
 class MainReviewState extends State<MainReview> {
 
-  List<bool> toggleSelections = [true, false, false];
   List<Word> myWords;
+  List<Word> myWordsInList;
+  List<bool> toggleSelections = [true, false, false];
+
   bool isPlayBtn = true;
   Widget floatingBtn;
-  List<Word> displayedMyWords;
 
 
   @override
@@ -29,6 +30,23 @@ class MainReviewState extends State<MainReview> {
     for(int i=0; i<myWords.length; i++) {
       myWords[i].wordId = i;
       myWords[i].isChecked = false;
+    }
+
+    myWordsInList = [];
+    if(toggleSelections[0]) {
+      myWordsInList = myWords;
+    } else if(toggleSelections[1]) {
+      for(Word myWord in myWords) {
+        if(myWord.isActive) {
+          myWordsInList.add(myWord);
+        }
+      }
+    } else {
+      for(Word myWord in myWords) {
+        if(!myWord.isActive) {
+          myWordsInList.add(myWord);
+        }
+      }
     }
 
     if(isPlayBtn) {
@@ -76,8 +94,6 @@ class MainReviewState extends State<MainReview> {
                     toggleSelections[i] = false;
                   }
                 }
-                //todo: 토글버튼 액션 실행1
-
               });
             },
           ),
@@ -133,7 +149,7 @@ class MainReviewState extends State<MainReview> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(Icons.assistant_photo_outlined, color: MyColors().purple,),
-                    Text(myWords.length.toString(), style: TextStyle(
+                    Text(myWordsInList.length.toString(), style: TextStyle(
                         fontSize: 20.0,
                         fontWeight: FontWeight.bold,
                         color: MyColors().purple)
@@ -144,9 +160,9 @@ class MainReviewState extends State<MainReview> {
               Expanded(
                 child: GestureDetector(
                   child: ListView.builder (
-                    itemCount: myWords.length,
+                    itemCount: myWordsInList.length,
                     itemBuilder: (context, index) {
-                      return WordList(false, myWords[index], !isPlayBtn);
+                      return WordList(false, myWordsInList[index], !isPlayBtn);
                     },
                   ),
                   onLongPress: () {
