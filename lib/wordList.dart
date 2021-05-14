@@ -12,10 +12,9 @@ typedef void StringCallback(String val);
 class WordList extends StatefulWidget {
 
   Word word;
-  bool isActive;
   bool isFromMainLearning;
   bool isDeleteMode;
-  WordList(this.isFromMainLearning, this.word, this.isActive, this.isDeleteMode);
+  WordList(this.isFromMainLearning, this.word, this.isDeleteMode);
 
   @override
   _WordListState createState() => _WordListState();
@@ -39,7 +38,7 @@ class _WordListState extends State<WordList> {
       leftMargin = 0.0;
     }
 
-    if(widget.isActive) {
+    if(widget.word.isActive) {
       textColor = MyColors().purple;
       backColor = Colors.white;
     } else {
@@ -49,7 +48,7 @@ class _WordListState extends State<WordList> {
 
     void setChecked(bool b) {
       print(DataStorage().myWords[widget.word.wordId].front);
-      DataStorage().myWords[widget.word.wordId].isSelected = b;
+      DataStorage().myWords[widget.word.wordId].isChecked = b;
     }
 
     return Container(
@@ -97,7 +96,7 @@ class _WordListState extends State<WordList> {
               visible: widget.isDeleteMode,
               child: Container(
                 child: Checkbox(
-                  value: widget.word.isSelected,
+                  value: widget.word.isChecked,
                   onChanged: (value){
                     setState(() {
                       setChecked(value);
@@ -127,7 +126,7 @@ class _WordListState extends State<WordList> {
                     //todo: 오디오 플레이
                     if(widget.isDeleteMode) {
                       setState(() {
-                        setChecked(!widget.word.isSelected);
+                        setChecked(!widget.word.isChecked);
                       });
                     } else {
                       print('audio play');

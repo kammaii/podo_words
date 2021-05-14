@@ -15,12 +15,11 @@ class MainReview extends StatefulWidget {
 
 class MainReviewState extends State<MainReview> {
 
-  List<bool> activeList;
   List<bool> toggleSelections = [true, false, false];
   List<Word> myWords;
   bool isPlayBtn = true;
   Widget floatingBtn;
-
+  List<Word> displayedMyWords;
 
 
   @override
@@ -29,10 +28,9 @@ class MainReviewState extends State<MainReview> {
     myWords = DataStorage().myWords;
     for(int i=0; i<myWords.length; i++) {
       myWords[i].wordId = i;
-      myWords[i].isSelected = false;
+      myWords[i].isChecked = false;
     }
 
-    activeList = DataStorage().getMyBoolList();
     if(isPlayBtn) {
       floatingBtn = Icon(Icons.play_arrow_rounded, color: MyColors().green, size: 50.0);
     } else {
@@ -148,7 +146,7 @@ class MainReviewState extends State<MainReview> {
                   child: ListView.builder (
                     itemCount: myWords.length,
                     itemBuilder: (context, index) {
-                      return WordList(false, myWords[index], activeList[index], !isPlayBtn);
+                      return WordList(false, myWords[index], !isPlayBtn);
                     },
                   ),
                   onLongPress: () {

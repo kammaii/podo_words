@@ -8,7 +8,9 @@ class Word {
   //String audio;
 
   int wordId;
-  bool isSelected = false;
+  bool isActive;
+  bool isChecked = false;
+
 
   Word(this.front, this.back, this.image);
 

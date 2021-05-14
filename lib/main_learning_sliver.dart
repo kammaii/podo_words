@@ -29,7 +29,6 @@ class MainLearningSliverState extends State<MainLearningSliver> {
   double sliverAppBarStretchOffsetSave;
 
   List<Word> words;
-  List<bool> activeList;
   int activeWordCount;
 
 
@@ -56,11 +55,10 @@ class MainLearningSliverState extends State<MainLearningSliver> {
     for(int i=0; i<words.length; i++) {
       fronts.add(words[i].front);
     }
-    activeList = DataStorage().getBoolList(fronts);
     activeWordCount = 0;
 
-    for(bool b in activeList) {
-      if(b) {
+    for(Word word in words) {
+      if(word.isActive) {
         activeWordCount ++;
       }
     }
@@ -135,8 +133,8 @@ class MainLearningSliverState extends State<MainLearningSliver> {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => LearningWords(widget.index)));
                   //todo: 활성화된 단어 플래시카드에 추가하기 -> 단어학습 완료 시점으로 옮길 것
                   List<Word> newMyWords = [];
-                  for(int i=0; i<activeList.length; i++) {
-                    if(activeList[i]) {
+                  for(int i=0; i<activeWordCount; i++) {
+                    if(words[i].isActive) {
                       newMyWords.add(words[i]);
                     }
                   }
@@ -174,7 +172,7 @@ class MainLearningSliverState extends State<MainLearningSliver> {
   }
 
   Widget wordsList(context, index) {
-    return WordList(true, words[index], activeList[index], false);
+    return WordList(true, words[index], false);
   }
 
 

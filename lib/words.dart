@@ -1,5 +1,6 @@
 import 'dart:core';
 
+import 'package:podo_words/data_storage.dart';
 import 'package:podo_words/word.dart';
 
 class Words{
@@ -94,6 +95,11 @@ class Words{
     List<Word> wordList = [];
     for(int i=0; i<wordsMap[FRONT].length; i++) {
       Word word = Word(wordsMap[FRONT][i], wordsMap[BACK][i], wordsMap[IMAGE][i]);
+      if(DataStorage().inActiveWords.contains(word.front)) {
+        word.isActive = false;
+      } else {
+        word.isActive = true;
+      }
       wordList.add(word);
     }
     return wordList;

@@ -36,13 +36,24 @@ class DataStorage {
       Word myWord = Word.fromJson(json.decode(myWordsJson[i]));
       myWords.add(myWord);
     }
+    setIsActiveMyWords();
     return true;
+  }
+
+  void setIsActiveMyWords() {
+    for(Word myWord in myWords) {
+      if(inActiveWords.contains(myWord.front)) {
+        myWord.isActive = false;
+      } else {
+        myWord.isActive = true;
+      }
+    }
   }
 
   void removeMyWords() {
     List<int> selectedId = [];
     for(Word myWord in myWords) {
-      if(myWord.isSelected) {
+      if(myWord.isChecked) {
         selectedId.add(myWord.wordId);
       }
     }
@@ -80,36 +91,10 @@ class DataStorage {
     DataStorage().setStringList(KEY_MY_WORDS, myWordsJson);
   }
 
-
-  // 단어 front 리스트를 입력하면 inActive 단어의 인덱스 리스트를 반환
-  List<bool> getBoolList(List<String> frontList) {
-    return initBoolList(frontList);
-  }
-
-  List<bool> getMyBoolList() {
-    List<String> myWordFronts = [];
-    for(Word myWord in myWords) {
-      myWordFronts.add(myWord.front);
-    }
-    return initBoolList(myWordFronts);
-  }
-
-  List<bool> initBoolList(List<String> list) {
-    List<bool> boolList = [];
-    for(int i=0; i<list.length; i++) {
-      if(inActiveWords.contains(list[i])) {
-        boolList.add(false);
-      } else {
-        boolList.add(true);
-      }
-    }
-    return boolList;
-  }
-
-
   void addInActiveWord(String word) {
     if(!inActiveWords.contains(word)) {
       inActiveWords.add(word);
+      setIsActiveMyWords();
       DataStorage().setStringList(KEY_IN_ACTIVE_WORDS, inActiveWords);
     } else {
       print('이미 비활성화된 단어입니다.');
@@ -119,6 +104,7 @@ class DataStorage {
   void removeInActiveWord(String word) {
     if(inActiveWords.contains(word)) {
       inActiveWords.remove(word);
+      setIsActiveMyWords();
       DataStorage().setStringList(KEY_IN_ACTIVE_WORDS, inActiveWords);
     } else {
       print('이미 활성화된 단어입니다.');
