@@ -1,5 +1,4 @@
 import 'dart:core';
-
 import 'package:podo_words/data_storage.dart';
 import 'package:podo_words/word.dart';
 
@@ -22,28 +21,54 @@ class Words{
     print('Words 초기화');
     setWords();
   }
+/*
+//
+{
+  'title' : [''],
+  'titleIcon' : ['.png'],
+  'front' : [''],
+  'back' : [''],
+  'pronunciation' : ['-','[]']
+}
+ */
 
-  List<Map<String, List<String>>> words = [];
-    /*
+
+  List<Map<String, List<String>>> words = [
+// 1
     {
-      'title' : 'title0',
-      'titleIcon' : 'titleImage0',
-      'front' : 'front0 front1 front2',
-      'back' : 'back0 back1 back2',
-      'image' : 'image0 image1 image2',
-      'pronunciation' : 'pro0 pro1 pro2'
+      'title' : ['음식'],
+      'titleIcon' : ['1.png'],
+      'front' : ['밥','국','반찬','고기','김치','만두','김','두부','생선','해산물','면','빵','떡볶이','김밥','비빔밥','냉면','햄버거','피자','한식','양식','중식','일식'],
+      'back' : ['rice/meal','soup','side dish','meat','Kimchi','dumplings','Laver','tofu','fish','seafood','noodles','bread','Tteok-bokki','Gimbap','Bibimbap','Cold Buchwheat Noodles','hamburger','pizza','Korean food','Western food','Chinese food','Japanese food'],
+      'pronunciation' : ['-','-','-','-','-','-','-','-','-','-','-','-','[떡보끼]','[김빱]','[비빔빱]','-','-','-','-','-','-','-']
     },
+// 2
     {
-      'title' : 'title0',
-      'titleIcon' : 'titleImage0',
-      'front' : 'front0 front1 front2',
-      'back' : 'back0 back1 back2',
-      'image' : 'image0 image1 image2',
-      'pronunciation' : 'pro0 pro1 pro2'
+      'title' : ['디저트'],
+      'titleIcon' : ['2.png'],
+      'front' : ['과일','음료','초콜릿','케이크','팥빙수','얼음','아이스크림','떡','사탕','과자'],
+      'back' : ['fruit','beverage','chocolate','cake','Patbingsu','ice','ice cream','Theok','candy','snacks'],
+      'pronunciation' : ['-','[음뇨]','-','-','[팓삥수]','[어름]','-','-','-','-']
     },
+// 3
+    {
+      'title' : ['과일'],
+      'titleIcon' : ['3.png'],
+      'front' : ['사과','딸기','포도','수박','바나나','배','귤','오렌지','블루베리','복숭아'],
+      'back' : ['apple','strawberry','grape','watermelon','banana','pear','tangerine','orange','blueberry','peach'],
+      'pronunciation' : ['-','-','-','-','-','-','-','-','-','[복쑹아]']
+    },
+// 4
+    {
+      'title' : ['야채'],
+      'titleIcon' : ['4.png'],
+      'front' : ['당근','감자','고구마','양파','오이','버섯','호박','무','고추','마늘','토마토','옥수수','콩','파','상추','콩나물','양배추','시금치'],
+      'back' : ['carrot','potato','sweet potato','onion','cucumber','mushroom','pumpkin','radish','chili','garlic','tomato','corn','bean','green onion','lettuce','bean sprouts','cabbage','spinach'],
+      'pronunciation' : ['-','-','-','-','-','-','-','-','-','-','-','[옥쑤수]','-','-','-','-','-','-']
+    }
+
   ];
 
-     */
 
   // todo: 테스트용임. 삭제할 것
   void setWords() {
