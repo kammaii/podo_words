@@ -25,19 +25,33 @@ class DataStorage {
     print('DataStorage 초기화');
   }
 
-  Future<bool> initData() async {
-    sp = await SharedPreferences.getInstance();
-    inActiveWords = await getStringList(KEY_IN_ACTIVE_WORDS);
-    List<String> myWordsJson = await getStringList(KEY_MY_WORDS);
-    print(myWordsJson);
+  Future<SharedPreferences> initData() {
+    Future<SharedPreferences> f = SharedPreferences.getInstance();
+    f.then((value) {
+      sp = value;
+      inActiveWords = getStringList(KEY_IN_ACTIVE_WORDS);
+      List<String> myWordsJson = getStringList(KEY_MY_WORDS);
+      print(myWordsJson);
 
-    myWords = [];
-    for(int i=0; i<myWordsJson.length; i++) {
-      Word myWord = Word.fromJson(json.decode(myWordsJson[i]));
-      myWords.add(myWord);
-    }
-    setIsActiveMyWords();
-    return true;
+      myWords = [];
+      for(int i=0; i<myWordsJson.length; i++) {
+        Word myWord = Word.fromJson(json.decode(myWordsJson[i]));
+        myWords.add(myWord);
+      }
+      setIsActiveMyWords();
+    });
+
+    return f;
+  }
+
+  Future<bool> wait() {
+    return Future.delayed(const Duration(seconds: 0), () { //todo: 3초로 수정하기
+      return true;
+    });
+  }
+
+  Future<List<Object>> init() {
+    return Future.wait([wait(), initData()]);
   }
 
   void setIsActiveMyWords() {
@@ -115,7 +129,7 @@ class DataStorage {
     sp.setStringList(key, list);
   }
 
-  Future<List<String>> getStringList(String key) async {
+  List<String> getStringList(String key) {
     List<String> stringList = sp.getStringList(key) ?? [];
     return stringList;
   }

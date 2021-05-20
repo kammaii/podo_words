@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:podo_words/logo.dart';
 import 'package:podo_words/main_learning.dart';
 
 
@@ -13,7 +12,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.deepPurple
       ),
-      home: new Logo(),
+      home: new MainLearning(),
     );
   }
 }
