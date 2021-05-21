@@ -66,7 +66,7 @@ class _LearningWordsState extends State<LearningWords> {
 
                             for (int i = 1; i < 5; i++) {
                               int count = index-i;
-                              Word word = Word(words[count].front, words[count].back, words[count].image);
+                              Word word = Word(words[count].front, words[count].back);
                               wordQuizList.add(word);
                             }
                             Navigator.push(context, MaterialPageRoute(builder: (context) => LearningWordsQuiz1(wordQuizList)));

@@ -12,7 +12,7 @@ class Word {
   bool isChecked = false;
 
 
-  Word(this.front, this.back, this.image);
+  Word(this.front, this.back);
 
   Map<String, dynamic> toJson() => {
     'front' : front,

@@ -156,7 +156,10 @@ class MainLearningSliverState extends State<MainLearningSliver> {
           Positioned(
             child: Hero(
               tag: 'wordTitleImage${widget.index}',
-              child: Icon(Icons.people,size: 250.0, color: Colors.white,)
+              child: Image.asset(
+                'images/sample_icon.png',
+                width: 250.0,
+                color: Colors.white,)  //todo: title_[index].png
             ),
             bottom: -50.0,
             right: -50.0,

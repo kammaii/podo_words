@@ -19,7 +19,7 @@ class Words{
 
   Words.init() {
     print('Words 초기화');
-    setWords();
+    //setWords();
   }
 /*
 //
@@ -34,7 +34,7 @@ class Words{
 
 
   List<Map<String, List<String>>> words = [
-// 1
+// 0
     {
       'title' : ['음식'],
       'titleIcon' : ['1.png'],
@@ -42,7 +42,7 @@ class Words{
       'back' : ['rice/meal','soup','side dish','meat','Kimchi','dumplings','Laver','tofu','fish','seafood','noodles','bread','Tteok-bokki','Gimbap','Bibimbap','Cold Buchwheat Noodles','hamburger','pizza','Korean food','Western food','Chinese food','Japanese food'],
       'pronunciation' : ['-','-','-','-','-','-','-','-','-','-','-','-','[떡보끼]','[김빱]','[비빔빱]','-','-','-','-','-','-','-']
     },
-// 2
+// 1
     {
       'title' : ['디저트'],
       'titleIcon' : ['2.png'],
@@ -50,7 +50,7 @@ class Words{
       'back' : ['fruit','beverage','chocolate','cake','Patbingsu','ice','ice cream','Theok','candy','snacks'],
       'pronunciation' : ['-','[음뇨]','-','-','[팓삥수]','[어름]','-','-','-','-']
     },
-// 3
+// 2
     {
       'title' : ['과일'],
       'titleIcon' : ['3.png'],
@@ -58,7 +58,7 @@ class Words{
       'back' : ['apple','strawberry','grape','watermelon','banana','pear','tangerine','orange','blueberry','peach'],
       'pronunciation' : ['-','-','-','-','-','-','-','-','-','[복쑹아]']
     },
-// 4
+// 3
     {
       'title' : ['야채'],
       'titleIcon' : ['4.png'],
@@ -66,7 +66,6 @@ class Words{
       'back' : ['carrot','potato','sweet potato','onion','cucumber','mushroom','pumpkin','radish','chili','garlic','tomato','corn','bean','green onion','lettuce','bean sprouts','cabbage','spinach'],
       'pronunciation' : ['-','-','-','-','-','-','-','-','-','-','-','[옥쑤수]','-','-','-','-','-','-']
     }
-
   ];
 
 
@@ -119,7 +118,7 @@ class Words{
     Map<String, List<String>> wordsMap = words[index];
     List<Word> wordList = [];
     for(int i=0; i<wordsMap[FRONT].length; i++) {
-      Word word = Word(wordsMap[FRONT][i], wordsMap[BACK][i], wordsMap[IMAGE][i]);
+      Word word = Word(wordsMap[FRONT][i], wordsMap[BACK][i]);
       if(DataStorage().inActiveWords.contains(word.front)) {
         word.isActive = false;
       } else {

@@ -93,7 +93,7 @@ class MainLearning extends StatelessWidget {
                 Expanded(
                   child: GridView.builder(
                       shrinkWrap: true,
-                      itemCount: Words().getTitles().length,
+                      itemCount: Words().words.length,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount (
                         crossAxisCount: 2,
                         childAspectRatio: 1,
@@ -111,22 +111,25 @@ class MainLearning extends StatelessWidget {
                                   child: Row(
                                     crossAxisAlignment: CrossAxisAlignment.stretch,
                                     children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(20.0),
-                                        child: Text('$index',
-                                          style: TextStyle(
-                                              fontSize: 40.0,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(10.0),
+                                          child: Text('$index',
+                                            style: TextStyle(
+                                                fontSize: 40.0,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white
+                                            ),
                                           ),
                                         ),
                                       ),
-                                      Expanded(
+                                      Padding(
+                                        padding: const EdgeInsets.all(10.0),
                                         child: Hero(
-                                          child: Icon(
-                                            Icons.people,
-                                            color: iconColors[index % 4],
-                                            size: 40.0,
+                                          child: Image.asset(
+                                            'images/sample_icon.png', //todo: title_[index].png
+                                            color: Colors.white,
+                                            width: 50.0,
                                           ),
                                           tag: 'wordTitleImage$index',
                                         ),
@@ -139,7 +142,7 @@ class MainLearning extends StatelessWidget {
                                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                                     child: Row(
                                       children: [
-                                        Text('title', style: TextStyle(
+                                        Text(Words().words[index]['title'][0], style: TextStyle(
                                             fontSize: 20.0,
                                             color: Colors.deepPurpleAccent
                                         ),)
