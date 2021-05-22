@@ -31,29 +31,27 @@ class _LearningWordsState extends State<LearningWords> {
         elevation: 1,
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        child: Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                front,
-                textScaleFactor: 3,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold
-                ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              front,
+              textScaleFactor: 3,
+              style: TextStyle(
+                fontWeight: FontWeight.bold
               ),
-              SizedBox(height: 20.0),
-              Text(
-                pronunciation,
-                textScaleFactor: 2,
-              ),
-              SizedBox(height: 30.0),
-              Text(
-                back,
-                textScaleFactor: 2,
-              )
-            ],
-          ),
+            ),
+            SizedBox(height: 20.0),
+            Text(
+              pronunciation,
+              textScaleFactor: 2,
+            ),
+            SizedBox(height: 30.0),
+            Text(
+              back,
+              textScaleFactor: 2,
+            )
+          ],
         ),
       ),
     );
@@ -69,74 +67,54 @@ class _LearningWordsState extends State<LearningWords> {
 
     return Scaffold(
       body: SafeArea(
-        child: GestureDetector(
-          child: Container(
-            color: MyColors().navyLightLight,
-            child: Column(
-              children: [
-                LearningWordsBar(),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Swiper(
-                      itemBuilder: (context, index) {
-                        return wordCard();
-                      },
-                      loop: false,
-                      itemCount: words.length,
-                      viewportFraction: 0.7,
-                      scale: 0.7,
-                      onIndexChanged: (index) {
-                        setState(() {
-                          wordIndex = index;
-                          //todo: index가 4의 배수이거나 마지막 index일 때 퀴즈1으로 이동
-                          //todo : 마지막 index일 때는 isLastQuiz = true 추가
-                          if(index != 0) {
-                            if (index % 4 == 0 || index == words.length) {
-                              List<Word> wordQuizList = [];
+        child: Container(
+          color: MyColors().purpleLight,
+          child: Column(
+            children: [
+              LearningWordsBar(),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Swiper(
+                    itemBuilder: (context, index) {
+                      return wordCard();
+                    },
+                    loop: false,
+                    itemCount: words.length,
+                    viewportFraction: 0.7,
+                    scale: 0.7,
+                    onIndexChanged: (index) {
+                      setState(() {
+                        wordIndex = index;
+                        //todo: index가 4의 배수이거나 마지막 index일 때 퀴즈1으로 이동
+                        //todo : 마지막 index일 때는 isLastQuiz = true 추가
+                        if(index != 0) {
+                          if (index % 4 == 0 || index == words.length) {
+                            List<Word> wordQuizList = [];
 
-                              for (int i = 1; i < 5; i++) {
-                                int count = index - i;
-                                Word word = Word(words[count].front, words[count].back, words[count].pronunciation);
-                                wordQuizList.add(word);
-                              }
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => LearningWordsQuiz1(wordQuizList)));
+                            for (int i = 1; i < 5; i++) {
+                              int count = index - i;
+                              Word word = Word(words[count].front, words[count].back, words[count].pronunciation);
+                              wordQuizList.add(word);
                             }
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => LearningWordsQuiz1(wordQuizList)));
                           }
-                        });
-                      },
-                    )
-                  ),
+                        }
+                      });
+                    },
+                  )
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20.0),
-                  child: IconButton(
-                    icon: Icon(Icons.multitrack_audio, color: MyColors().purple,),
-                    iconSize: 100.0,
-                    onPressed: () => print('play button pressed'),
-                  ),
-                )
-              ],
-            ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20.0),
+                child: IconButton(
+                  icon: Icon(Icons.multitrack_audio, color: MyColors().purple,),
+                  iconSize: 100.0,
+                  onPressed: () => print('play button pressed'),
+                ),
+              )
+            ],
           ),
-          onPanUpdate: (detail) {
-            if (detail.delta.dx > 0) {
-
-              if(wordIndex > 0) {
-                wordIndex--;
-                print('오른쪽 스와이프');
-
-              } else {
-                //todo: 퀴즈로 이동
-              }
-
-            } else {
-              if(wordIndex < words.length - 1) {
-                wordIndex++;
-                print('왼쪽 스와이프');
-              }
-            }
-          },
         ),
       ),
     );

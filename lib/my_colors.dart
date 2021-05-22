@@ -2,6 +2,7 @@ import 'dart:ui';
 
 class MyColors {
   final Color purple = Color(0xff432AA3);
+  final Color purpleLight = Color(0xffF8F8FF);
   final Color navy = Color(0xff8389BE);
   final Color navyLight = Color(0xffE0E3FF);
   final Color navyLightLight = Color(0xffF5F5F5);

@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:podo_words/learning_words_bar.dart';
+import 'package:podo_words/mix_index.dart';
+import 'package:podo_words/my_colors.dart';
 import 'package:podo_words/word.dart';
 
 class LearningWordsQuiz1 extends StatefulWidget {
@@ -23,57 +25,61 @@ class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
   Widget build(BuildContext context) {
     front = widget.wordList[wordIndex].front;
     back = widget.wordList[wordIndex].back;
-    mixedIndex = MixedIndex();
+    mixedIndex = MixIndex().getMixedIndex(widget.wordList.length);
 
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: SafeArea(
+      body: SafeArea(
+        child: Container(
+          color: MyColors().purpleLight,
           child: Column(
             children: [
               LearningWordsBar(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    front,
-                    textScaleFactor: 5,
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.play_circle_outline),
-                    iconSize: 80.0,
-                    onPressed: () => print('play button pressed'),
-                  ),
-                ]
-                ),
-              Divider(
-                color: Colors.black,
+              SizedBox(height: 20.0),
+              IconButton(
+                icon: Icon(Icons.multitrack_audio, color: MyColors().purple,),
+                iconSize: 100.0,
+                onPressed: () => print('play button pressed'),
               ),
-              Expanded(
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+                child: Row(
+                  children: [
+                    Expanded(child: Divider(color: MyColors().navy)),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                      child: Text('select correct word', style: TextStyle(color: MyColors().navy),),
+                    ),
+                    Expanded(child: Divider(color: MyColors().navy))
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
                 child: GridView.builder(
                     shrinkWrap: true,
                     itemCount: 4,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount (
                       crossAxisCount: 2,
                       childAspectRatio: 1,
-                      crossAxisSpacing: 10.0,
-                      mainAxisSpacing: 10.0,
+                      crossAxisSpacing: 20.0,
+                      mainAxisSpacing: 20.0,
                     ),
                     itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: (){},
-                        child: Container(
-                          color: Colors.yellow,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                child: FlutterLogo(),
-                              ),
-                              Text('word'),
-                            ],
-                          ) ,
+                      return Padding(
+                        padding: const EdgeInsets.all(1.0),
+                        child: InkWell(
+                          onTap: (){},
+                          child: Material(
+                            elevation: 1.0,
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                            child: Center(
+                                child: Text(
+                                  widget.wordList[mixedIndex[index]].back,
+                                  textScaleFactor: 1.5,
+                                )
+                            ),
+                          ),
                         ),
                       );
                     }
@@ -85,11 +91,4 @@ class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
       ),
     );
   }
-}
-
-List<int> MixedIndex() {
-  //todo: 0~3까지 숫자 리스트 섞는 함수
-  int randomNumber = Random().nextInt(4) - 1;
-  List<int> newIndex;
-  return newIndex;
 }
