@@ -22,24 +22,56 @@ class _LearningWordsState extends State<LearningWords> {
   int wordIndex = 0;
   String front;
   String back;
-  List<String> images;
+  String pronunciation;
+
+  Widget wordCard() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 50.0),
+      child: Material(
+        elevation: 1,
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        child: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                front,
+                textScaleFactor: 3,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold
+                ),
+              ),
+              SizedBox(height: 20.0),
+              Text(
+                pronunciation,
+                textScaleFactor: 2,
+              ),
+              SizedBox(height: 30.0),
+              Text(
+                back,
+                textScaleFactor: 2,
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     words = Words().getWords(widget.lessonIndex);
     front = words[wordIndex].front;
     back = words[wordIndex].back;
-    images = [];
-    for(int i=0; i<words.length; i++) {
-      String image = words[i].image;
-      images.add(image);
-    }
+    pronunciation = words[wordIndex].pronunciation;
+
 
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: SafeArea(
-          child: GestureDetector(
+      body: SafeArea(
+        child: GestureDetector(
+          child: Container(
+            color: MyColors().navyLightLight,
             child: Column(
               children: [
                 LearningWordsBar(),
@@ -48,49 +80,33 @@ class _LearningWordsState extends State<LearningWords> {
                     padding: const EdgeInsets.all(10.0),
                     child: Swiper(
                       itemBuilder: (context, index) {
-                        return Image.network(images[index]);
+                        return wordCard();
                       },
-                      itemCount: images.length,
-                      pagination: SwiperPagination(),
-                      control: SwiperControl(),
+                      loop: false,
+                      itemCount: words.length,
                       viewportFraction: 0.7,
                       scale: 0.7,
                       onIndexChanged: (index) {
                         setState(() {
                           wordIndex = index;
-
                           //todo: index가 4의 배수이거나 마지막 index일 때 퀴즈1으로 이동
                           //todo : 마지막 index일 때는 isLastQuiz = true 추가
-                          if(index % 4 == 0 || index == images.length) {
-                            List<Word> wordQuizList = [];
+                          if(index != 0) {
+                            if (index % 4 == 0 || index == words.length) {
+                              List<Word> wordQuizList = [];
 
-                            for (int i = 1; i < 5; i++) {
-                              int count = index-i;
-                              Word word = Word(words[count].front, words[count].back);
-                              wordQuizList.add(word);
+                              for (int i = 1; i < 5; i++) {
+                                int count = index - i;
+                                Word word = Word(words[count].front, words[count].back, words[count].pronunciation);
+                                wordQuizList.add(word);
+                              }
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => LearningWordsQuiz1(wordQuizList)));
                             }
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => LearningWordsQuiz1(wordQuizList)));
                           }
                         });
                       },
                     )
                   ),
-                ),
-                AnimatedSwitcher(
-                  child: Text(
-                    front,
-                    textScaleFactor: 3,
-                    key: ValueKey<String>(front),
-                  ),
-                  duration: const Duration(milliseconds: 500),
-                  transitionBuilder: (Widget child, Animation<double> animation) {
-                    return ScaleTransition(child: child, scale: animation);
-                  },
-                ),
-                SizedBox(height: 10.0,),
-                Text(
-                  back,
-                  textScaleFactor: 2,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 20.0),
@@ -102,25 +118,25 @@ class _LearningWordsState extends State<LearningWords> {
                 )
               ],
             ),
-            onPanUpdate: (detail) {
-              if (detail.delta.dx > 0) {
+          ),
+          onPanUpdate: (detail) {
+            if (detail.delta.dx > 0) {
 
-                if(wordIndex > 0) {
-                  wordIndex--;
-                  print('오른쪽 스와이프');
-
-                } else {
-                  //todo: 퀴즈로 이동
-                }
+              if(wordIndex > 0) {
+                wordIndex--;
+                print('오른쪽 스와이프');
 
               } else {
-                if(wordIndex < words.length - 1) {
-                  wordIndex++;
-                  print('왼쪽 스와이프');
-                }
+                //todo: 퀴즈로 이동
               }
-            },
-          ),
+
+            } else {
+              if(wordIndex < words.length - 1) {
+                wordIndex++;
+                print('왼쪽 스와이프');
+              }
+            }
+          },
         ),
       ),
     );

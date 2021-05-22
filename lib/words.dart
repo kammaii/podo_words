@@ -14,7 +14,6 @@ class Words{
   static const TITLE_IMAGE = 'titleImage';
   static const FRONT = 'front';
   static const BACK = 'back';
-  static const IMAGE = 'image';
   static const PRONUNCIATION = 'pronunciation';
 
   Words.init() {
@@ -91,7 +90,6 @@ class Words{
       words[i][FRONT] = testFront;
       words[i][BACK] = testBack;
       words[i][PRONUNCIATION] = testPronunciation;
-      words[i][IMAGE] = testImage;
     }
   }
 
@@ -118,7 +116,7 @@ class Words{
     Map<String, List<String>> wordsMap = words[index];
     List<Word> wordList = [];
     for(int i=0; i<wordsMap[FRONT].length; i++) {
-      Word word = Word(wordsMap[FRONT][i], wordsMap[BACK][i]);
+      Word word = Word(wordsMap[FRONT][i], wordsMap[BACK][i], wordsMap[PRONUNCIATION][i]);
       if(DataStorage().inActiveWords.contains(word.front)) {
         word.isActive = false;
       } else {

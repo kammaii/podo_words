@@ -142,7 +142,7 @@ class MainLearning extends StatelessWidget {
                                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                                     child: Row(
                                       children: [
-                                        Text(Words().words[index]['title'][0], style: TextStyle(
+                                        Text(Words().words[index][Words.TITLE][0], style: TextStyle(
                                             fontSize: 20.0,
                                             color: Colors.deepPurpleAccent
                                         ),)
