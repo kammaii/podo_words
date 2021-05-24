@@ -1,7 +1,6 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:podo_words/learning_words_bar.dart';
+import 'package:podo_words/learning_words_quiz2.dart';
 import 'package:podo_words/mix_index.dart';
 import 'package:podo_words/my_colors.dart';
 import 'package:podo_words/word.dart';
@@ -16,40 +15,73 @@ class LearningWordsQuiz1 extends StatefulWidget {
 }
 
 class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
-  int wordIndex = 0;
+  int wordIndex;
   String front;
   String back;
   List<int> mixedIndex;
-  List<Color> borderColor = List<Color>.generate(4, (index) => Colors.white);
-  bool isAnswerCheck = false;
+  List<Color> borderColor;
+  bool isAnswerCheck;
   bool isCorrectAnswer;
+  //AudioPlayer player;
+
+
+  @override
+  void initState() {
+    super.initState();
+    wordIndex = 0;
+    borderColor = List<Color>.generate(4, (index) => Colors.white);
+    isAnswerCheck = false;
+    isAnswerCheck = false;
+    //player = AudioPlayer();
+  }
+
+
+  @override
+  void dispose() {
+    super.dispose();
+    //player.dispose();
+  }
+
+  void checkAnswer() {
+    if(isAnswerCheck) {
+      if(isCorrectAnswer) { // 정답
+        // todo: 정답오디오 재생
+        //await player.setAsset('assets/audio/correct.mp3');
+        wordIndex++;
+
+      } else {
+        // todo: 오답오디오 재생
+        //await player.setAsset('assets/audio/wrong.mp3');
+      }
+      //player.play();
+
+
+      Future.delayed(const Duration(seconds: 1), () {
+        if(wordIndex < 4) {
+          setState(() {
+            isAnswerCheck = false;
+            for (int i = 0; i < borderColor.length; i++) {
+              borderColor[i] = Colors.white;
+            }
+          });
+        } else {
+          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LearningWordsQuiz2()));
+        }
+      });
+
+    } else {
+      print('정답 : $back');
+      mixedIndex = MixIndex().getMixedIndex(4);
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
     front = widget.wordList[wordIndex].front;
     back = widget.wordList[wordIndex].back;
 
-    if(isAnswerCheck) {
-      if(isCorrectAnswer) { // 정답
-        // todo: 정답오디오 재생
-        wordIndex++;
-      } else {
-        // todo: 오답오디오 재생
-      }
-
-      Future.delayed(const Duration(seconds: 1), () {
-        setState(() {
-          isAnswerCheck = false;
-          for(int i=0; i<borderColor.length; i++) {
-            borderColor[i] = Colors.white;
-          }
-        });
-      });
-
-    } else {
-      mixedIndex = MixIndex().getMixedIndex(4);
-    }
-
+    checkAnswer();
 
     return Scaffold(
       body: SafeArea(
