@@ -20,12 +20,36 @@ class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
   String front;
   String back;
   List<int> mixedIndex;
+  List<Color> borderColor = List<Color>.generate(4, (index) => Colors.white);
+  bool isAnswerCheck = false;
+  bool isCorrectAnswer;
 
   @override
   Widget build(BuildContext context) {
     front = widget.wordList[wordIndex].front;
     back = widget.wordList[wordIndex].back;
-    mixedIndex = MixIndex().getMixedIndex(widget.wordList.length);
+
+    if(isAnswerCheck) {
+      if(isCorrectAnswer) { // 정답
+        // todo: 정답오디오 재생
+        wordIndex++;
+      } else {
+        // todo: 오답오디오 재생
+      }
+
+      Future.delayed(const Duration(seconds: 1), () {
+        setState(() {
+          isAnswerCheck = false;
+          for(int i=0; i<borderColor.length; i++) {
+            borderColor[i] = Colors.white;
+          }
+        });
+      });
+
+    } else {
+      mixedIndex = MixIndex().getMixedIndex(4);
+    }
+
 
     return Scaffold(
       body: SafeArea(
@@ -68,11 +92,25 @@ class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
                       return Padding(
                         padding: const EdgeInsets.all(1.0),
                         child: InkWell(
-                          onTap: (){},
-                          child: Material(
-                            elevation: 1.0,
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
+                          onTap: (){
+                            // todo: 정답 확인 -> border color 표시 -> 맞으면 다음문제 -> 틀리면 다시
+                            setState(() {
+                              if(mixedIndex[index] == wordIndex) {
+                                isCorrectAnswer = true;
+                                borderColor[index] = MyColors().purple;
+                              } else {
+                                isCorrectAnswer = false;
+                                borderColor[index] = MyColors().red;
+                              }
+                              isAnswerCheck = true;
+                            });
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20.0),
+                              boxShadow: [BoxShadow(color: borderColor[index], spreadRadius: 0.1)]
+                            ),
                             child: Center(
                                 child: Text(
                                   widget.wordList[mixedIndex[index]].back,

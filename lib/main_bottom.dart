@@ -35,10 +35,10 @@ class _MainBottomState extends State<MainBottom> {
         setState(() {
           switch (index) {
             case 0 :
-              Navigator.push(context, MaterialPageRoute(builder: (context) => MainLearning()));
+              Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => MainLearning()), (Route<dynamic> route) => false);
               break;
             case 1 :
-              Navigator.push(context, MaterialPageRoute(builder: (context) => MainReview()));
+              Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => MainReview()), (Route<dynamic> route) => false);
               break;
           }
         });
