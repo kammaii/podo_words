@@ -21,16 +21,16 @@ class WordList extends StatefulWidget {
 }
 
 class _WordListState extends State<WordList> {
-  Color textColor;
-  Color backColor;
+  Color textColor = MyColors().purple;
+  Color backColor = Colors.white;
   double itemHeight = 80.0;
   double iconHeight = 70.0;
-  double leftMargin;
+  double leftMargin = 0.0;
 
   @override
   Widget build(BuildContext context) {
-    MainReviewState mainReviewState = context.findAncestorStateOfType<MainReviewState>();
-    MainLearningSliverState mainLearningSliverState = context.findAncestorStateOfType<MainLearningSliverState>();
+    MainReviewState? mainReviewState = context.findAncestorStateOfType<MainReviewState>();
+    MainLearningSliverState? mainLearningSliverState = context.findAncestorStateOfType<MainLearningSliverState>();
 
     if(widget.isDeleteMode) {
       leftMargin = 50.0;
@@ -47,7 +47,7 @@ class _WordListState extends State<WordList> {
     }
 
     void setChecked(bool b) {
-      DataStorage().myWords[widget.word.wordId].isChecked = b;
+      DataStorage().myWords[widget.word.wordId!].isChecked = b;
     }
 
     return Container(
@@ -56,22 +56,22 @@ class _WordListState extends State<WordList> {
       child: SwipeTo(
         onLeftSwipe: () {
           if(widget.isFromMainLearning) {
-            mainLearningSliverState.setState(() {
+            mainLearningSliverState!.setState(() {
               DataStorage().addInActiveWord(widget.word.front);
             });
           } else {
-            mainReviewState.setState(() {
+            mainReviewState!.setState(() {
               DataStorage().addInActiveWord(widget.word.front);
             });
           }
         },
         onRightSwipe: () {
           if(widget.isFromMainLearning) {
-            mainLearningSliverState.setState(() {
+            mainLearningSliverState!.setState(() {
               DataStorage().removeInActiveWord(widget.word.front);
             });
           } else {
-            mainReviewState.setState(() {
+            mainReviewState!.setState(() {
               DataStorage().removeInActiveWord(widget.word.front);
             });
           }
@@ -98,7 +98,7 @@ class _WordListState extends State<WordList> {
                   value: widget.word.isChecked,
                   onChanged: (value){
                     setState(() {
-                      setChecked(value);
+                      setChecked(value!);
                     });
                   },
                 ),

@@ -17,13 +17,13 @@ class MainReview extends StatefulWidget {
 
 class MainReviewState extends State<MainReview> {
 
-  List<Word> myWords;
-  List<Word> myWordsInList;
+  List<Word> myWords = [];
+  List<Word> myWordsInList = [];
   List<bool> toggleSelections = [true, false, false];
-  String searchInput;
+  String searchInput = "";
 
   bool isPlayBtn = true;
-  Widget floatingBtn;
+  Widget floatingBtn = Icon(Icons.play_arrow_rounded, color: MyColors().green, size: 50.0);
 
   final textFieldController = TextEditingController();
 
@@ -49,7 +49,7 @@ class MainReviewState extends State<MainReview> {
     }
 
     myWordsInList = [];
-    if(searchInput != null && searchInput.length > 0) {
+    if(searchInput.length > 0) {
       for(Word myWord in myWords) {
         if(myWord.front.contains(searchInput) || myWord.back.contains(searchInput)) {
           myWordsInList.add(myWord);
@@ -189,7 +189,7 @@ class MainReviewState extends State<MainReview> {
                   child: ListView.builder (
                     itemCount: myWordsInList.length,
                     itemBuilder: (context, index) {
-                      return WordList(false, myWordsInList[index], !isPlayBtn);
+                      return WordList(false, myWordsInList[index], isPlayBtn);
                     },
                   ),
                   onLongPress: () {

@@ -18,11 +18,11 @@ class LearningWords extends StatefulWidget {
 }
 
 class _LearningWordsState extends State<LearningWords> {
-  List<Word> words;
+  List<Word> words = [];
   int wordIndex = 0;
-  String front;
-  String back;
-  String pronunciation;
+  String front = "";
+  String back = "";
+  String pronunciation = "";
 
   Widget wordCard() {
     return Padding(

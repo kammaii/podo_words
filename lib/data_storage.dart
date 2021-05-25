@@ -14,9 +14,9 @@ class DataStorage {
   // 비활성 단어 저장 : 'inActiveWords'
   // 영어 번역 스위치 : 'isEngOn'
 
-  SharedPreferences sp;
-  List<String> inActiveWords;
-  List<Word> myWords;
+  SharedPreferences? sp;
+  List<String> inActiveWords = [];
+  List<Word> myWords = [];
 
   static const String KEY_IN_ACTIVE_WORDS = 'inActiveWords';
   static const String KEY_MY_WORDS = 'myWords';
@@ -68,7 +68,7 @@ class DataStorage {
     List<int> selectedId = [];
     for(Word myWord in myWords) {
       if(myWord.isChecked) {
-        selectedId.add(myWord.wordId);
+        selectedId.add(myWord.wordId!);
       }
     }
     for(int id in selectedId) {
@@ -126,20 +126,20 @@ class DataStorage {
   }
 
   setStringList(String key, List<String> list) async {
-    sp.setStringList(key, list);
+    sp!.setStringList(key, list);
   }
 
   List<String> getStringList(String key) {
-    List<String> stringList = sp.getStringList(key) ?? [];
+    List<String> stringList = sp!.getStringList(key) ?? [];
     return stringList;
   }
 
   setBool(String key, bool b) async {
-    sp.setBool(key, b);
+    sp!.setBool(key, b);
   }
 
   Future<bool> getBool(String key) async {
-    bool b = sp.getBool(key) ?? true;
+    bool b = sp!.getBool(key) ?? true;
     return b;
   }
 }

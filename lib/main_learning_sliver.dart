@@ -22,20 +22,18 @@ class MainLearningSliver extends StatefulWidget {
 }
 
 class MainLearningSliverState extends State<MainLearningSliver> {
-  ScrollController scrollController;
+  ScrollController scrollController = new ScrollController();
   double sliverAppBarHeight = 200.0;
   double sliverAppBarMinimumHeight = 60.0;
   double sliverAppBarStretchOffset = 100.0;
-  double sliverAppBarStretchOffsetSave;
 
-  List<Word> words;
-  int activeWordCount;
+  List<Word> words = [];
+  int activeWordCount = 0;
 
 
   @override
   void initState() {
     super.initState();
-    scrollController = new ScrollController();
     scrollController.addListener(() => setState(() {
     }));
   }
@@ -55,6 +53,7 @@ class MainLearningSliverState extends State<MainLearningSliver> {
     for(int i=0; i<words.length; i++) {
       fronts.add(words[i].front);
     }
+
     activeWordCount = 0;
 
     for(Word word in words) {
@@ -192,13 +191,6 @@ class MainLearningSliverState extends State<MainLearningSliver> {
       expandedHeight: sliverAppBarHeight,
       pinned: true,
       stretch: true,
-      stretchTriggerOffset: sliverAppBarStretchOffset,
-      onStretchTrigger: (){
-        print('스트레치 트리거');
-        //Navigator.pop(context);
-        //todo: 이전 페이지로 넘어가기 안됨
-        return;
-      },
       title: Text(Words().getTitles()[widget.index], style: TextStyle(
         fontSize: 25.0,
         fontWeight: FontWeight.bold,

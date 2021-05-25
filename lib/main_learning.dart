@@ -8,16 +8,15 @@ import 'package:podo_words/words.dart';
 
 class MainLearning extends StatelessWidget {
 
-  DataStorage dataStorage;
-  BuildContext context;
-  Widget _widget;
+  DataStorage dataStorage = DataStorage();
+  BuildContext? context;
+  Widget? _widget;
 
   List<Color> bgColors = [MyColors().navyLight, MyColors().mustardLight, MyColors().greenLight, MyColors().pink];
   List<Color> iconColors = [MyColors().navy, MyColors().mustard, MyColors().greenDark, MyColors().wine];
 
   @override
   Widget build(BuildContext context) {
-    dataStorage = DataStorage();
     this.context = context;
 
     return FutureBuilder(
@@ -31,7 +30,7 @@ class MainLearning extends StatelessWidget {
           print('데이타 없음');
           _widget = widgetLogo();
         }
-        return _widget;
+        return _widget!;
       },
     );
   }
@@ -142,7 +141,7 @@ class MainLearning extends StatelessWidget {
                                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                                     child: Row(
                                       children: [
-                                        Text(Words().words[index][Words.TITLE][0], style: TextStyle(
+                                        Text(Words().words[index][Words.TITLE]![0], style: TextStyle(
                                             fontSize: 20.0,
                                             color: Colors.deepPurpleAccent
                                         ),)
@@ -161,7 +160,7 @@ class MainLearning extends StatelessWidget {
             )
         ),
       ),
-      bottomNavigationBar: MainBottom(context, 0),
+      bottomNavigationBar: MainBottom(context!, 0),
     );
   }
 }

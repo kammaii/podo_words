@@ -6,8 +6,8 @@ class Word {
   String pronunciation;
   //String audio;
 
-  int wordId;
-  bool isActive;
+  int? wordId;
+  bool isActive = true;
   bool isChecked = false;
 
 

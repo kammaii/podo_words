@@ -97,7 +97,7 @@ class Words{
   List<String> getTitles() {
     List<String> titles = [];
     for(int i=0; i< words.length; i++) {
-      titles.add(words[i][TITLE][0]);
+      titles.add(words[i][TITLE]![0]);
     }
     return titles;
   }
@@ -106,7 +106,7 @@ class Words{
   List<String> getTitleImages() {
     List<String> titleImages = [];
     for(int i=0; i< words.length; i++) {
-      titleImages.add(words[i][TITLE_IMAGE][0]);
+      titleImages.add(words[i][TITLE_IMAGE]![0]);
     }
     return titleImages;
   }
@@ -115,8 +115,8 @@ class Words{
   List<Word> getWords(int index) {
     Map<String, List<String>> wordsMap = words[index];
     List<Word> wordList = [];
-    for(int i=0; i<wordsMap[FRONT].length; i++) {
-      Word word = Word(wordsMap[FRONT][i], wordsMap[BACK][i], wordsMap[PRONUNCIATION][i]);
+    for(int i=0; i<wordsMap[FRONT]!.length; i++) {
+      Word word = Word(wordsMap[FRONT]![i], wordsMap[BACK]![i], wordsMap[PRONUNCIATION]![i]);
       if(DataStorage().inActiveWords.contains(word.front)) {
         word.isActive = false;
       } else {

@@ -15,23 +15,19 @@ class LearningWordsQuiz1 extends StatefulWidget {
 }
 
 class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
-  int wordIndex;
-  String front;
-  String back;
-  List<int> mixedIndex;
-  List<Color> borderColor;
-  bool isAnswerCheck;
-  bool isCorrectAnswer;
+  int wordIndex = 0;
+  String front = "";
+  String back = "";
+  List<int> mixedIndex = [];
+  List<Color> borderColor = List<Color>.generate(4, (index) => Colors.white);
+  bool isAnswerCheck = false;
+  bool isCorrectAnswer = false;
   //AudioPlayer player;
 
 
   @override
   void initState() {
     super.initState();
-    wordIndex = 0;
-    borderColor = List<Color>.generate(4, (index) => Colors.white);
-    isAnswerCheck = false;
-    isAnswerCheck = false;
     //player = AudioPlayer();
   }
 

@@ -10,7 +10,6 @@ class LearningWordsBar extends StatefulWidget {
 class _LearningWordsBarState extends State<LearningWordsBar> {
 
   bool isEngOn = true; //todo: DB에서 가져오기
-  int opacity;
 
   @override
   Widget build(BuildContext context) {

@@ -13,8 +13,8 @@ class LearningWordsQuiz2 extends StatefulWidget {
 
 class _LearningWordsQuiz2State extends State<LearningWordsQuiz2> {
   int wordIndex = 0;
-  String front;
-  String back;
+  String front = "";
+  String back = "";
 
   @override
   Widget build(BuildContext context) {
