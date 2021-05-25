@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:podo_words/learning_words_bar.dart';
 import 'package:podo_words/learning_words_quiz2.dart';
 import 'package:podo_words/mix_index.dart';
@@ -22,34 +23,27 @@ class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
   List<Color> borderColor = List<Color>.generate(4, (index) => Colors.white);
   bool isAnswerCheck = false;
   bool isCorrectAnswer = false;
-  //AudioPlayer player;
-
-
-  @override
-  void initState() {
-    super.initState();
-    //player = AudioPlayer();
-  }
+  AudioPlayer player = AudioPlayer();
 
 
   @override
   void dispose() {
     super.dispose();
-    //player.dispose();
+    player.dispose();
   }
 
-  void checkAnswer() {
+  void checkAnswer() async {
     if(isAnswerCheck) {
       if(isCorrectAnswer) { // 정답
         // todo: 정답오디오 재생
-        //await player.setAsset('assets/audio/correct.mp3');
+        await player.setAsset('assets/audio/correct.mp3');
         wordIndex++;
 
       } else {
         // todo: 오답오디오 재생
-        //await player.setAsset('assets/audio/wrong.mp3');
+        await player.setAsset('assets/audio/wrong.mp3');
       }
-      //player.play();
+      player.play();
 
 
       Future.delayed(const Duration(seconds: 1), () {
