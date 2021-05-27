@@ -16,7 +16,7 @@ class LearningWordsQuiz1 extends StatefulWidget {
 }
 
 class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
-  int wordIndex = 0;
+  int quizIndex = 0;
   String front = "";
   String back = "";
   List<int> mixedIndex = [];
@@ -37,7 +37,7 @@ class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
       if(isCorrectAnswer) { // 정답
         // todo: 정답오디오 재생
         await player.setAsset('assets/audio/correct.mp3');
-        wordIndex++;
+        quizIndex++;
 
       } else {
         // todo: 오답오디오 재생
@@ -47,7 +47,7 @@ class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
 
 
       Future.delayed(const Duration(seconds: 1), () {
-        if(wordIndex < 4) {
+        if(quizIndex < 4) {
           setState(() {
             isAnswerCheck = false;
             for (int i = 0; i < borderColor.length; i++) {
@@ -55,7 +55,7 @@ class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
             }
           });
         } else {
-          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LearningWordsQuiz2()));
+          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LearningWordsQuiz2(widget.wordList)));
         }
       });
 
@@ -68,8 +68,8 @@ class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
 
   @override
   Widget build(BuildContext context) {
-    front = widget.wordList[wordIndex].front;
-    back = widget.wordList[wordIndex].back;
+    front = widget.wordList[quizIndex].front;
+    back = widget.wordList[quizIndex].back;
 
     checkAnswer();
 
@@ -115,9 +115,8 @@ class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
                         padding: const EdgeInsets.all(1.0),
                         child: InkWell(
                           onTap: (){
-                            // todo: 정답 확인 -> border color 표시 -> 맞으면 다음문제 -> 틀리면 다시
                             setState(() {
-                              if(mixedIndex[index] == wordIndex) {
+                              if(mixedIndex[index] == quizIndex) {
                                 isCorrectAnswer = true;
                                 borderColor[index] = MyColors().purple;
                               } else {
