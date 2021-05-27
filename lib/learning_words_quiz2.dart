@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:podo_words/learning_words_bar.dart';
+import 'package:podo_words/play_audio.dart';
 import 'package:podo_words/word.dart';
 import 'mix_index.dart';
 import 'my_colors.dart';
@@ -22,13 +22,7 @@ class _LearningWordsQuiz2State extends State<LearningWordsQuiz2> {
   List<int> mixedIndexBack = MixIndex().getMixedIndex(4);
   List<int> checkedIndex = [4, 4];
   List<int> answeredIndex = [];
-  AudioPlayer player = AudioPlayer();
 
-  @override
-  void dispose() {
-    super.dispose();
-    player.dispose();
-  }
 
   void initCheck() {
     checkedIndex = [4,4];
@@ -87,10 +81,12 @@ class _LearningWordsQuiz2State extends State<LearningWordsQuiz2> {
                     if(checkedIndex[0] != 4 && checkedIndex[1] != 4) {
                       if(mixedIndexFront[checkedIndex[0]] == mixedIndexBack[checkedIndex[1]]) {  // 정답
                         print('정답');
+                        PlayAudio().playCorrect();
                         answeredIndex.add(mixedIndexFront[checkedIndex[0]]);
 
                       } else {
                         print('오답');
+                        PlayAudio().playWrong();
                       }
 
                       initCheck();

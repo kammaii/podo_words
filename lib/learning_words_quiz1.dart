@@ -4,6 +4,7 @@ import 'package:podo_words/learning_words_bar.dart';
 import 'package:podo_words/learning_words_quiz2.dart';
 import 'package:podo_words/mix_index.dart';
 import 'package:podo_words/my_colors.dart';
+import 'package:podo_words/play_audio.dart';
 import 'package:podo_words/word.dart';
 
 class LearningWordsQuiz1 extends StatefulWidget {
@@ -23,27 +24,25 @@ class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
   List<Color> borderColor = List<Color>.generate(4, (index) => Colors.white);
   bool isAnswerCheck = false;
   bool isCorrectAnswer = false;
-  AudioPlayer player = AudioPlayer();
 
 
-  @override
-  void dispose() {
-    super.dispose();
-    player.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  //   player.dispose();
+  // }
 
-  void checkAnswer() async {
+  void checkAnswer() {
     if(isAnswerCheck) {
       if(isCorrectAnswer) { // 정답
         // todo: 정답오디오 재생
-        await player.setAsset('assets/audio/correct.mp3');
+        PlayAudio().playCorrect();
         quizIndex++;
 
       } else {
         // todo: 오답오디오 재생
-        await player.setAsset('assets/audio/wrong.mp3');
+        PlayAudio().playWrong();
       }
-      player.play();
 
 
       Future.delayed(const Duration(seconds: 1), () {
