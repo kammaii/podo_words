@@ -28,7 +28,7 @@ class _LearningWordsBarState extends State<LearningWordsBar> {
             progressColor: Colors.blue,
           ),
         ),
-        Text('Eng'),
+        Text('Quiz'),
         SizedBox(width: 10.0,),
         Switch(
           value: isEngOn,

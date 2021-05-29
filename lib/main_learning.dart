@@ -40,7 +40,7 @@ class MainLearning extends StatelessWidget {
       body: Stack(
         alignment: Alignment.center,
         children: [
-          Center(child: Image.asset('images/podo.png')),
+          Center(child: Image.asset('assets/images/podo.png')),
           Positioned(
             bottom: 100.0,
             child: Row(
@@ -126,7 +126,7 @@ class MainLearning extends StatelessWidget {
                                         padding: const EdgeInsets.all(10.0),
                                         child: Hero(
                                           child: Image.asset(
-                                            'images/sample_icon.png', //todo: title_[index].png
+                                            'assets/images/sample_icon.png', //todo: title_[index].png
                                             color: Colors.white,
                                             width: 50.0,
                                           ),

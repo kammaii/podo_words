@@ -126,4 +126,12 @@ class Words{
     }
     return wordList;
   }
+
+  int getTotalWordsLength() {
+    int totalLength = 0;
+    for(int i=0; i<words.length; i++) {
+      totalLength += words[i][FRONT]!.length;
+    }
+    return totalLength;
+  }
 }

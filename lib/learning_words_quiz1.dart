@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:podo_words/divider_text.dart';
 import 'package:podo_words/learning_words_bar.dart';
 import 'package:podo_words/learning_words_quiz2.dart';
 import 'package:podo_words/mix_index.dart';
@@ -85,19 +86,7 @@ class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
                 iconSize: 100.0,
                 onPressed: () => print('play button pressed'),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
-                child: Row(
-                  children: [
-                    Expanded(child: Divider(color: MyColors().navy)),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                      child: Text('select correct word', style: TextStyle(color: MyColors().navy),),
-                    ),
-                    Expanded(child: Divider(color: MyColors().navy))
-                  ],
-                ),
-              ),
+              DividerText().getDivider('select correct word'),
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: GridView.builder(

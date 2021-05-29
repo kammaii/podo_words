@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:podo_words/learning_words_bar.dart';
+import 'package:podo_words/learning_words_complete.dart';
 import 'package:podo_words/learning_words_quiz1.dart';
 import 'package:podo_words/my_colors.dart';
 import 'package:podo_words/word.dart';
 import 'package:podo_words/words.dart';
+
+import 'learning_words_quiz3.dart';
 
 class LearningWords extends StatefulWidget {
 
@@ -89,7 +92,10 @@ class _LearningWordsState extends State<LearningWords> {
                         //todo: index가 4의 배수이거나 마지막 index일 때 퀴즈1으로 이동
                         //todo : 마지막 index일 때는 isLastQuiz = true 추가
                         if(index != 0) {
-                          if (index % 4 == 0 || index == words.length) {
+                          if(index >= words.length) {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => LearningWordsQuiz3(words)));
+
+                          }else if (index % 4 == 0) {
                             List<Word> wordQuizList = [];
 
                             for (int i = 1; i < 5; i++) {
@@ -97,7 +103,7 @@ class _LearningWordsState extends State<LearningWords> {
                               Word word = Word(words[count].front, words[count].back, words[count].pronunciation);
                               wordQuizList.add(word);
                             }
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => LearningWordsQuiz1(wordQuizList)));
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => LearningWordsQuiz3(words)));
                           }
                         }
                       });

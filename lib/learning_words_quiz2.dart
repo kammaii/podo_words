@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:podo_words/divider_text.dart';
 import 'package:podo_words/learning_words_bar.dart';
 import 'package:podo_words/play_audio.dart';
 import 'package:podo_words/word.dart';
@@ -91,7 +92,7 @@ class _LearningWordsQuiz2State extends State<LearningWordsQuiz2> {
 
                       initCheck();
                       if(answeredIndex.length == 4) {
-                        // todo: 다음 퀴즈로 이동
+                        Navigator.pop(context);
                       }
                     }
                   });
@@ -123,11 +124,11 @@ class _LearningWordsQuiz2State extends State<LearningWordsQuiz2> {
     }
 
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: SafeArea(
-          child: Container(
-            color: MyColors().purpleLight,
+      body: SafeArea(
+        child: Container(
+          color: MyColors().purpleLight,
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
             child: Column(
               children: [
                 LearningWordsBar(),
@@ -137,19 +138,7 @@ class _LearningWordsQuiz2State extends State<LearningWordsQuiz2> {
                     child: wordItem(true)
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 50.0),
-                  child: Row(
-                    children: [
-                      Expanded(child: Divider(color: MyColors().navy)),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                        child: Text('match correct words', style: TextStyle(color: MyColors().navy),),
-                      ),
-                      Expanded(child: Divider(color: MyColors().navy))
-                    ],
-                  ),
-                ),
+                DividerText().getDivider('match correct words'),
                 Expanded(
                     child: wordItem(false)
                 ),

@@ -25,4 +25,9 @@ class PlayAudio {
     await player.setAsset('assets/audio/wrong.mp3');
     player.play();
   }
+
+  void playYay() async {
+    await player.setAsset('assets/audio/yay.mp3');
+    player.play();
+  }
 }
