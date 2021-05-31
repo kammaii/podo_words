@@ -127,15 +127,26 @@ class MainLearningSliverState extends State<MainLearningSliver> {
                 backgroundColor: Colors.white,
                 child: Icon(Icons.play_arrow_rounded, color: MyColors().green, size: 50.0,),
                 onPressed: () {
-                  List<Word> activeWords = [];
-                  for(int i=0; i<words.length; i++) {
-                    if(words[i].isActive) {
-                      activeWords.add(words[i]);
+                  if(activeWordCount >= 5) {
+                    List<Word> activeWords = [];
+                    for (int i = 0; i < words.length; i++) {
+                      if (words[i].isActive) {
+                        activeWords.add(words[i]);
+                      }
                     }
+                    Navigator.push(context, MaterialPageRoute(
+                        builder: (context) => LearningWords(activeWords)));
+
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          backgroundColor: MyColors().pink,
+                          content: Text(
+                            'It needs more than 5 words to start learning.',
+                            style: TextStyle(color: MyColors().red, fontWeight: FontWeight.bold, fontSize: 18.0),
+                          ),
+                        ));
                   }
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => LearningWords(activeWords)));
-                  //todo: 활성화된 단어 플래시카드에 추가하기 -> 단어학습 완료 시점으로 옮길 것
-                  //DataStorage().addMyWords(activeWords);
                 },
               ),
             )

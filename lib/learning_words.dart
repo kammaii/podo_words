@@ -33,27 +33,31 @@ class _LearningWordsState extends State<LearningWords> {
         elevation: 1,
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              front,
-              textScaleFactor: 3,
-              style: TextStyle(
-                fontWeight: FontWeight.bold
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                front,
+                textScaleFactor: 3,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold
+                ),
               ),
-            ),
-            SizedBox(height: 20.0),
-            Text(
-              pronunciation,
-              textScaleFactor: 2,
-            ),
-            SizedBox(height: 30.0),
-            Text(
-              back,
-              textScaleFactor: 2,
-            )
-          ],
+              SizedBox(height: 20.0),
+              Text(
+                pronunciation,
+                textScaleFactor: 2,
+              ),
+              SizedBox(height: 30.0),
+              Text(
+                back,
+                textScaleFactor: 2,
+                textAlign: TextAlign.center,
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -90,7 +94,7 @@ class _LearningWordsState extends State<LearningWords> {
                       ),
                       width: 250,
                       lineHeight: 8.0,
-                      percent: (wordIndex+1) / words.length,
+                      percent: wordIndex / words.length,
                       backgroundColor: MyColors().navyLight,
                       progressColor: MyColors().purple,
                     ),
@@ -135,7 +139,7 @@ class _LearningWordsState extends State<LearningWords> {
                         if(isQuizOn) {
                           Navigator.push(context, MaterialPageRoute(builder: (context) => LearningWordsQuiz3(words)));
                         } else {
-                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LearningWordsComplete(words.length)));
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LearningWordsComplete(words)));
                         }
 
                       } else if(isQuizOn && index != 0 && index % 4 == 0) {

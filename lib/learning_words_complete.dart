@@ -3,23 +3,26 @@ import 'package:percent_indicator/percent_indicator.dart';
 import 'package:podo_words/data_storage.dart';
 import 'package:podo_words/my_colors.dart';
 import 'package:podo_words/play_audio.dart';
+import 'package:podo_words/word.dart';
 import 'package:podo_words/words.dart';
 
 class LearningWordsComplete extends StatelessWidget {
 
   int totalWords = 0;
   int myWords = 0;
-  int newWords = 0;
   double percent = 0;
+  List<Word> words;
 
-  LearningWordsComplete(this.newWords);
+  LearningWordsComplete(this.words);
 
   @override
   Widget build(BuildContext context) {
     totalWords = Words().getTotalWordsLength();
     myWords = DataStorage().myWords.length;
-    percent = ((newWords + myWords) / totalWords).toDouble();
+    percent = ((words.length + myWords) / totalWords).toDouble();
     PlayAudio().playYay();
+    DataStorage().addMyWords(words);
+
 
     return Scaffold(
       body: Padding(
@@ -49,7 +52,7 @@ class LearningWordsComplete extends StatelessWidget {
                   Text('You have learned', textScaleFactor: 1.5,
                     style: TextStyle(color: MyColors().purple)),
                   SizedBox(height: 10.0),
-                  Text('$newWords words', textScaleFactor: 2,
+                  Text('${words.length} words', textScaleFactor: 2,
                     style: TextStyle(color: MyColors().purple)),
                   SizedBox(height: 30.0),
                   Padding(
