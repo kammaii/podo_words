@@ -3,6 +3,7 @@ import 'package:podo_words/divider_text.dart';
 import 'package:podo_words/learning_words_bar.dart';
 import 'package:podo_words/word.dart';
 import 'my_colors.dart';
+import 'package:unicode/unicode.dart';
 
 class LearningWordsQuiz3 extends StatefulWidget {
 
@@ -24,7 +25,25 @@ class _LearningWordsQuiz3State extends State<LearningWordsQuiz3> {
     back = widget.words[wordIndex].back;
 
     List<String> frontSplit = front.split('');
-    //todo: frontSplit을 자모음으로 분리해서 리스트에 담기
+    //todo: frontSplit를 자모음으로 나누기
+    //todo: 자모음 버튼을 클릭하면 한글로 변환하기
+
+    String str = '사';
+    double cho = ((toRune(str) - 0xAC00) / 28) / 21 + 0x1100;
+    double jung = ((toRune(str) - 0xAC00) / 28) % 21 + 0x1161;
+    double jong = ((toRune(str) - 0xAC00) % 28) + 0x11A8 - 1;
+    print('초 : $cho');
+    print('중 : $jung');
+    print('종 : $jong');
+    //String choString = String.fromCharCode(cho);
+
+    print(toRune(str));
+    print(String.fromCharCode(4361));
+    print(String.fromCharCode(4449));
+    print(String.fromCharCode(4519));
+
+
+
 
     return Scaffold(
       body: SafeArea(
@@ -46,7 +65,6 @@ class _LearningWordsQuiz3State extends State<LearningWordsQuiz3> {
                 Material(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10.0),
-                  elevation: 2.0,
                   child: Padding(
                     padding: const EdgeInsets.all(15.0),
                     child: Center(child: Text('text', textScaleFactor: 1.5)),
