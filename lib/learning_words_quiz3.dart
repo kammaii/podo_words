@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:podo_words/divider_text.dart';
-import 'package:podo_words/learning_words_bar.dart';
 import 'package:podo_words/word.dart';
 import 'my_colors.dart';
 import 'package:unicode/unicode.dart';
@@ -54,7 +53,14 @@ class _LearningWordsQuiz3State extends State<LearningWordsQuiz3> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                LearningWordsBar(),
+                Row(
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.arrow_back),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ],
+                ),
                 SizedBox(height: 20.0),
                 IconButton(
                   icon: Icon(Icons.multitrack_audio, color: MyColors().purple,),

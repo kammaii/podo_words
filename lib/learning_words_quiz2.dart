@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:podo_words/divider_text.dart';
-import 'package:podo_words/learning_words_bar.dart';
 import 'package:podo_words/play_audio.dart';
 import 'package:podo_words/word.dart';
 import 'mix_index.dart';
@@ -131,7 +130,14 @@ class _LearningWordsQuiz2State extends State<LearningWordsQuiz2> {
             padding: const EdgeInsets.all(10.0),
             child: Column(
               children: [
-                LearningWordsBar(),
+                Row(
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.arrow_back),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ],
+                ),
                 Expanded(
                   child: Container(
                     alignment: Alignment.bottomCenter,

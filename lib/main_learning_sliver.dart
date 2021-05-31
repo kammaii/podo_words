@@ -1,8 +1,6 @@
-import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:podo_words/data_storage.dart';
 import 'package:podo_words/learning_words.dart';
 import 'package:podo_words/main_bottom.dart';
 import 'package:podo_words/my_colors.dart';
@@ -129,15 +127,15 @@ class MainLearningSliverState extends State<MainLearningSliver> {
                 backgroundColor: Colors.white,
                 child: Icon(Icons.play_arrow_rounded, color: MyColors().green, size: 50.0,),
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => LearningWords(widget.index)));
-                  //todo: 활성화된 단어 플래시카드에 추가하기 -> 단어학습 완료 시점으로 옮길 것
-                  List<Word> newMyWords = [];
-                  for(int i=0; i<activeWordCount; i++) {
+                  List<Word> activeWords = [];
+                  for(int i=0; i<words.length; i++) {
                     if(words[i].isActive) {
-                      newMyWords.add(words[i]);
+                      activeWords.add(words[i]);
                     }
                   }
-                  DataStorage().addMyWords(newMyWords);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => LearningWords(activeWords)));
+                  //todo: 활성화된 단어 플래시카드에 추가하기 -> 단어학습 완료 시점으로 옮길 것
+                  //DataStorage().addMyWords(activeWords);
                 },
               ),
             )

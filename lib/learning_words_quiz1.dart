@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:podo_words/divider_text.dart';
-import 'package:podo_words/learning_words_bar.dart';
 import 'package:podo_words/learning_words_quiz2.dart';
 import 'package:podo_words/mix_index.dart';
 import 'package:podo_words/my_colors.dart';
@@ -79,8 +77,14 @@ class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
           color: MyColors().purpleLight,
           child: Column(
             children: [
-              LearningWordsBar(),
-              SizedBox(height: 20.0),
+              Row(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.arrow_back),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ],
+              ),
               IconButton(
                 icon: Icon(Icons.multitrack_audio, color: MyColors().purple,),
                 iconSize: 100.0,

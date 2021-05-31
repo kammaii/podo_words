@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -189,7 +187,7 @@ class MainReviewState extends State<MainReview> {
                   child: ListView.builder (
                     itemCount: myWordsInList.length,
                     itemBuilder: (context, index) {
-                      return WordList(false, myWordsInList[index], isPlayBtn);
+                      return WordList(false, myWordsInList[index], !isPlayBtn);
                     },
                   ),
                   onLongPress: () {
