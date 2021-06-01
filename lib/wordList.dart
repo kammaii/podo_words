@@ -48,6 +48,7 @@ class _WordListState extends State<WordList> {
 
     void setChecked(bool b) {
       DataStorage().myWords[widget.word.wordId!].isChecked = b;
+      print('id : ${widget.word.wordId!} : $b');
     }
 
     return Container(

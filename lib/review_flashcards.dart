@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:podo_words/word.dart';
 
 class ReviewFlashCards extends StatefulWidget {
+
+  List<Word> words;
+
+  ReviewFlashCards(this.words);
+
   @override
   _ReviewFlashCardsState createState() => _ReviewFlashCardsState();
 }

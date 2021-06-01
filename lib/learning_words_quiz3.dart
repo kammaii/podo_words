@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:podo_words/divider_text.dart';
 import 'package:podo_words/word.dart';
@@ -18,29 +20,38 @@ class _LearningWordsQuiz3State extends State<LearningWordsQuiz3> {
   String front = "";
   String back = "";
 
+  List<String> cho = ["ㄱ", "ㄲ", "ㄴ", "ㄷ", "ㄸ", "ㄹ", "ㅁ", "ㅂ", "ㅃ", "ㅅ" ,"ㅆ", "ㅇ" ,"ㅈ", "ㅉ", "ㅊ", "ㅋ", "ㅌ" ,"ㅍ", "ㅎ"];
+  List<String> jung =["ㅏ", "ㅐ", "ㅑ", "ㅒ", "ㅓ", "ㅔ", "ㅕ", "ㅖ", "ㅗ", "ㅘ", "ㅙ", "ㅚ", "ㅛ", "ㅜ", "ㅝ", "ㅞ", "ㅟ", "ㅠ", "ㅡ", "ㅢ", "ㅣ"];
+  List<String> jong = ["", "ㄱ", "ㄲ", "ㄳ", "ㄴ", "ㄵ", "ㄶ", "ㄷ", "ㄹ", "ㄺ", "ㄻ", "ㄼ", "ㄽ", "ㄾ", "ㄿ", "ㅀ", "ㅁ", "ㅂ", "ㅄ", "ㅅ", "ㅆ", "ㅇ", "ㅈ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ"];
+
   @override
   Widget build(BuildContext context) {
-    front = widget.words[wordIndex].front;
+
+    front = widget.words[wordIndex].front; // 사과
     back = widget.words[wordIndex].back;
 
-    List<String> frontSplit = front.split('');
+    List<String> frontSplit = front.split(''); //['사', '과']
     //todo: frontSplit를 자모음으로 나누기
     //todo: 자모음 버튼을 클릭하면 한글로 변환하기
 
-    String str = '사';
+    String str = "사";
+    //print(utf8.decode(str.runes.toList()));
+    print(str.codeUnits);
     double cho = ((toRune(str) - 0xAC00) / 28) / 21 + 0x1100;
     double jung = ((toRune(str) - 0xAC00) / 28) % 21 + 0x1161;
-    double jong = ((toRune(str) - 0xAC00) % 28) + 0x11A8 - 1;
+    //double jong = ((toRune(str) - 0xAC00) % 28) + 0x11A8 - 1;
     print('초 : $cho');
     print('중 : $jung');
-    print('종 : $jong');
+    // print('종 : $jong');
     //String choString = String.fromCharCode(cho);
 
-    print(toRune(str));
-    print(String.fromCharCode(4361));
-    print(String.fromCharCode(4449));
-    print(String.fromCharCode(4519));
+    //print(toRune(str));
+    // print(String.fromCharCode(4361));
+    // print(String.fromCharCode(4449));
+    // print(String.fromCharCode(4519));
 
+    //[(initial) × 588 + (medial) × 28 + (final)] + 44032
+    //int.toRadixString(16)
 
 
 

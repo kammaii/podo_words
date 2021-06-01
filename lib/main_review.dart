@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:podo_words/main_bottom.dart';
 import 'package:podo_words/my_colors.dart';
+import 'package:podo_words/review_flashcards.dart';
 import 'package:podo_words/word.dart';
 import 'package:podo_words/wordList.dart';
 import 'data_storage.dart';
+import 'learning_words.dart';
 
 
 class MainReview extends StatefulWidget {
@@ -44,6 +46,7 @@ class MainReviewState extends State<MainReview> {
     for(int i=0; i<myWords.length; i++) {
       myWords[i].wordId = i;
       myWords[i].isChecked = false;
+      print(myWords[i].pronunciation);
     }
 
     myWordsInList = [];
@@ -227,15 +230,19 @@ class MainReviewState extends State<MainReview> {
 
   CupertinoActionSheet playBtnClick() {
     return CupertinoActionSheet(
-      message: Text('Select review mode', textScaleFactor: 2,),
+      message: Text('Select review mode', textScaleFactor: 1.5),
       actions: [
         CupertinoActionSheetAction(
           child: Text('quiz'),
-          onPressed: (){},
+          onPressed: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context) => LearningWords(myWords)));
+          },
         ),
         CupertinoActionSheetAction(
           child: Text('flash card'),
-          onPressed: (){},
+          onPressed: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context) => ReviewFlashCards(myWords)));
+          },
         )
       ],
       cancelButton: CupertinoActionSheetAction(

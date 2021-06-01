@@ -31,7 +31,6 @@ class DataStorage {
       sp = value;
       inActiveWords = getStringList(KEY_IN_ACTIVE_WORDS);
       List<String> myWordsJson = getStringList(KEY_MY_WORDS);
-      print(myWordsJson);
 
       myWords = [];
       for(int i=0; i<myWordsJson.length; i++) {
@@ -65,20 +64,19 @@ class DataStorage {
   }
 
   void removeMyWords() {
-    List<int> selectedId = [];
+    List<Word> selectedWord = [];
     for(Word myWord in myWords) {
       if(myWord.isChecked) {
-        selectedId.add(myWord.wordId!);
+        selectedWord.add(myWord);
       }
     }
-    for(int id in selectedId) {
-      myWords.removeAt(id);
+    for(Word word in selectedWord) {
+      myWords.remove(word);
     }
     setMyWords();
   }
 
   void addMyWords(List<Word> wordList) {
-    List<Word> newWords = [];
     for(Word word in wordList) {
       String front = word.front;
       bool isNew = true;
@@ -88,11 +86,8 @@ class DataStorage {
         }
       }
       if(isNew) {
-        newWords.add(word);
+        myWords.add(word);
       }
-    }
-    for(Word newWord in newWords ) {
-      myWords.add(newWord);
     }
     setMyWords();
   }
