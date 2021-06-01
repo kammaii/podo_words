@@ -235,13 +235,32 @@ class MainReviewState extends State<MainReview> {
         CupertinoActionSheetAction(
           child: Text('quiz'),
           onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context) => LearningWords(myWords)));
+            int activeWords = 0;
+            for(Word myWord in myWords) {
+              if(myWord.isActive) {
+                activeWords++;
+              }
+            }
+            if(activeWords >= 5) {
+              Navigator.pushReplacement(context, MaterialPageRoute(
+                  builder: (context) => LearningWords(myWords)));
+            } else {
+              Navigator.pop(context);
+              ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    backgroundColor: MyColors().pink,
+                    content: Text(
+                      'It needs more than 5 words to start learning.',
+                      style: TextStyle(color: MyColors().red, fontWeight: FontWeight.bold, fontSize: 18.0),
+                    ),
+                  ));
+            }
           },
         ),
         CupertinoActionSheetAction(
           child: Text('flash card'),
           onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context) => ReviewFlashCards(myWords)));
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ReviewFlashCards(myWords)));
           },
         )
       ],

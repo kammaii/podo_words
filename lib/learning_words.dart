@@ -87,12 +87,12 @@ class _LearningWordsState extends State<LearningWords> {
                 children: [
                   Expanded(
                     child: LinearPercentIndicator(
+                      animateFromLastPercent: true,
                       animation: true,
                       leading: IconButton(
                         icon: Icon(Icons.arrow_back),
                         onPressed: () => Navigator.pop(context),
                       ),
-                      width: 250,
                       lineHeight: 8.0,
                       percent: wordIndex / words.length,
                       backgroundColor: MyColors().navyLight,

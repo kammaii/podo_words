@@ -34,15 +34,16 @@ class _LearningWordsQuiz3State extends State<LearningWordsQuiz3> {
     //todo: frontSplit를 자모음으로 나누기
     //todo: 자모음 버튼을 클릭하면 한글로 변환하기
 
-    String str = "사";
+    String str = "산";
     //print(utf8.decode(str.runes.toList()));
     print(str.codeUnits);
+    var ch = toRune(str);
     double cho = ((toRune(str) - 0xAC00) / 28) / 21 + 0x1100;
     double jung = ((toRune(str) - 0xAC00) / 28) % 21 + 0x1161;
-    //double jong = ((toRune(str) - 0xAC00) % 28) + 0x11A8 - 1;
+    double jong = ((toRune(str) - 0xAC00) % 28) + 0x11A8 - 1;
     print('초 : $cho');
     print('중 : $jung');
-    // print('종 : $jong');
+    print('종 : $jong');
     //String choString = String.fromCharCode(cho);
 
     //print(toRune(str));
