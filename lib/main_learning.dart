@@ -101,7 +101,7 @@ class MainLearning extends StatelessWidget {
                       ),
                       itemBuilder: (context, index) {
                         return InkWell(
-                          onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => MainLearningSliver(index, bgColors[index%4])));},
+                          onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => MainLearningSliver(index, bgColors[index%4], iconColors[index%4])));},
                           child: Container(
                             color: bgColors[index % 4],
                             child: Column(

@@ -11,9 +11,10 @@ import 'package:podo_words/words.dart';
 class MainLearningSliver extends StatefulWidget {
 
   final int index;
-  final Color color;
+  final Color bgColor;
+  final Color iconColor;
 
-  MainLearningSliver(this.index, this.color);
+  MainLearningSliver(this.index, this.bgColor, this.iconColor);
 
   @override
   MainLearningSliverState createState() => MainLearningSliverState();
@@ -95,7 +96,7 @@ class MainLearningSliverState extends State<MainLearningSliver> {
                 margin: EdgeInsets.symmetric(horizontal: 30.0),
                 padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
                 decoration: BoxDecoration(
-                  color: MyColors().navy,
+                  color: widget.iconColor,
                   borderRadius: BorderRadius.all(Radius.circular(15.0)),
                 ),
                 child: Row(
@@ -196,7 +197,7 @@ class MainLearningSliverState extends State<MainLearningSliver> {
           Navigator.pop(context);
         },
       ),
-      backgroundColor: widget.color,
+      backgroundColor: widget.bgColor,
       expandedHeight: sliverAppBarHeight,
       pinned: true,
       stretch: true,
