@@ -25,12 +25,6 @@ class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
   bool isCorrectAnswer = false;
 
 
-  // @override
-  // void dispose() {
-  //   super.dispose();
-  //   player.dispose();
-  // }
-
   void checkAnswer() {
     if(isAnswerCheck) {
       if(isCorrectAnswer) { // 정답
