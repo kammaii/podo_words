@@ -12,4 +12,14 @@ class MixIndex {
     }
     return list;
   }
+
+  List<String> getMixedStringList(List<String> list) {
+    for(int i=0; i<list.length; i++) {
+      int rand = Random().nextInt(list.length);
+      dynamic temp = list[i];
+      list[i] = list[rand];
+      list[rand] = temp;
+    }
+    return list;
+  }
 }

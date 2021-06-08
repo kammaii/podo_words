@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:podo_words/divider_text.dart';
 import 'package:podo_words/play_audio.dart';
@@ -22,8 +20,8 @@ class _LearningWordsQuiz3State extends State<LearningWordsQuiz3> {
   String front = "";
   String back = "";
   List<String> jamo = [];
+  List<String> mixedJamo = [];
   List<int> jamoDecimal = [];
-  List<int> mixedIndex = [];
   int answerCount = 0;
   List<int> clickedIndex = [];
 
@@ -45,9 +43,7 @@ class _LearningWordsQuiz3State extends State<LearningWordsQuiz3> {
 
       decomposed.add(choList[cho]);
       decomposed.add(jungList[jung]);
-      if(jong != 0) {
-        decomposed.add(jongList[jong]);
-      }
+      decomposed.add(jongList[jong]);
 
       jamoDecimal.add(cho);
       jamoDecimal.add(jung);
@@ -55,8 +51,6 @@ class _LearningWordsQuiz3State extends State<LearningWordsQuiz3> {
     }
     return decomposed;
   }
-
-  //todo: 입력한 자모음이 순서에 맞으면 글자로 만들기
 
   String answer = '';
   int answerCho = 0;
@@ -94,20 +88,21 @@ class _LearningWordsQuiz3State extends State<LearningWordsQuiz3> {
     front = widget.words[quizIndex].front;
     back = widget.words[quizIndex].back;
     jamo = decomposeHangul(front);
-    mixedIndex = MixIndex().getMixedIndex(jamo.length);
+    mixedJamo = new List<String>.from(jamo);
+    MixIndex().getMixedStringList(mixedJamo);
     answer = '';
     clickedIndex = [];
     print('정답 : $front');
     print('자모 : $jamo');
+    print('랜덤자모 : $mixedJamo');
     print('자모십진수 : $jamoDecimal');
-    print('랜덤인덱스 : $mixedIndex');
   }
 
 
   @override
   Widget build(BuildContext context) {
 
-    if(answerCount == 0) {
+    if(answerCount == 0 && quizIndex < widget.words.length) {
       setQuiz();
     }
 
@@ -153,9 +148,12 @@ class _LearningWordsQuiz3State extends State<LearningWordsQuiz3> {
                       crossAxisSpacing: 10.0,
                       mainAxisSpacing: 10.0,
                     ),
+
                     itemBuilder: (context, index) {
+                      bool visible;
                       Color bgBtn;
                       TextDecoration textDecoration;
+
                       if(clickedIndex.contains(index)) {
                         bgBtn = MyColors().purpleLight;
                         textDecoration = TextDecoration.lineThrough;
@@ -164,45 +162,56 @@ class _LearningWordsQuiz3State extends State<LearningWordsQuiz3> {
                         textDecoration = TextDecoration.none;
                       }
 
-                      return Padding(
-                        padding: const EdgeInsets.all(1.0),
-                        child: InkWell(
-                          onTap: (){
-                            //정답 체크
-                            int answeredDecimal = jamoDecimal[mixedIndex[index]];
-                            if(answeredDecimal == jamoDecimal[answerCount]) { // 정답
-                              setState(() {
-                                PlayAudio().playCorrect();
-                                clickedIndex.add(index);
-                                setAnswer(answeredDecimal);
+                      if(mixedJamo[index] == '') {
+                        visible = false;
+                      } else {
+                        visible = true;
+                      }
 
-                                if(answerCount >= jamo.length) {  // 다음 퀴즈로 넘어가기
-                                  answerCount = 0;
-                                  quizIndex++;
+                      return Visibility(
+                        visible: visible,
+                        child: Padding(
+                          padding: const EdgeInsets.all(1.0),
+                          child: InkWell(
+                            onTap: (){
+                              //정답 체크
+                              if(jamo[answerCount] == '') { // 받침 없는 경우
+                                answerCount++;
+                              }
+                              if(jamo[answerCount] == mixedJamo[index]) { // 정답
+                                setState(() {
+                                  PlayAudio().playCorrect();
+                                  clickedIndex.add(index);
+                                  setAnswer(jamoDecimal[answerCount]);
 
-                                  if(quizIndex >= widget.words.length) {  // 모든 퀴즈 완료
-                                    Navigator.pop(context);
+                                  if(answerCount >= jamo.length - 1 && jamo[jamo.length - 1] == '' || answerCount >= jamo.length) {  // 다음 퀴즈로 넘어가기
+                                    answerCount = 0;
+                                    quizIndex++;
+
+                                    if(quizIndex >= widget.words.length) {  // 모든 퀴즈 완료
+                                      Navigator.pop(context);
+                                    }
                                   }
-                                }
-                              });
-                              
-                            } else {
-                              PlayAudio().playWrong();
-                            }
-                          },
-                          child: Container(
-                              decoration: BoxDecoration(
-                                  color: bgBtn,
-                                  borderRadius: BorderRadius.circular(20.0),
-                              ),
-                              child: Center(
-                                child: Text(jamo[mixedIndex[index]],
-                                  textScaleFactor: 1.5,
-                                  style: TextStyle(
-                                    decoration: textDecoration
-                                  ),
+                                });
+
+                              } else {
+                                PlayAudio().playWrong();
+                              }
+                            },
+                            child: Container(
+                                decoration: BoxDecoration(
+                                    color: bgBtn,
+                                    borderRadius: BorderRadius.circular(20.0),
                                 ),
-                              )
+                                child: Center(
+                                  child: Text(mixedJamo[index],
+                                    textScaleFactor: 1.5,
+                                    style: TextStyle(
+                                      decoration: textDecoration
+                                    ),
+                                  ),
+                                )
+                            ),
                           ),
                         ),
                       );
