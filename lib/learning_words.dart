@@ -101,7 +101,7 @@ class _LearningWordsState extends State<LearningWords> {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Text('(${wordIndex + 1} / ${words.length})'),
+                    child: Text('($wordIndex / ${words.length})'),
                   )
                 ],
               ),
@@ -133,8 +133,6 @@ class _LearningWordsState extends State<LearningWords> {
                   onIndexChanged: (index) {
                     setState(() {
                       wordIndex = index;
-                      //todo: index가 4의 배수이거나 마지막 index일 때 퀴즈1으로 이동
-                      //todo : 마지막 index일 때는 isLastQuiz = true 추가
                       if(index >= words.length) {
                         if(isQuizOn) {
                           Navigator.push(context, MaterialPageRoute(builder: (context) => LearningWordsQuiz3(words)));
