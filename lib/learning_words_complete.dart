@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:podo_words/data_storage.dart';
+import 'package:podo_words/main_learning.dart';
 import 'package:podo_words/my_colors.dart';
 import 'package:podo_words/play_audio.dart';
 import 'package:podo_words/word.dart';
@@ -18,10 +19,10 @@ class LearningWordsComplete extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     totalWords = Words().getTotalWordsLength();
-    myWords = DataStorage().myWords.length;
-    percent = ((words.length + myWords) / totalWords).toDouble();
-    PlayAudio().playYay();
     DataStorage().addMyWords(words);
+    myWords = DataStorage().myWords.length;
+    percent = (myWords / totalWords).toDouble();
+    //PlayAudio().playYay();
 
 
     return Scaffold(
@@ -59,8 +60,8 @@ class LearningWordsComplete extends StatelessWidget {
                     padding: const EdgeInsets.all(10.0),
                     child: InkWell(
                       onTap: (){
-                        //todo: myWord에 저장하기
-                        Navigator.pop(context);
+                        DataStorage().addMyWords(words);
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => MainLearning()));
                       },
                       child: Material(
                         color: MyColors().purple,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:podo_words/divider_text.dart';
 import 'package:podo_words/learning_words_quiz2.dart';
-import 'package:podo_words/mix_index.dart';
+import 'package:podo_words/list_mix.dart';
 import 'package:podo_words/my_colors.dart';
 import 'package:podo_words/play_audio.dart';
 import 'package:podo_words/word.dart';
@@ -19,7 +19,7 @@ class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
   int quizIndex = 0;
   String front = "";
   String back = "";
-  List<int> mixedIndex = [];
+  List<int> mixedIndex = List<int>.generate(4, (index) => index);
   List<Color> borderColor = List<Color>.generate(4, (index) => Colors.white);
   bool isAnswerCheck = false;
   bool isCorrectAnswer = false;
@@ -37,7 +37,6 @@ class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
         PlayAudio().playWrong();
       }
 
-
       Future.delayed(const Duration(seconds: 1), () {
         if(quizIndex < 4) {
           setState(() {
@@ -53,7 +52,7 @@ class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
 
     } else {
       print('정답 : $back');
-      mixedIndex = MixIndex().getMixedIndex(4);
+      ListMix().getMixedList(mixedIndex);
     }
   }
 
@@ -101,16 +100,18 @@ class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
                         padding: const EdgeInsets.all(1.0),
                         child: InkWell(
                           onTap: (){
-                            setState(() {
-                              if(mixedIndex[index] == quizIndex) {
-                                isCorrectAnswer = true;
-                                borderColor[index] = MyColors().purple;
-                              } else {
-                                isCorrectAnswer = false;
-                                borderColor[index] = MyColors().red;
-                              }
-                              isAnswerCheck = true;
-                            });
+                            if(!isAnswerCheck) {
+                              setState(() {
+                                if (mixedIndex[index] == quizIndex) {
+                                  isCorrectAnswer = true;
+                                  borderColor[index] = MyColors().purple;
+                                } else {
+                                  isCorrectAnswer = false;
+                                  borderColor[index] = MyColors().red;
+                                }
+                                isAnswerCheck = true;
+                              });
+                            }
                           },
                           child: Container(
                             decoration: BoxDecoration(

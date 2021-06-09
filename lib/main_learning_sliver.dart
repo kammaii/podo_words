@@ -112,7 +112,7 @@ class MainLearningSliverState extends State<MainLearningSliver> {
                       children: [
                         Text('Active', style: TextStyle(color: Colors.white, fontSize: 17.0),),
                         Text(
-                          activeWordCount.toString(), //todo: 카운팅 코드 추가
+                          activeWordCount.toString(),
                           style: TextStyle(color: Colors.white, fontSize: 25.0, fontWeight: FontWeight.bold),
                         )
                       ],

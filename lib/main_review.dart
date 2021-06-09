@@ -213,16 +213,28 @@ class MainReviewState extends State<MainReview> {
         backgroundColor: Colors.white,
         child: floatingBtn,
         onPressed: (){
-          showCupertinoModalPopup(
-            context: context,
-            builder: (_) {
-              if(isPlayBtn) {
-                return playBtnClick();
-              } else {
-                return deleteBtnClick();
-              }
-            }
-          );
+          if(myWords.length > 0) {
+            showCupertinoModalPopup(
+                context: context,
+                builder: (_) {
+                  if (isPlayBtn) {
+                    return playBtnClick();
+                  } else {
+                    return deleteBtnClick();
+                  }
+                }
+            );
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  backgroundColor: MyColors().pink,
+                  content: Text(
+                    'It needs more than 5 words to start learning.',
+                    style: TextStyle(color: MyColors().red, fontWeight: FontWeight.bold, fontSize: 18.0),
+                  ),
+                )
+            );
+          }
         },
       ),
     );

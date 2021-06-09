@@ -150,7 +150,7 @@ class _LearningWordsState extends State<LearningWords> {
                           Word word = Word(words[count].front, words[count].back, words[count].pronunciation);
                           wordQuizList.add(word);
                         }
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => LearningWordsQuiz3(words)));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => LearningWordsQuiz1(words)));
                       }
                     });
                   },

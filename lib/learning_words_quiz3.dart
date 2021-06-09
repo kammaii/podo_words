@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:podo_words/divider_text.dart';
+import 'package:podo_words/learning_words_complete.dart';
 import 'package:podo_words/play_audio.dart';
 import 'package:podo_words/word.dart';
-import 'mix_index.dart';
+import 'list_mix.dart';
 import 'my_colors.dart';
 import 'package:unicode/unicode.dart';
 
@@ -89,7 +90,7 @@ class _LearningWordsQuiz3State extends State<LearningWordsQuiz3> {
     back = widget.words[quizIndex].back;
     jamo = decomposeHangul(front);
     mixedJamo = new List<String>.from(jamo);
-    MixIndex().getMixedStringList(mixedJamo);
+    ListMix().getMixedList(mixedJamo);
     answer = '';
     clickedIndex = [];
     print('정답 : $front');
@@ -173,29 +174,33 @@ class _LearningWordsQuiz3State extends State<LearningWordsQuiz3> {
                         child: Padding(
                           padding: const EdgeInsets.all(1.0),
                           child: InkWell(
-                            onTap: (){
-                              //정답 체크
-                              if(jamo[answerCount] == '') { // 받침 없는 경우
-                                answerCount++;
-                              }
-                              if(jamo[answerCount] == mixedJamo[index]) { // 정답
-                                setState(() {
-                                  PlayAudio().playCorrect();
-                                  clickedIndex.add(index);
-                                  setAnswer(jamoDecimal[answerCount]);
+                            onTap: () {
+                              if (!clickedIndex.contains(index)) {
+                                //정답 체크
+                                if (jamo[answerCount] == '') { // 받침 없는 경우
+                                  answerCount++;
+                                }
+                                if (jamo[answerCount] == mixedJamo[index]) { // 정답
+                                  setState(() {
+                                    clickedIndex.add(index);
+                                    setAnswer(jamoDecimal[answerCount]);
 
-                                  if(answerCount >= jamo.length - 1 && jamo[jamo.length - 1] == '' || answerCount >= jamo.length) {  // 다음 퀴즈로 넘어가기
-                                    answerCount = 0;
-                                    quizIndex++;
-
-                                    if(quizIndex >= widget.words.length) {  // 모든 퀴즈 완료
-                                      Navigator.pop(context);
+                                    if (answerCount >= jamo.length - 1 && jamo[jamo.length - 1] == '' || answerCount >= jamo.length) { // 다음 퀴즈로 넘어가기
+                                      PlayAudio().playCorrect();
+                                      Future.delayed(const Duration(seconds: 1), () {
+                                        setState(() {
+                                          answerCount = 0;
+                                          quizIndex++;
+                                          if (quizIndex >= widget.words.length) { // 모든 퀴즈 완료
+                                            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => LearningWordsComplete(widget.words)), (Route<dynamic> route) => false);
+                                          }
+                                        });
+                                      });
                                     }
-                                  }
-                                });
-
-                              } else {
-                                PlayAudio().playWrong();
+                                  });
+                                } else {
+                                  PlayAudio().playWrong();
+                                }
                               }
                             },
                             child: Container(

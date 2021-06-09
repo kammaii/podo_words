@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:podo_words/divider_text.dart';
 import 'package:podo_words/play_audio.dart';
 import 'package:podo_words/word.dart';
-import 'mix_index.dart';
+import 'list_mix.dart';
 import 'my_colors.dart';
 
 class LearningWordsQuiz2 extends StatefulWidget {
@@ -18,8 +18,8 @@ class LearningWordsQuiz2 extends StatefulWidget {
 class _LearningWordsQuiz2State extends State<LearningWordsQuiz2> {
   List<String> front = [];
   List<String> back = [];
-  List<int> mixedIndexFront = MixIndex().getMixedIndex(4);
-  List<int> mixedIndexBack = MixIndex().getMixedIndex(4);
+  List<int> mixedIndexFront = List<int>.generate(4, (index) => index);
+  List<int> mixedIndexBack = List<int>.generate(4, (index) => index);
   List<int> checkedIndex = [4, 4];
   List<int> answeredIndex = [];
 
@@ -51,7 +51,6 @@ class _LearningWordsQuiz2State extends State<LearningWordsQuiz2> {
           mainAxisSpacing: 10.0,
         ),
         itemBuilder: (context, index) {
-
           Color borderColor = Colors.white;
           Color backgroundColor = Colors.white;
 
@@ -115,13 +114,19 @@ class _LearningWordsQuiz2State extends State<LearningWordsQuiz2> {
 
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
+    ListMix().getMixedList(mixedIndexFront);
+    ListMix().getMixedList(mixedIndexBack);
 
     for(Word word in widget.words) {
       front.add(word.front);
       back.add(word.back);
     }
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Container(
