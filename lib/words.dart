@@ -20,17 +20,6 @@ class Words{
     print('Words 초기화');
     //setWords();
   }
-/*
-//
-{
-  'title' : [''],
-  'titleIcon' : ['.png'],
-  'front' : [''],
-  'back' : [''],
-  'pronunciation' : ['-','[]']
-}
- */
-
 
   List<Map<String, List<String>>> words = [
 // 0
@@ -128,7 +117,18 @@ class Words{
       'front' : ['지갑','열쇠','가방','짐','신분증','여권','화장품','향수','우산','책','선물','표'],
       'back' : ['wallet','key','bag','luggage','ID card','passport','cosmetics','perfume','umbrella','book','present','ticket'],
       'pronunciation' : ['-','[열쐬]','-','-','[신분쯩]','[여꿘]','-','-','-','-','-','-']
-    }
+    },
+
+/*
+//
+{
+  'title' : [''],
+  'titleIcon' : ['.png'],
+  'front' : [''],
+  'back' : [''],
+  'pronunciation' : ['-','[]']
+}
+*/
 
 
   ];

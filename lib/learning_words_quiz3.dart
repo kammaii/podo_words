@@ -180,19 +180,32 @@ class _LearningWordsQuiz3State extends State<LearningWordsQuiz3> {
                                 if (jamo[answerCount] == '') { // 받침 없는 경우
                                   answerCount++;
                                 }
-                                if (jamo[answerCount] == mixedJamo[index]) { // 정답
+                                if (jamo[answerCount] ==
+                                    mixedJamo[index]) { // 정답
                                   setState(() {
                                     clickedIndex.add(index);
                                     setAnswer(jamoDecimal[answerCount]);
 
-                                    if (answerCount >= jamo.length - 1 && jamo[jamo.length - 1] == '' || answerCount >= jamo.length) { // 다음 퀴즈로 넘어가기
+                                    if (answerCount >= jamo.length - 1 &&
+                                        jamo[jamo.length - 1] == '' ||
+                                        answerCount >=
+                                            jamo.length) { // 다음 퀴즈로 넘어가기
                                       PlayAudio().playCorrect();
-                                      Future.delayed(const Duration(seconds: 1), () {
+                                      Future.delayed(
+                                          const Duration(seconds: 1), () {
                                         setState(() {
                                           answerCount = 0;
                                           quizIndex++;
-                                          if (quizIndex >= widget.words.length) { // 모든 퀴즈 완료
-                                            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => LearningWordsComplete(widget.words)), (Route<dynamic> route) => false);
+                                          if (quizIndex >= widget.words
+                                              .length) { // 모든 퀴즈 완료
+                                            Navigator.of(context)
+                                                .pushAndRemoveUntil(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        LearningWordsComplete(
+                                                            widget.words)), (
+                                                Route<
+                                                    dynamic> route) => false);
                                           }
                                         });
                                       });
@@ -205,14 +218,14 @@ class _LearningWordsQuiz3State extends State<LearningWordsQuiz3> {
                             },
                             child: Container(
                                 decoration: BoxDecoration(
-                                    color: bgBtn,
-                                    borderRadius: BorderRadius.circular(20.0),
+                                  color: bgBtn,
+                                  borderRadius: BorderRadius.circular(20.0),
                                 ),
                                 child: Center(
                                   child: Text(mixedJamo[index],
                                     textScaleFactor: 1.5,
                                     style: TextStyle(
-                                      decoration: textDecoration
+                                        decoration: textDecoration
                                     ),
                                   ),
                                 )

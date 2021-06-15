@@ -4,6 +4,7 @@ import 'package:podo_words/data_storage.dart';
 import 'package:podo_words/main_bottom.dart';
 import 'package:podo_words/main_learning_sliver.dart';
 import 'package:podo_words/my_colors.dart';
+import 'package:podo_words/premium.dart';
 import 'package:podo_words/words.dart';
 
 class MainLearning extends StatelessWidget {
@@ -24,7 +25,7 @@ class MainLearning extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<List<Object>> snapshot) {
         if(snapshot.hasData) {
           print('데이타 있음 : $snapshot');
-          _widget = widgetMainLearning();
+          _widget = widgetMainLearning(context);
 
         } else {
           print('데이타 없음');
@@ -62,29 +63,40 @@ class MainLearning extends StatelessWidget {
     );
   }
 
-  Widget widgetMainLearning() {
+  Widget widgetMainLearning(BuildContext context) {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 30.0),
         child: SafeArea(
             child: Column(
               children: [
-                Container(
-                  child: Text(
-                    'Select word title',
-                    style: TextStyle(
-                        fontSize: 20.0,
-                        color: Colors.deepPurpleAccent,
-                        fontWeight: FontWeight.bold
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Select word title',
+                      style: TextStyle(
+                          fontSize: 20.0,
+                          color: MyColors().purple,
+                          fontWeight: FontWeight.bold
+                      ),
                     ),
-                  ),
+                    IconButton(
+                      icon: Icon(Icons.verified,
+                        size: 30.0,
+                        color: MyColors().red),
+                      onPressed: (){
+                        Navigator.push(context, MaterialPageRoute(
+                            builder: (context) => Premium()));
+                      }
+                    )
+                  ],
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 10.0, bottom: 20.0),
                   child: DottedLine(
                     lineThickness: 3.0,
                     dashColor: Colors.grey,
-                    lineLength: 200.0,
                     dashRadius: 3.0,
                     dashGapLength: 5.0,
                   ),
@@ -160,7 +172,7 @@ class MainLearning extends StatelessWidget {
             )
         ),
       ),
-      bottomNavigationBar: MainBottom(context!, 0),
+      bottomNavigationBar: MainBottom(context, 0),
     );
   }
 }
