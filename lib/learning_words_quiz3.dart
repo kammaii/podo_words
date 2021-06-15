@@ -90,6 +90,7 @@ class _LearningWordsQuiz3State extends State<LearningWordsQuiz3> {
     back = widget.words[quizIndex].back;
     jamo = decomposeHangul(front);
     mixedJamo = new List<String>.from(jamo);
+    mixedJamo.removeWhere((element) => element == '');
     ListMix().getMixedList(mixedJamo);
     answer = '';
     clickedIndex = [];
@@ -142,7 +143,7 @@ class _LearningWordsQuiz3State extends State<LearningWordsQuiz3> {
                 SizedBox(height: 20.0),
                 GridView.builder(
                     shrinkWrap: true,
-                    itemCount: jamo.length,
+                    itemCount: mixedJamo.length,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount (
                       crossAxisCount: 4,
                       childAspectRatio: 1,
@@ -180,16 +181,14 @@ class _LearningWordsQuiz3State extends State<LearningWordsQuiz3> {
                                 if (jamo[answerCount] == '') { // 받침 없는 경우
                                   answerCount++;
                                 }
-                                if (jamo[answerCount] ==
-                                    mixedJamo[index]) { // 정답
+                                if (jamo[answerCount] == mixedJamo[index]) { // 정답
                                   setState(() {
                                     clickedIndex.add(index);
                                     setAnswer(jamoDecimal[answerCount]);
 
                                     if (answerCount >= jamo.length - 1 &&
                                         jamo[jamo.length - 1] == '' ||
-                                        answerCount >=
-                                            jamo.length) { // 다음 퀴즈로 넘어가기
+                                        answerCount >= jamo.length) { // 다음 퀴즈로 넘어가기
                                       PlayAudio().playCorrect();
                                       Future.delayed(
                                           const Duration(seconds: 1), () {
