@@ -10,7 +10,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'podo_words',
       theme: ThemeData(
-        primarySwatch: Colors.deepPurple
       ),
       home: new MainLearning(),
     );
