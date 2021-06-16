@@ -69,7 +69,7 @@ class Words{
       'title' : ['taste'],
       'front' : ['맛있다','맛없다','달다','쓰다','맵다','짜다','싱겁다','시다','신선하다','상하다','익다','썩다'],
       'back' : ['delicious','not delicious','sweet','bitter','spicy','salty','bland','sour','fresh','go bad','ripen','decay'],
-      'pronunciation' : ['마시따','마덥따','-','-','맵따','-','-','-','-','-','익따','썩따']
+      'pronunciation' : ['마시따','마덥따','-','-','맵따','-','싱겁따','-','-','-','익따','썩따']
     },
 // 7
     {
@@ -97,7 +97,7 @@ class Words{
       'title' : ['electronics'],
       'front' : ['휴대폰','컴퓨터','노트북','텔레비전','냉장고','세탁기','청소기','선풍기','에어컨','전자레인지','다리미','전기','충전'],
       'back' : ['cell phone','computer','laptop','television','refrigerator','washing machine','vacuum cleaner','electric fan','air conditioner','microwave','iron','electricity','charging'],
-      'pronunciation' : ['-','-','-','-','-','-','-','-','-','-','-','-','-']
+      'pronunciation' : ['-','-','-','-','-','세탁끼','-','-','-','-','-','-','-']
     },
 // 11
     {
@@ -125,7 +125,7 @@ class Words{
       'title' : ['kitchen'],
       'front' : ['숟가락','젓가락','포크','컵','접시','그릇','냄비','도마','칼','국자','가위','앞치마'],
       'back' : ['spoon','chopsticks','fork','cup','plate','bowl','pot','cutting board','knife','ladle','scissors','apron'],
-      'pronunciation' : ['숟까락','젇까락','-','-','-','-','-','-','-','국짜','-','-']
+      'pronunciation' : ['숟까락','젇까락','-','-','접씨','-','-','-','-','국짜','-','-']
     },
 // 15
     {
@@ -137,16 +137,16 @@ class Words{
 // 16
     {
       'title' : ['place2'],
-      'front' : ['교회','미용실','대사관','헬스장','주차장','주유소','버스정류장','지하철역','백화점','동물원','편의점','부동산','길','가게','세탁소','은행'],
-      'back' : ['church','hair salon','embassy','fitness center','parking lot','gas station','bus stop','subway station','department store','zoo','convenience store','real estate agency','road','shop','laundry','bank'],
-      'pronunciation' : ['-','-','-','헬쓰장','-','-','-','지하철력','배콰점','동무뤈','펴니점','-','-','-','세탁쏘','-']
+      'front' : ['교회','미용실','대사관','헬스장','주차장','주유소','버스정류장','지하철역','백화점','동물원','편의점','부동산','길','가게','세탁소','은행','주소'],
+      'back' : ['church','hair salon','embassy','fitness center','parking lot','gas station','bus stop','subway station','department store','zoo','convenience store','real estate agency','road','shop','laundry','bank','address'],
+      'pronunciation' : ['-','-','-','헬쓰장','-','-','-','지하철력','배콰점','동무뤈','펴니점','-','-','-','세탁쏘','-','-']
     },
 // 17
     {
       'title' : ['school'],
-      'front' : ['초등학교','중학교','고등학교','대학교','대학원','입학','졸업','수업','숙제','시험','문제','축제','방학','교실','기숙사','유학','학비','가르치다','배우다','공부하다','지각하다'],
-      'back' : ['elementary school','middle school','high school','university','graduate school','entering the school','graduation','lesson','homework','examination','question','festival','school vacation','classroom','dormitory','studying abroad','tuition','teach','learn','study','be late'],
-      'pronunciation' : ['초등학꾜','중하꾜','고등학꾜','대학꾜','대하권','이팍','조럽','-','숙쩨','-','-','축쩨','-','-','기숙싸','-','학삐','-','-','-','지가카다']
+      'front' : ['초등학교','중학교','고등학교','대학교','대학원','입학','졸업','수업','숙제','시험','문제','축제','방학','교실','기숙사','유학','학비','가르치다','배우다','공부하다','지각하다','단어','문장','발음'],
+      'back' : ['elementary school','middle school','high school','university','graduate school','entering the school','graduation','lesson','homework','examination','question','festival','school vacation','classroom','dormitory','studying abroad','tuition','teach','learn','study','be late','word','sentence','pronunciation'],
+      'pronunciation' : ['초등학꾜','중하꾜','고등학꾜','대학꾜','대하권','이팍','조럽','-','숙쩨','-','-','축쩨','-','-','기숙싸','-','학삐','-','-','-','지가카다','다너','-','바름']
     },
 // 18
     {
@@ -214,9 +214,9 @@ class Words{
 // 27
     {
       'title' : ['hobby'],
-      'front' : ['드라마','요리','운동','여행','영화','쇼핑','게임','외국어','낚시','등산','책을 읽다','음악을 듣다','피아노를 치다','자전거를 타다','공연을 보다','춤을 추다','노래를 부르다','사진을 찍다','그림을 그리다'],
-      'back' : ['drama','cooking','workout','travel','movie','shopping','game','foreign language','fishing','hiking','read a book','listen to music','play the piano','ride a bike','watch a performance','dance','sing a song','take a photo','draw a picture'],
-      'pronunciation' : ['-','-','-','-','-','-','-','외구거','낙씨','-','채글익따','으마글듣따','-','-','공여늘보다','추믈추다','-','사지늘찍따','그리믈그리다']
+      'front' : ['드라마','자막','요리','운동','여행','영화','쇼핑','게임','외국어','낚시','등산','책을 읽다','음악을 듣다','피아노를 치다','자전거를 타다','공연을 보다','춤을 추다','노래를 부르다','사진을 찍다','그림을 그리다'],
+      'back' : ['drama','subtitles','cooking','workout','travel','movie','shopping','game','foreign language','fishing','hiking','read a book','listen to music','play the piano','ride a bike','watch a performance','dance','sing a song','take a photo','draw a picture'],
+      'pronunciation' : ['-','-','-','-','-','-','-','-','외구거','낙씨','-','채글익따','으마글듣따','-','-','공여늘보다','추믈추다','-','사지늘찍따','그리믈그리다']
     },
 // 28
     {
@@ -258,7 +258,7 @@ class Words{
       'title' : ['shopping'],
       'front' : ['사다','팔다','싸다','비싸다','계산하다','할인','신용카드','현금','돈','잔돈','무료/공짜','환전','교환','환불','일시불','할부','영수증','깎다','매진'],
       'back' : ['buy','sell','cheap','expensive','pay','discount','credit card','cash','money','change','free','currency exchange','exchange','refund','payment in full','monthly installment','receipt','price down','sold out'],
-      'pronunciation' : ['-','-','-','-','-','하린','-','-','-','-','-','-','-','-','-','-','-','깍따','-']
+      'pronunciation' : ['-','-','-','-','-','하린','시뇽카드','-','-','-','-','-','-','-','-','-','-','깍따','-']
     },
 // 34
     {
