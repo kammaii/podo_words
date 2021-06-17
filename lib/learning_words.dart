@@ -4,6 +4,7 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:podo_words/learning_words_complete.dart';
 import 'package:podo_words/learning_words_quiz1.dart';
 import 'package:podo_words/my_colors.dart';
+import 'package:podo_words/play_audio.dart';
 import 'package:podo_words/word.dart';
 import 'learning_words_quiz3.dart';
 
@@ -24,6 +25,7 @@ class _LearningWordsState extends State<LearningWords> {
   String front = "";
   String back = "";
   String pronunciation = "";
+  String audio = "";
   bool isQuizOn = true;
 
   Widget wordCard() {
@@ -70,10 +72,15 @@ class _LearningWordsState extends State<LearningWords> {
       front = words[wordIndex].front;
       back = words[wordIndex].back;
       pronunciation = words[wordIndex].pronunciation;
+      audio = words[wordIndex].audio;
+      print(audio);
+      PlayAudio().playWord(audio);
+
     } else {
       front = '';
       back = '';
       pronunciation = '';
+      audio = '';
     }
 
 
@@ -145,7 +152,7 @@ class _LearningWordsState extends State<LearningWords> {
 
                         for (int i = 1; i < 5; i++) {
                           int count = index - i;
-                          Word word = Word(words[count].front, words[count].back, words[count].pronunciation);
+                          Word word = Word(words[count].front, words[count].back, words[count].pronunciation, words[count].audio);
                           wordQuizList.add(word);
                         }
                         Navigator.push(context, MaterialPageRoute(builder: (context) => LearningWordsQuiz1(words)));

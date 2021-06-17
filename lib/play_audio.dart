@@ -28,4 +28,9 @@ class PlayAudio {
     await player.setAsset('assets/audio/yay.mp3');
     player.play();
   }
+
+  void playWord(String audio) async {
+    await player.setAsset('assets/audio/words/$audio');
+    player.play();
+  }
 }

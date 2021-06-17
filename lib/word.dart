@@ -4,25 +4,25 @@ class Word {
   String front;
   String back;
   String pronunciation;
-  //String audio;
+  String audio;
 
   int? wordId;
   bool isActive = true;
   bool isChecked = false;
 
 
-  Word(this.front, this.back, this.pronunciation);
+  Word(this.front, this.back, this.pronunciation, this.audio);
 
   Map<String, dynamic> toJson() => {
     'front' : front,
     'back' : back,
-    'pronunciation' : pronunciation
-    //'audio' : audio
+    'pronunciation' : pronunciation,
+    'audio' : audio
   };
 
   Word.fromJson(Map<String, dynamic> json) :
         front = json['front'],
         back = json['back'],
-        pronunciation = json['pronunciation'];
-        //audio = json['audio'];
+        pronunciation = json['pronunciation'],
+        audio = json['audio'];
 }
