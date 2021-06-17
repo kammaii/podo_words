@@ -17,9 +17,11 @@ class DataStorage {
   SharedPreferences? sp;
   List<String> inActiveWords = [];
   List<Word> myWords = [];
+  int lastClickedItem = 0;
 
   static const String KEY_IN_ACTIVE_WORDS = 'inActiveWords';
   static const String KEY_MY_WORDS = 'myWords';
+  static const String KEY_LAST_CLICKED_ITEM = 'lastClickedItem';
 
   DataStorage.init() {
     print('DataStorage 초기화');
@@ -30,6 +32,7 @@ class DataStorage {
     f.then((value) {
       sp = value;
       inActiveWords = getStringList(KEY_IN_ACTIVE_WORDS);
+      lastClickedItem = getInt(KEY_LAST_CLICKED_ITEM);
       List<String> myWordsJson = getStringList(KEY_MY_WORDS);
 
       myWords = [];
@@ -120,6 +123,10 @@ class DataStorage {
     }
   }
 
+  void setLastClickedItem(int i) {
+    DataStorage().setInt(KEY_LAST_CLICKED_ITEM, i);
+  }
+
   setStringList(String key, List<String> list) async {
     sp!.setStringList(key, list);
   }
@@ -129,12 +136,13 @@ class DataStorage {
     return stringList;
   }
 
-  setBool(String key, bool b) async {
-    sp!.setBool(key, b);
+
+  setInt(String key, int int) async {
+    sp!.setInt(key, int);
   }
 
-  Future<bool> getBool(String key) async {
-    bool b = sp!.getBool(key) ?? true;
-    return b;
+  int getInt(String key) {
+    int i = sp!.getInt(key) ?? 0;
+    return i;
   }
 }

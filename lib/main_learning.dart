@@ -12,6 +12,8 @@ class MainLearning extends StatelessWidget {
   DataStorage dataStorage = DataStorage();
   BuildContext? context;
   Widget? _widget;
+  ScrollController _controller = new ScrollController();
+  double axisSpacing = 30.0;
 
   List<Color> bgColors = [MyColors().navyLight, MyColors().mustardLight, MyColors().greenLight, MyColors().pink];
   List<Color> iconColors = [MyColors().navy, MyColors().mustard, MyColors().greenDark, MyColors().wine];
@@ -26,6 +28,11 @@ class MainLearning extends StatelessWidget {
         if(snapshot.hasData) {
           print('데이타 있음 : $snapshot');
           _widget = widgetMainLearning(context);
+          double itemHeight = getItemHeight(context);
+          if(_controller.hasClients) {
+            _controller.animateTo(DataStorage().lastClickedItem * itemHeight,
+                duration: new Duration(seconds: 1), curve: Curves.ease);
+          }
 
         } else {
           print('데이타 없음');
@@ -34,6 +41,12 @@ class MainLearning extends StatelessWidget {
         return _widget!;
       },
     );
+  }
+
+  double getItemHeight(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double itemHeight = (screenWidth - axisSpacing * 3)/2 + axisSpacing;
+    return itemHeight;
   }
 
   Widget widgetLogo() {
@@ -103,20 +116,29 @@ class MainLearning extends StatelessWidget {
                 ),
                 Expanded(
                   child: GridView.builder(
+                      controller: _controller,
                       shrinkWrap: true,
                       itemCount: Words().words.length,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount (
                         crossAxisCount: 2,
                         childAspectRatio: 1,
-                        crossAxisSpacing: 30.0,
-                        mainAxisSpacing: 30.0,
+                        crossAxisSpacing: axisSpacing,
+                        mainAxisSpacing: axisSpacing,
                       ),
                       itemBuilder: (context, index) {
                         return InkWell(
-                          onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => MainLearningSliver(index, bgColors[index%4], iconColors[index%4])));},
+                          onTap: (){
+                            int clickedItem = index~/2;
+                            DataStorage().setLastClickedItem(clickedItem);
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => MainLearningSliver(index, bgColors[index%4], iconColors[index%4])));
+                            },
                           child: Container(
-                            color: bgColors[index % 4],
+                            decoration: BoxDecoration(
+                              color: bgColors[index % 4],
+                              borderRadius: BorderRadius.all(Radius.circular(10.0))
+                            ),
                             child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Expanded(
                                   child: Row(
@@ -150,14 +172,10 @@ class MainLearning extends StatelessWidget {
                                 ),
                                 Expanded(
                                   child: Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                                    child: Row(
-                                      children: [
-                                        Text(Words().words[index][Words.TITLE]![0], style: TextStyle(
-                                            fontSize: 20.0,
-                                            color: Colors.deepPurpleAccent
-                                        ),)
-                                      ],
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Text(Words().words[index][Words.TITLE]![0],
+                                      textScaleFactor: 1.5,
+                                      style: TextStyle(color: iconColors[index % 4]),
                                     ),
                                   ),
                                 )
