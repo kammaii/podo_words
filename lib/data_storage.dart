@@ -18,10 +18,13 @@ class DataStorage {
   List<String> inActiveWords = [];
   List<Word> myWords = [];
   int lastClickedItem = 0;
+  bool isPremiumUser = false;
 
   static const String KEY_IN_ACTIVE_WORDS = 'inActiveWords';
   static const String KEY_MY_WORDS = 'myWords';
   static const String KEY_LAST_CLICKED_ITEM = 'lastClickedItem';
+  static const String KEY_IS_PREMIUM_USER = 'isPremiumUser';
+
 
   DataStorage.init() {
     print('DataStorage 초기화');
@@ -33,6 +36,7 @@ class DataStorage {
       sp = value;
       inActiveWords = getStringList(KEY_IN_ACTIVE_WORDS);
       lastClickedItem = getInt(KEY_LAST_CLICKED_ITEM);
+      isPremiumUser = getBool(KEY_IS_PREMIUM_USER);
       List<String> myWordsJson = getStringList(KEY_MY_WORDS);
 
       myWords = [];
@@ -145,4 +149,14 @@ class DataStorage {
     int i = sp!.getInt(key) ?? 0;
     return i;
   }
+
+  setBool(String key, bool b) async {
+    sp!.setBool(key, b);
+  }
+
+  bool getBool(String key) {
+    bool b = sp!.getBool(key) ?? false;
+    return b;
+  }
+
 }

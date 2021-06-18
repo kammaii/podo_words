@@ -14,6 +14,9 @@ class MainLearning extends StatelessWidget {
   Widget? _widget;
   ScrollController _controller = new ScrollController();
   double axisSpacing = 30.0;
+  List<String> titles = [];
+  static const List<int> freeLesson = [0,3,5,6,9,12,15,20,22,24,28,34,36,44,47];
+
 
   List<Color> bgColors = [MyColors().navyLight, MyColors().mustardLight, MyColors().greenLight, MyColors().pink];
   List<Color> iconColors = [MyColors().navy, MyColors().mustard, MyColors().greenDark, MyColors().wine];
@@ -27,7 +30,9 @@ class MainLearning extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<List<Object>> snapshot) {
         if(snapshot.hasData) {
           print('데이타 있음 : $snapshot');
+          titles = Words().getTitles();
           _widget = widgetMainLearning(context);
+
           double itemHeight = getItemHeight(context);
           if(_controller.hasClients) {
             _controller.animateTo(DataStorage().lastClickedItem * itemHeight,
@@ -118,7 +123,7 @@ class MainLearning extends StatelessWidget {
                   child: GridView.builder(
                       controller: _controller,
                       shrinkWrap: true,
-                      itemCount: Words().words.length,
+                      itemCount: titles.length,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount (
                         crossAxisCount: 2,
                         childAspectRatio: 1,
@@ -126,12 +131,30 @@ class MainLearning extends StatelessWidget {
                         mainAxisSpacing: axisSpacing,
                       ),
                       itemBuilder: (context, index) {
+                        String imageAsset;
+                        // todo: 각 레슨 타이틀에 맞는 아이콘 설정하기
+                        // todo: 테스트용
+                        if(DataStorage().isPremiumUser) {
+                          imageAsset = 'assets/images/sample_icon.png';
+                        } else {
+                          if(freeLesson.contains(index)) {
+                            imageAsset = 'assets/images/sample_icon.png';
+                          } else {
+                            imageAsset = 'assets/images/sample_icon_lock.png';
+                          }
+                        }
+
                         return InkWell(
                           onTap: (){
                             int clickedItem = index~/2;
                             DataStorage().setLastClickedItem(clickedItem);
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => MainLearningSliver(index, bgColors[index%4], iconColors[index%4])));
-                            },
+
+                            if(DataStorage().isPremiumUser || freeLesson.contains(index)) {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => MainLearningSliver(index, bgColors[index % 4], iconColors[index % 4])));
+                            } else {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => Premium()));
+                            }
+                          },
                           child: Container(
                             decoration: BoxDecoration(
                               color: bgColors[index % 4],
@@ -159,8 +182,7 @@ class MainLearning extends StatelessWidget {
                                       Padding(
                                         padding: const EdgeInsets.all(10.0),
                                         child: Hero(
-                                          child: Image.asset(
-                                            'assets/images/sample_icon.png', //todo: title_[index].png
+                                          child: Image.asset(imageAsset, //todo: title_[index].png
                                             color: Colors.white,
                                             width: 50.0,
                                           ),
@@ -173,7 +195,7 @@ class MainLearning extends StatelessWidget {
                                 Expanded(
                                   child: Padding(
                                     padding: const EdgeInsets.all(10.0),
-                                    child: Text(Words().words[index][Words.TITLE]![0],
+                                    child: Text(titles[index],
                                       textScaleFactor: 1.5,
                                       style: TextStyle(color: iconColors[index % 4]),
                                     ),

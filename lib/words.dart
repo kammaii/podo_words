@@ -53,7 +53,7 @@ class Words{
     return totalLength;
   }
 
-  List<Map<String, List<String>>> words = [
+  static const List<Map<String, List<String>>> words = [
 // 0
     {
       'title' : ['food'],

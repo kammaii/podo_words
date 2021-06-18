@@ -122,8 +122,9 @@ class Premium extends StatelessWidget {
                 ),
                 SizedBox(height: 20.0),
                 Text('The payment will be charged to your Google account at the confirmation of purchase.'
-                    'This purchase is one-time purchase. You can request a refund within 24 hours.'
-                    'If you have any trouble with purchasing, please contact akorean.app@gmail.com.',
+                    ' This purchase is one-time purchase. You can request a refund within 24 hours.'
+                    ' Premium benefit is applied only to devices that have been paid.'
+                    ' If you have any trouble with purchasing, please contact akorean.app@gmail.com.',
                   style: TextStyle(color: Colors.grey.shade400),
                 )
               ],
