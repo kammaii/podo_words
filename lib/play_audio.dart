@@ -30,7 +30,7 @@ class PlayAudio {
   }
 
   void playWord(String audio) async {
-    await player.setAsset('assets/audio/words/$audio');
+    await player.setAsset('assets/audio/$audio');
     player.play();
   }
 }

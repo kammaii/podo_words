@@ -18,6 +18,7 @@ class LearningWordsQuiz2 extends StatefulWidget {
 class _LearningWordsQuiz2State extends State<LearningWordsQuiz2> {
   List<String> front = [];
   List<String> back = [];
+  List<String> audio = [];
   List<int> mixedIndexFront = List<int>.generate(4, (index) => index);
   List<int> mixedIndexBack = List<int>.generate(4, (index) => index);
   List<int> checkedIndex = [4, 4];
@@ -80,7 +81,7 @@ class _LearningWordsQuiz2State extends State<LearningWordsQuiz2> {
                     if(checkedIndex[0] != 4 && checkedIndex[1] != 4) {
                       if(mixedIndexFront[checkedIndex[0]] == mixedIndexBack[checkedIndex[1]]) {  // 정답
                         print('정답');
-                        PlayAudio().playCorrect();
+                        PlayAudio().playWord(audio[mixedIndexFront[checkedIndex[0]]]);
                         answeredIndex.add(mixedIndexFront[checkedIndex[0]]);
 
                       } else {
@@ -122,6 +123,7 @@ class _LearningWordsQuiz2State extends State<LearningWordsQuiz2> {
     for(Word word in widget.words) {
       front.add(word.front);
       back.add(word.back);
+      audio.add(word.audio);
     }
   }
 

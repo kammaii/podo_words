@@ -138,26 +138,28 @@ class _LearningWordsState extends State<LearningWords> {
                   viewportFraction: 0.7,
                   scale: 0.7,
                   onIndexChanged: (index) {
-                    setState(() {
-                      wordIndex = index;
-                      if(index >= words.length) {
-                        if(isQuizOn) {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => LearningWordsQuiz3(words)));
-                        } else {
-                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LearningWordsComplete(words)));
-                        }
-
-                      } else if(isQuizOn && index != 0 && index % 4 == 0) {
-                        List<Word> wordQuizList = [];
-
-                        for (int i = 1; i < 5; i++) {
-                          int count = index - i;
-                          Word word = Word(words[count].front, words[count].back, words[count].pronunciation, words[count].audio);
-                          wordQuizList.add(word);
-                        }
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => LearningWordsQuiz1(words)));
+                    if(index >= words.length) {
+                      if(isQuizOn) {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => LearningWordsQuiz3(words)));
+                      } else {
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LearningWordsComplete(words)));
                       }
-                    });
+
+                    } else if(isQuizOn && index != 0 && index % 4 == 0) {
+                      List<Word> wordQuizList = [];
+
+                      for (int i = 1; i < 5; i++) {
+                        int count = index - i;
+                        Word word = Word(words[count].front, words[count].back, words[count].pronunciation, words[count].audio);
+                        wordQuizList.add(word);
+                      }
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => LearningWordsQuiz1(words)));
+
+                    } else {
+                      setState(() {
+                        wordIndex = index;
+                      });
+                    }
                   },
                 ),
               ),
@@ -166,7 +168,7 @@ class _LearningWordsState extends State<LearningWords> {
                 child: IconButton(
                   icon: Icon(Icons.multitrack_audio, color: MyColors().purple,),
                   iconSize: 100.0,
-                  onPressed: () => print('play button pressed'),
+                  onPressed: () => PlayAudio().playWord(audio),
                 ),
               )
             ],

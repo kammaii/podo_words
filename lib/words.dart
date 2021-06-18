@@ -87,7 +87,7 @@ class Words{
       'title' : ['seasoning'],
       'front' : ['설탕','소금','간장','식초','후추','식용유','고추장','고춧가루','된장','향신료','꿀'],
       'back' : ['sugar','salt','soy sauce','vinegar','pepper','cooking oil','red pepper paste','red pepper powder','soybean paste','spice','honey'],
-      'pronunciation' : ['-','-','-','-','-','시굥뉴','-','-','-','향신뇨','-']
+      'pronunciation' : ['-','-','-','-','-','시굥뉴','-','고춛까루','-','향신뇨','-']
     },
 // 5
     {
@@ -101,7 +101,7 @@ class Words{
       'title' : ['taste'],
       'front' : ['맛있다','맛없다','달다','쓰다','맵다','짜다','싱겁다','시다','신선하다','상하다','익다','썩다'],
       'back' : ['delicious','not delicious','sweet','bitter','spicy','salty','bland','sour','fresh','go bad','ripen','decay'],
-      'pronunciation' : ['마시따','마덥따','-','-','맵따','-','싱겁따','-','-','-','익따','썩따']
+      'pronunciation' : ['마싣따','마덥따','-','-','맵따','-','싱겁따','-','-','-','익따','썩따']
     },
 // 7
     {
@@ -141,7 +141,7 @@ class Words{
 // 12
     {
       'title' : ['housework'],
-      'front' : ['정리하다','청소하다','빨래사다','장을 보다','쓰레기를 버리다','설거지하다','이사하다','고치다','만들다'],
+      'front' : ['정리하다','청소하다','빨래하다','장을 보다','쓰레기를 버리다','설거지하다','이사하다','고치다','만들다'],
       'back' : ['tidy up','clean up','laundry','grocery shopping','throw away','wash dishes','move','fix','make'],
       'pronunciation' : ['정니하다','-','-','-','-','-','-','-','-']
     },
@@ -150,7 +150,7 @@ class Words{
       'title' : ['restroom'],
       'front' : ['세면대','변기','욕조','샤워기','거울','칫솔','치약','면도기','비누','빗','수건','휴지','씻다','양치하다/이를 닦다','세수하다'],
       'back' : ['sink','toilet','bathtub','shower','mirror','toothbrush','toothpaste','razor','soap','comb','towel','toilet paper','wash','brush teeth','wash face'],
-      'pronunciation' : ['-','-','-','-','-','치쏠','-','-','-','-','-','-','씯따','-','-']
+      'pronunciation' : ['-','-','-','-','-','칟쏠','-','-','-','-','-','-','씯따','이를닥따','-']
     },
 // 14
     {
@@ -171,14 +171,14 @@ class Words{
       'title' : ['place2'],
       'front' : ['교회','미용실','대사관','헬스장','주차장','주유소','버스정류장','지하철역','백화점','동물원','편의점','부동산','길','가게','세탁소','은행','주소'],
       'back' : ['church','hair salon','embassy','fitness center','parking lot','gas station','bus stop','subway station','department store','zoo','convenience store','real estate agency','road','shop','laundry','bank','address'],
-      'pronunciation' : ['-','-','-','헬쓰장','-','-','-','지하철력','배콰점','동무뤈','펴니점','-','-','-','세탁쏘','-','-']
+      'pronunciation' : ['-','-','-','헬쓰장','-','-','버스정뉴장','지하철력','배콰점','동무뤈','펴니점','-','-','-','세탁쏘','-','-']
     },
 // 17
     {
       'title' : ['school'],
       'front' : ['초등학교','중학교','고등학교','대학교','대학원','입학','졸업','수업','숙제','시험','문제','축제','방학','교실','기숙사','유학','학비','가르치다','배우다','공부하다','지각하다','단어','문장','발음'],
       'back' : ['elementary school','middle school','high school','university','graduate school','entering the school','graduation','lesson','homework','examination','question','festival','school vacation','classroom','dormitory','studying abroad','tuition','teach','learn','study','be late','word','sentence','pronunciation'],
-      'pronunciation' : ['초등학꾜','중하꾜','고등학꾜','대학꾜','대하권','이팍','조럽','-','숙쩨','-','-','축쩨','-','-','기숙싸','-','학삐','-','-','-','지가카다','다너','-','바름']
+      'pronunciation' : ['초등학꾜','중학꾜','고등학꾜','대학꾜','대하권','이팍','조럽','-','숙쩨','-','-','축쩨','-','-','기숙싸','-','학삐','-','-','-','지가카다','다너','-','바름']
     },
 // 18
     {
@@ -199,14 +199,14 @@ class Words{
       'title' : ['people'],
       'front' : ['가족','친구','남자','여자','여자친구','남자친구','아기','아이=어린이','어른','아는 사람','이웃','아저씨','아줌마','쌍둥이','손님','동양인','서양인'],
       'back' : ['family','friend','man','woman','girlfriend','boyfriend','baby','child','adult','acquaintance','neighbor','middle-aged man','middle-aged woman','twins','quest','Asians','Westerners'],
-      'pronunciation' : ['-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-']
+      'pronunciation' : ['-','-','-','-','-','-','-','어리니','-','-','-','-','-','-','-','-','-']
     },
 // 21
     {
       'title' : ['people condition'],
       'front' : ['어리다','나이가 많다','태어나다','자라다','결혼하다','사귀다','헤어지다','피곤하다','배고프다','배부르다','졸리다=잠이 오다','졸다','아이를 낳다','아이를 키우다','죽다','돌아가시다'],
       'back' : ['young','old','be born','grow up','get married','going out','break up','tired','hungry','full','sleepy','doze off','give birth','raise a child','die','pass away'],
-      'pronunciation' : ['-','나이가만타','-','-','-','-','-','-','-','-','-','-','아이를나타','-','죽따','도라가시다']
+      'pronunciation' : ['-','나이가만타','-','-','-','-','-','-','-','-','자미오다','-','아이를나타','-','죽따','도라가시다']
     },
 // 22
     {
@@ -226,15 +226,15 @@ class Words{
     {
       'title' : ['appearance'],
       'front' : ['뚱뚱하다','날씬하다','말랐다','멋있다','잘생기다','못생기다','예쁘다','귀엽다','키가 크다','키가 작다','힘이 세다','약하다','머리가 길다','머리가 짧다','살이 찌다','살을 빼다','살이 빠지다','평범하다'],
-      'back' : ['fat','slim','skinny','good-looking','hansome','ugly','pretty','cute','tall','short','strong','weak','long hair','short hair','gain weight','on a diet','lose weight','normal'],
-      'pronunciation' : ['-','-','-','머싣따','잘쌩기다','몯쌩기다','-','귀엽다','-','키가작따','-','야카다','-','머리가짤따','사리찌다','사를빼다','사리빠지다','-']
+      'back' : ['fat','slim','skinny','good-looking','handsome','ugly','pretty','cute','tall','short','strong','weak','long hair','short hair','gain weight','on a diet','lose weight','normal'],
+      'pronunciation' : ['-','-','-','머싣따','잘쌩기다','몯쌩기다','-','귀엽따','-','키가작따','히미세다','야카다','-','머리가짤따','사리찌다','사를빼다','사리빠지다','-']
     },
 // 25
     {
       'title' : ['personality'],
       'front' : ['성격이 좋다','착하다','부지런하다','게으르다','친절하다','활발하다','조용하다','겸손하다','거만하다','이기적이다','인내심이 있다','욕심이 많다','자신감이 있다','솔직하다'],
       'back' : ['have a good personality','nice','diligent','lazy','kind','outgoing','quiet','humble','arrogant','selfish','patient','greedy','confident','honest'],
-      'pronunciation' : ['성꺼기조타','차카다','-','-','-','-','-','-','-','-','인내시미읻따','욕시미만타','자신가미읻따','솔찌카다']
+      'pronunciation' : ['성껴기조타','차카다','-','-','-','-','-','-','-','-','인내시미읻따','욕시미만타','자신가미읻따','솔찌카다']
     },
 // 26
     {
@@ -311,7 +311,7 @@ class Words{
       'title' : ['location'],
       'front' : ['앞','뒤','왼쪽','오른쪽','옆','안','밖','위','아래','가운데','가깝다','멀다','처음','중간','마지막','근처','건너편'],
       'back' : ['front','back','left','right','next to','inside','outside','above','below','center','close','far','first','middle','last','near','opposite side'],
-      'pronunciation' : ['압','-','-','-','엽','-','-','-','-','-','가깝다','-','-','-','-','-','-']
+      'pronunciation' : ['압','-','-','-','엽','-','-','-','-','-','가깝따','-','-','-','-','-','-']
     },
 // 37
     {
@@ -353,14 +353,14 @@ class Words{
       'title' : ['color'],
       'front' : ['흰색=하얀색','검은색=까만색','빨간색','주황색','노란색','초록색=녹색','파란색','남색','보라색','회색','하늘색','분홍색','갈색','밝은색','어두운색','연한색','진한색'],
       'back' : ['white','black','red','orange','yellow','green','blue','indigo','purple','gray','sky blue','pink','brown','bright color','dark color','light color','deep color'],
-      'pronunciation' : ['힌색','거믄색','-','-','-','-','-','-','-','-','하늘쌕','-','갈쌕','발근색','-','-','-']
+      'pronunciation' : ['힌색','거믄색','-','-','-','초록쌕','-','-','-','-','하늘쌕','-','갈쌕','발근색','-','-','-']
     },
 // 43
     {
       'title' : ['weather'],
       'front' : ['봄','여름','가을','겨울','비가 오다','눈이 오다','덥다','춥다','따뜻하다','시원하다','쌀쌀하다','맑다','흐리다','습하다','건조하다','해','구름','하늘','기온','소나기','장마','태풍','바람이 불다','안개가 끼다'],
       'back' : ['spring','summer','fall','winter','rain','snow','hot','cold','warm','cool','chilly','clear','cloudy','humid','dry','sun','cloud','sky','temperature','shower','rainy season','typhoon','wind blows','foggy'],
-      'pronunciation' : ['-','-','-','-','-','-','덥따','춥따','따뜨타다','-','-','막따','-','스파다','-','-','-','-','-','-','-','-','바라미불다','-']
+      'pronunciation' : ['-','-','-','-','-','누니오다','덥따','춥따','따뜨타다','-','-','막따','-','스파다','-','-','-','-','-','-','-','-','바라미불다','-']
     },
 // 44
     {
@@ -380,7 +380,7 @@ class Words{
     {
       'title' : ['hospital'],
       'front' : ['내과','외과','치과','정형외과','안과','이비인후과','성형외과','피부과','소아과','산부인과','응급실','한의원'],
-      'back' : ['internal medicine','general surgery','dental','orthopedic surgery','ophthalmology','otolaryngology/EENT','plastic surgery','dermatology','pediatric','obstetrics and gynecology','emergency room','oriental medical clinic'],
+      'back' : ['internal medicine','general surgery','dental','orthopedic surgery','ophthalmology','otolaryngology/ENT','plastic surgery','dermatology','pediatric','obstetrics and gynecology','emergency room','oriental medical clinic'],
       'pronunciation' : ['내꽈','외꽈','치꽈','정형외꽈','안꽈','이비인후꽈','성형외꽈','피부꽈','소아꽈','산부인꽈','-','하니원']
     },
 // 47
@@ -388,7 +388,7 @@ class Words{
       'title' : ['sickness'],
       'front' : ['아프다','몸이 안 좋다','병에 걸리다','감기에 걸리다','콧물이 나다','열이 나다','기침이 나다','코가 막히다','약','주사를 맞다','입원하다','피가 나다','눈물이 나다','여드름이 나다','체하다','가렵다','어지럽다','답답하다','멀미가 나다'],
       'back' : ['sick','not feeling well','get sick','catch a cold','runny nose','have a fever','have a cough','stuffy nose','medicine','get an injection','hospitalize','bleeding','tears flow','get acne','indigestion','itchy','dizzy','feel heavy','motion sickness'],
-      'pronunciation' : ['-','모미안조타','-','-',',콘물이나다','여리나다','기치미나다','코가마키다','-','-','이붠하다','-','눈무리나다','여드르미나다','-','-','-',',답다파다','-']
+      'pronunciation' : ['-','모미안조타','-','-',',콘물이나다','여리나다','기치미나다','코가마키다','-','-','이붠하다','-','눈무리나다','여드르미나다','-','가렵따','-',',답다파다','-']
     },
 // 48
     {
@@ -402,7 +402,7 @@ class Words{
       'title' : ['emotion1'],
       'front' : ['좋아하다','싫어하다','기쁘다','슬프다','무섭다','울다','웃다','기분이 좋다','기분이 나쁘다','사랑하다','걱정하다','외롭다','놀라다','심심하다','짜증이 나다','행복하다','부럽다','마음에 들다','관심이 있다','스트레스를 받다','스트레스를 풀다','화가 나다','화를 풀다'],
       'back' : ['like','hate','glad','sad','scary','cry','laugh','feel good','not feel good','love','worry','lonely','be surprised','bored','irritated','happy','envy','take a liking','interested','under stress','relieve stress','get angry','blow off steam'],
-      'pronunciation' : ['조아하다','시러하다','-','-','무섭따','-','욷따','기부니조타','기부니나쁘다','-','걱쩡하다','-','-','-','-','행보카다','부럽따','-','관시미읻따','스트레스를받따','-','-','-']
+      'pronunciation' : ['조아하다','시러하다','-','-','무섭따','-','욷따','기부니조타','기부니나쁘다','-','걱쩡하다','외롭따','-','-','-','행보카다','부럽따','-','관시미읻따','스트레스를받따','-','-','-']
     },
 // 50
     {

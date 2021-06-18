@@ -20,6 +20,7 @@ class _LearningWordsQuiz3State extends State<LearningWordsQuiz3> {
   int quizIndex = 0;
   String front = "";
   String back = "";
+  String audio = "";
   List<String> jamo = [];
   List<String> mixedJamo = [];
   List<int> jamoDecimal = [];
@@ -88,6 +89,8 @@ class _LearningWordsQuiz3State extends State<LearningWordsQuiz3> {
   void setQuiz() {
     front = widget.words[quizIndex].front;
     back = widget.words[quizIndex].back;
+    audio = widget.words[quizIndex].audio;
+    PlayAudio().playWord(audio);
     jamo = decomposeHangul(front);
     mixedJamo = new List<String>.from(jamo);
     mixedJamo.removeWhere((element) => element == '');
@@ -129,7 +132,7 @@ class _LearningWordsQuiz3State extends State<LearningWordsQuiz3> {
                 IconButton(
                   icon: Icon(Icons.multitrack_audio, color: MyColors().purple,),
                   iconSize: 100.0,
-                  onPressed: () => print('play button pressed'),
+                  onPressed: () => PlayAudio().playWord(audio),
                 ),
                 DividerText().getDivider('Listen & Answer'),
                 Material(
@@ -190,21 +193,12 @@ class _LearningWordsQuiz3State extends State<LearningWordsQuiz3> {
                                         jamo[jamo.length - 1] == '' ||
                                         answerCount >= jamo.length) { // 다음 퀴즈로 넘어가기
                                       PlayAudio().playCorrect();
-                                      Future.delayed(
-                                          const Duration(seconds: 1), () {
+                                      Future.delayed(const Duration(seconds: 1), () {
                                         setState(() {
                                           answerCount = 0;
                                           quizIndex++;
-                                          if (quizIndex >= widget.words
-                                              .length) { // 모든 퀴즈 완료
-                                            Navigator.of(context)
-                                                .pushAndRemoveUntil(
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        LearningWordsComplete(
-                                                            widget.words)), (
-                                                Route<
-                                                    dynamic> route) => false);
+                                          if (quizIndex >= widget.words.length) { // 모든 퀴즈 완료
+                                            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => LearningWordsComplete(widget.words)), (Route<dynamic> route) => false);
                                           }
                                         });
                                       });

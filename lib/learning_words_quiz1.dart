@@ -19,6 +19,7 @@ class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
   int quizIndex = 0;
   String front = "";
   String back = "";
+  String audio = "";
   List<int> mixedIndex = List<int>.generate(4, (index) => index);
   List<Color> borderColor = List<Color>.generate(4, (index) => Colors.white);
   bool isAnswerCheck = false;
@@ -28,12 +29,10 @@ class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
   void checkAnswer() {
     if(isAnswerCheck) {
       if(isCorrectAnswer) { // 정답
-        // todo: 정답오디오 재생
         PlayAudio().playCorrect();
         quizIndex++;
 
       } else {
-        // todo: 오답오디오 재생
         PlayAudio().playWrong();
       }
 
@@ -61,6 +60,8 @@ class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
   Widget build(BuildContext context) {
     front = widget.wordList[quizIndex].front;
     back = widget.wordList[quizIndex].back;
+    audio = widget.wordList[quizIndex].audio;
+    PlayAudio().playWord(audio);
 
     checkAnswer();
 
@@ -81,7 +82,7 @@ class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
               IconButton(
                 icon: Icon(Icons.multitrack_audio, color: MyColors().purple,),
                 iconSize: 100.0,
-                onPressed: () => print('play button pressed'),
+                onPressed: () => PlayAudio().playWord(audio),
               ),
               DividerText().getDivider('select correct word'),
               Padding(
