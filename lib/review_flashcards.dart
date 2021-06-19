@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:podo_words/play_audio.dart';
 import 'package:podo_words/word.dart';
 
 import 'my_colors.dart';
@@ -22,6 +23,7 @@ class _ReviewFlashCardsState extends State<ReviewFlashCards> {
   bool isReverse = false;
   String front = '';
   String back = '';
+  String audio = '';
   bool isAnswer = false;
   String btnText = 'Answer';
 
@@ -35,6 +37,8 @@ class _ReviewFlashCardsState extends State<ReviewFlashCards> {
         front = widget.words[rand].back;
         back = widget.words[rand].front;
       }
+      audio = widget.words[rand].audio;
+      PlayAudio().playWord(audio);
     }
   }
 
@@ -111,14 +115,14 @@ class _ReviewFlashCardsState extends State<ReviewFlashCards> {
                       visible: isAnswer,
                       child: Center(
                           child: Text('$back', textScaleFactor: 2)
-                      ),
+                        )
                     ),
                   ),
                 ),
                 IconButton(
-                  icon: Icon(Icons.multitrack_audio, color: MyColors().purple,),
+                  icon: Icon(Icons.play_circle_outline_rounded, color: MyColors().purple,),
                   iconSize: 80.0,
-                  onPressed: () => print('play button pressed'),
+                  onPressed: () => PlayAudio().playWord(audio),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(10.0),
