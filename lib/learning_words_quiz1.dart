@@ -80,7 +80,7 @@ class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
                 ],
               ),
               IconButton(
-                icon: Icon(Icons.multitrack_audio, color: MyColors().purple,),
+                icon: Icon(Icons.play_circle_outline_rounded, color: MyColors().purple,),
                 iconSize: 100.0,
                 onPressed: () => PlayAudio().playWord(audio),
               ),

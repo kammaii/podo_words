@@ -130,7 +130,7 @@ class _LearningWordsQuiz3State extends State<LearningWordsQuiz3> {
                 ),
                 SizedBox(height: 20.0),
                 IconButton(
-                  icon: Icon(Icons.multitrack_audio, color: MyColors().purple,),
+                  icon: Icon(Icons.play_circle_outline_rounded, color: MyColors().purple,),
                   iconSize: 100.0,
                   onPressed: () => PlayAudio().playWord(audio),
                 ),
