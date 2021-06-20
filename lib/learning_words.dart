@@ -71,7 +71,11 @@ class _LearningWordsState extends State<LearningWords> {
     if(wordIndex < words.length) {
       front = words[wordIndex].front;
       back = words[wordIndex].back;
-      pronunciation = words[wordIndex].pronunciation;
+      if(words[wordIndex].pronunciation != '-') {
+        pronunciation = '[${words[wordIndex].pronunciation}]';
+      } else {
+        pronunciation = '-';
+      }
       audio = words[wordIndex].audio;
       print(audio);
       PlayAudio().playWord(audio);
@@ -153,7 +157,7 @@ class _LearningWordsState extends State<LearningWords> {
                         Word word = Word(words[count].front, words[count].back, words[count].pronunciation, words[count].audio);
                         wordQuizList.add(word);
                       }
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => LearningWordsQuiz1(words)));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => LearningWordsQuiz1(wordQuizList)));
 
                     } else {
                       setState(() {

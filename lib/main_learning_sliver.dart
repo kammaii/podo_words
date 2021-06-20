@@ -91,7 +91,6 @@ class MainLearningSliverState extends State<MainLearningSliver> {
               width: MediaQuery.of(context).size.width,
               top: topMargin,
               child: Container(
-                height: 70.0,
                 margin: EdgeInsets.symmetric(horizontal: 30.0),
                 padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
                 decoration: BoxDecoration(
