@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:podo_words/learning_words.dart';
-import 'package:podo_words/main_bottom.dart';
 import 'package:podo_words/my_colors.dart';
 import 'package:podo_words/word.dart';
 import 'package:podo_words/wordList.dart';
@@ -154,7 +153,6 @@ class MainLearningSliverState extends State<MainLearningSliver> {
           ],
         ),
       ),
-      bottomNavigationBar: MainBottom(context, 0),
     );
   }
 

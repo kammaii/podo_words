@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:podo_words/main_bottom.dart';
 import 'package:podo_words/my_colors.dart';
 import 'package:podo_words/review_flashcards.dart';
 import 'package:podo_words/word.dart';
@@ -10,12 +9,12 @@ import 'data_storage.dart';
 import 'learning_words.dart';
 
 
-class MainReview extends StatefulWidget {
+class MainBodyReview extends StatefulWidget {
   @override
-  MainReviewState createState() => MainReviewState();
+  MainBodyReviewState createState() => MainBodyReviewState();
 }
 
-class MainReviewState extends State<MainReview> {
+class MainBodyReviewState extends State<MainBodyReview> {
 
   List<Word> myWords = [];
   List<Word> myWordsInList = [];
@@ -46,7 +45,6 @@ class MainReviewState extends State<MainReview> {
     for(int i=0; i<myWords.length; i++) {
       myWords[i].wordId = i;
       myWords[i].isChecked = false;
-      print(myWords[i].pronunciation);
     }
 
     myWordsInList = [];
@@ -208,7 +206,6 @@ class MainReviewState extends State<MainReview> {
           ),
         ),
       ),
-      bottomNavigationBar: MainBottom(context, 1),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.white,
         child: floatingBtn,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:podo_words/data_storage.dart';
-import 'package:podo_words/main_learning.dart';
+import 'package:podo_words/main_frame.dart';
 import 'package:podo_words/my_colors.dart';
 import 'package:podo_words/word.dart';
 import 'package:podo_words/words.dart';
@@ -60,7 +60,7 @@ class LearningWordsComplete extends StatelessWidget {
                     child: InkWell(
                       onTap: (){
                         DataStorage().addMyWords(words);
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => MainLearning()));
+                        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => MainFrame()), (Route<dynamic> route) => false);
                       },
                       child: Material(
                         color: MyColors().purple,

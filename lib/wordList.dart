@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:podo_words/main_learning_sliver.dart';
-import 'package:podo_words/main_review.dart';
+import 'package:podo_words/main_body_review.dart';
 import 'package:podo_words/my_colors.dart';
 import 'package:podo_words/word.dart';
 import 'package:swipe_to/swipe_to.dart';
@@ -29,7 +29,7 @@ class _WordListState extends State<WordList> {
 
   @override
   Widget build(BuildContext context) {
-    MainReviewState? mainReviewState = context.findAncestorStateOfType<MainReviewState>();
+    MainBodyReviewState? mainReviewState = context.findAncestorStateOfType<MainBodyReviewState>();
     MainLearningSliverState? mainLearningSliverState = context.findAncestorStateOfType<MainLearningSliverState>();
 
     if(widget.isDeleteMode) {

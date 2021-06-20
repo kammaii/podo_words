@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:podo_words/main_learning.dart';
+import 'package:podo_words/logo.dart';
 
 
 void main() => runApp(MyApp());
@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
       title: 'podo_words',
       theme: ThemeData(
       ),
-      home: new MainLearning(),
+      home: new Logo(),
     );
   }
 }
