@@ -51,7 +51,7 @@ class DataStorage {
   }
 
   Future<bool> wait() {
-    return Future.delayed(const Duration(seconds: 3), () { //todo: 3초로 수정하기
+    return Future.delayed(const Duration(seconds: 0), () { //todo: 3초로 수정하기
       return true;
     });
   }
