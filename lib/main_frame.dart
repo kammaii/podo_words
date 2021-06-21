@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:podo_words/my_colors.dart';
 import 'package:podo_words/main_body_learning.dart';
@@ -10,14 +11,20 @@ class MainFrame extends StatefulWidget {
 }
 
 class _MainFrameState extends State<MainFrame> {
-  Widget _widget = MainBodyLearning();
-  int selectedIndex = 0;
+  List<Widget> pageList = [MainBodyLearning(), MainBodyReview()];
+  int pageIndex = 0;
 
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
-      body: _widget,
+      body: PageTransitionSwitcher(
+        transitionBuilder: (Widget child, Animation<double> animation, Animation<double> secondaryAnimation) {
+          return FadeThroughTransition(animation: animation, secondaryAnimation: secondaryAnimation, child: child);
+        },
+        child: pageList[pageIndex],
+
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: [
           BottomNavigationBarItem(
@@ -30,28 +37,28 @@ class _MainFrameState extends State<MainFrame> {
           ),
         ],
         selectedItemColor: MyColors().purple,
-        currentIndex: selectedIndex,
+        currentIndex: pageIndex,
         backgroundColor: MyColors().navyLightLight,
-        onTap: (int index){
+        onTap: (int newValue){
           setState(() {
-            switch (index) {
-              case 0 :
-                setState(() {
-                  _widget = MainBodyLearning();
-                  selectedIndex = 0;
-                });
-                break;
-              case 1 :
-                setState(() {
-                  _widget = MainBodyReview();
-                  selectedIndex = 1;
-                });
-                break;
-            }
+            pageIndex = newValue;
+            // switch (newValue) {
+            //   case 0 :
+            //     setState(() {
+            //       _widget = MainBodyLearning();
+            //       pageIndex = 0;
+            //     });
+            //     break;
+            //   case 1 :
+            //     setState(() {
+            //       _widget = MainBodyReview();
+            //       pageIndex = 1;
+            //     });
+            //     break;
+            // }
           });
         },
       )
     );
   }
-
 }
