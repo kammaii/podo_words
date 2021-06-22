@@ -6,7 +6,10 @@ import 'package:podo_words/learning_words_quiz1.dart';
 import 'package:podo_words/my_colors.dart';
 import 'package:podo_words/play_audio.dart';
 import 'package:podo_words/word.dart';
-import 'learning_words_quiz3.dart';
+import 'package:podo_words/learning_words_quiz3.dart';
+import 'package:podo_words/play_audio_button.dart';
+
+
 
 class LearningWords extends StatefulWidget {
 
@@ -169,11 +172,7 @@ class _LearningWordsState extends State<LearningWords> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20.0),
-                child: IconButton(
-                  icon: Icon(Icons.play_circle_outline_rounded, color: MyColors().purple,),
-                  iconSize: 100.0,
-                  onPressed: () => PlayAudio().playWord(audio),
-                ),
+                child: PlayAudioButton(audio)
               )
             ],
           ),

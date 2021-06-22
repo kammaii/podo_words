@@ -4,6 +4,7 @@ import 'package:podo_words/learning_words_quiz2.dart';
 import 'package:podo_words/list_mix.dart';
 import 'package:podo_words/my_colors.dart';
 import 'package:podo_words/play_audio.dart';
+import 'package:podo_words/play_audio_button.dart';
 import 'package:podo_words/word.dart';
 
 class LearningWordsQuiz1 extends StatefulWidget {
@@ -79,11 +80,7 @@ class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
                   ),
                 ],
               ),
-              IconButton(
-                icon: Icon(Icons.play_circle_outline_rounded, color: MyColors().purple,),
-                iconSize: 100.0,
-                onPressed: () => PlayAudio().playWord(audio),
-              ),
+              PlayAudioButton(audio),
               DividerText().getDivider('select correct word'),
               Padding(
                 padding: const EdgeInsets.all(20.0),

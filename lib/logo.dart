@@ -20,27 +20,30 @@ class Logo extends StatelessWidget {
           });
         }
         return Scaffold(
-            body: Stack(
-              alignment: Alignment.center,
-              children: [
-                Center(child: Image.asset('assets/images/podo.png')),
-                Positioned(
-                  bottom: 100.0,
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        child: CircularProgressIndicator(
-                          strokeWidth: 1.0,
+            body: Container(
+              color: Colors.white,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Center(child: Image.asset('assets/images/podo.png')),
+                  Positioned(
+                    bottom: 100.0,
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          child: CircularProgressIndicator(
+                            strokeWidth: 1.0,
+                          ),
+                          height: 20.0,
+                          width: 20.0,
                         ),
-                        height: 20.0,
-                        width: 20.0,
-                      ),
-                      SizedBox(width: 20.0),
-                      Text('Loading...')
-                    ],
+                        SizedBox(width: 20.0),
+                        Text('Loading...')
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             )
         );
       },

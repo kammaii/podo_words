@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:podo_words/divider_text.dart';
 import 'package:podo_words/learning_words_complete.dart';
 import 'package:podo_words/play_audio.dart';
+import 'package:podo_words/play_audio_button.dart';
 import 'package:podo_words/word.dart';
 import 'list_mix.dart';
 import 'my_colors.dart';
@@ -129,11 +130,7 @@ class _LearningWordsQuiz3State extends State<LearningWordsQuiz3> {
                   ],
                 ),
                 SizedBox(height: 20.0),
-                IconButton(
-                  icon: Icon(Icons.play_circle_outline_rounded, color: MyColors().purple,),
-                  iconSize: 100.0,
-                  onPressed: () => PlayAudio().playWord(audio),
-                ),
+                PlayAudioButton(audio),
                 DividerText().getDivider('Listen & Answer'),
                 Material(
                   color: Colors.white,
