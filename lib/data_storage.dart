@@ -50,15 +50,15 @@ class DataStorage {
     return f;
   }
 
-  Future<bool> wait() {
-    return Future.delayed(const Duration(seconds: 0), () { //todo: 3초로 수정하기
-      return true;
-    });
-  }
-
-  Future<List<Object>> init() {
-    return Future.wait([wait(), initData()]);
-  }
+  // Future<bool> wait() {
+  //   return Future.delayed(const Duration(seconds: 3), () { //todo: 3초로 수정하기
+  //     return true;
+  //   });
+  // }
+  //
+  // Future<List<Object>> init() {
+  //   return Future.wait([wait(), initData()]);
+  // }
 
   void setIsActiveMyWords() {
     for(Word myWord in myWords) {

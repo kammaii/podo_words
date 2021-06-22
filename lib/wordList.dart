@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:podo_words/main_learning_sliver.dart';
 import 'package:podo_words/main_body_review.dart';
 import 'package:podo_words/my_colors.dart';
+import 'package:podo_words/play_audio.dart';
 import 'package:podo_words/word.dart';
 import 'package:swipe_to/swipe_to.dart';
 import 'data_storage.dart';
@@ -123,13 +124,12 @@ class _WordListState extends State<WordList> {
                     ),
                   ),
                   onTap: (){
-                    //todo: 오디오 플레이
                     if(widget.isDeleteMode) {
                       setState(() {
                         setChecked(!widget.word.isChecked);
                       });
                     } else {
-                      print('audio play');
+                      PlayAudio().playWord(widget.word.audio);
                     }
                   },
                 ),
