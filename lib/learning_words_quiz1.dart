@@ -121,6 +121,7 @@ class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
                                 child: Text(
                                   widget.wordList[mixedIndex[index]].back,
                                   textScaleFactor: 1.5,
+                                  textAlign: TextAlign.center,
                                 )
                             ),
                           ),

@@ -4,7 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:podo_words/learning_words.dart';
 import 'package:podo_words/my_colors.dart';
 import 'package:podo_words/word.dart';
-import 'package:podo_words/wordList.dart';
+import 'package:podo_words/word_list.dart';
 import 'package:podo_words/words.dart';
 
 class MainLearningSliver extends StatefulWidget {
@@ -126,7 +126,7 @@ class MainLearningSliverState extends State<MainLearningSliver> {
                 backgroundColor: Colors.white,
                 child: Icon(Icons.play_arrow_rounded, color: MyColors().green, size: 50.0,),
                 onPressed: () {
-                  if(activeWordCount >= 5) {
+                  if(activeWordCount >= 4) {
                     List<Word> activeWords = [];
                     for (int i = 0; i < words.length; i++) {
                       if (words[i].isActive) {
@@ -141,7 +141,7 @@ class MainLearningSliverState extends State<MainLearningSliver> {
                         SnackBar(
                           backgroundColor: MyColors().pink,
                           content: Text(
-                            'It needs more than 5 words to start learning.',
+                            'It needs more than 4 words to start learning.',
                             style: TextStyle(color: MyColors().red, fontWeight: FontWeight.bold, fontSize: 18.0),
                           ),
                         ));

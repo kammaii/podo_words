@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:podo_words/my_colors.dart';
 import 'package:podo_words/review_flashcards.dart';
 import 'package:podo_words/word.dart';
-import 'package:podo_words/wordList.dart';
+import 'package:podo_words/word_list.dart';
 import 'data_storage.dart';
 import 'learning_words.dart';
 
@@ -16,15 +16,16 @@ class MainBodyReview extends StatefulWidget {
 
 class MainBodyReviewState extends State<MainBodyReview> {
 
-  List<Word> myWords = [];
-  List<Word> myWordsInList = [];
+  late List<Word> myWords;
+  late List<Word> myWordsInList;
   List<bool> toggleSelections = [true, false, false];
   String searchInput = "";
 
   bool isPlayBtn = true;
-  Widget floatingBtn = Icon(Icons.play_arrow_rounded, color: MyColors().green, size: 50.0);
+  late Widget floatingBtn;
 
   final textFieldController = TextEditingController();
+  final focusNode = FocusNode();
 
   @override
   void initState() {
@@ -40,7 +41,6 @@ class MainBodyReviewState extends State<MainBodyReview> {
 
   @override
   Widget build(BuildContext context) {
-
     myWords = DataStorage().myWords;
     for(int i=0; i<myWords.length; i++) {
       myWords[i].wordId = i;
@@ -112,6 +112,7 @@ class MainBodyReviewState extends State<MainBodyReview> {
             onPressed: (){
               setState(() {
                 textFieldController.clear();
+                focusNode.unfocus();
                 for(int i=0; i<toggleSelections.length; i++) {
                   if(i == toggleIndex) {
                     toggleSelections[i] = true;
@@ -140,6 +141,7 @@ class MainBodyReviewState extends State<MainBodyReview> {
                 child: Column(
                   children: [
                     TextField(
+                      focusNode: focusNode,
                       decoration: InputDecoration(
                         prefixIcon: Icon(Icons.search),
                         focusedBorder: OutlineInputBorder(
@@ -192,6 +194,7 @@ class MainBodyReviewState extends State<MainBodyReview> {
                     },
                   ),
                   onLongPress: () {
+                    focusNode.unfocus();
                     setState(() {
                       if(isPlayBtn) {
                         isPlayBtn = false;
@@ -206,40 +209,34 @@ class MainBodyReviewState extends State<MainBodyReview> {
           ),
         ),
       ),
-      floatingActionButton: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 300),
-        transitionBuilder: (Widget child, Animation<double> animation) {
-          return RotationTransition(child: child, turns: animation);
-        },
-        child: FloatingActionButton(
-          key: ValueKey<Widget> (floatingBtn),
-          backgroundColor: Colors.white,
-          child: floatingBtn,
-          onPressed: (){
-            if(myWords.length > 0) {
-              showCupertinoModalPopup(
-                  context: context,
-                  builder: (_) {
-                    if (isPlayBtn) {
-                      return playBtnClick();
-                    } else {
-                      return deleteBtnClick();
-                    }
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.white,
+        child: floatingBtn,
+        onPressed: (){
+          focusNode.unfocus();
+          if(myWords.length > 0) {
+            showCupertinoModalPopup(
+                context: context,
+                builder: (_) {
+                  if (isPlayBtn) {
+                    return playBtnClick();
+                  } else {
+                    return deleteBtnClick();
                   }
-              );
-            } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    backgroundColor: MyColors().pink,
-                    content: Text(
-                      'It needs more than 5 words to start learning.',
-                      style: TextStyle(color: MyColors().red, fontWeight: FontWeight.bold, fontSize: 18.0),
-                    ),
-                  )
-              );
-            }
-          },
-        ),
+                }
+            );
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  backgroundColor: MyColors().pink,
+                  content: Text(
+                    'It needs more than 4 words to start learning.',
+                    style: TextStyle(color: MyColors().red, fontWeight: FontWeight.bold, fontSize: 18.0),
+                  ),
+                )
+            );
+          }
+        },
       ),
     );
   }
@@ -257,7 +254,7 @@ class MainBodyReviewState extends State<MainBodyReview> {
                 activeWords++;
               }
             }
-            if(activeWords >= 5) {
+            if(activeWords >= 4) {
               Navigator.pushReplacement(context, MaterialPageRoute(
                   builder: (context) => LearningWords(myWords)));
             } else {
@@ -266,7 +263,7 @@ class MainBodyReviewState extends State<MainBodyReview> {
                   SnackBar(
                     backgroundColor: MyColors().pink,
                     content: Text(
-                      'It needs more than 5 words to start learning.',
+                      'It needs more than 4 words to start learning.',
                       style: TextStyle(color: MyColors().red, fontWeight: FontWeight.bold, fontSize: 18.0),
                     ),
                   ));

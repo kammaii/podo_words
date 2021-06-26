@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:podo_words/list_mix.dart';
 import 'package:podo_words/play_audio.dart';
 import 'package:podo_words/word.dart';
 
@@ -21,25 +22,31 @@ class _ReviewFlashCardsState extends State<ReviewFlashCards> {
 
   int count = 0;
   bool isReverse = false;
-  String front = '';
-  String back = '';
-  String audio = '';
+  late String front;
+  late String back;
+  late String audio;
   bool isAnswer = false;
   String btnText = 'Answer';
 
   void setFlashCard() {
     if(!isAnswer) {
-      int rand = Random().nextInt(widget.words.length);
       if (!isReverse) {
-        front = widget.words[rand].front;
-        back = widget.words[rand].back;
+        front = widget.words[count].front;
+        back = widget.words[count].back;
       } else {
-        front = widget.words[rand].back;
-        back = widget.words[rand].front;
+        front = widget.words[count].back;
+        back = widget.words[count].front;
       }
-      audio = widget.words[rand].audio;
+      audio = widget.words[count].audio;
       PlayAudio().playWord(audio);
     }
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+    ListMix().getMixedList(widget.words);
   }
 
   @override
@@ -132,7 +139,11 @@ class _ReviewFlashCardsState extends State<ReviewFlashCards> {
                         if(isAnswer) {
                           isAnswer = false;
                           btnText = 'Answer';
-                          count++;
+                          if(count+1 < widget.words.length) {
+                            count++;
+                          } else {
+                            count = 0;
+                          }
 
                         } else {
                           isAnswer = true;

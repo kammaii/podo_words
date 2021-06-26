@@ -42,20 +42,6 @@ class _MainFrameState extends State<MainFrame> {
         onTap: (int newValue){
           setState(() {
             pageIndex = newValue;
-            // switch (newValue) {
-            //   case 0 :
-            //     setState(() {
-            //       _widget = MainBodyLearning();
-            //       pageIndex = 0;
-            //     });
-            //     break;
-            //   case 1 :
-            //     setState(() {
-            //       _widget = MainBodyReview();
-            //       pageIndex = 1;
-            //     });
-            //     break;
-            // }
           });
         },
       )

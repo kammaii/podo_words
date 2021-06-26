@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:podo_words/divider_text.dart';
+import 'package:podo_words/learning_words.dart';
 import 'package:podo_words/play_audio.dart';
 import 'package:podo_words/word.dart';
 import 'list_mix.dart';
@@ -63,6 +64,7 @@ class _LearningWordsQuiz2State extends State<LearningWordsQuiz2> {
             backgroundColor = MyColors().purpleLight;
             return Center(
               child: Text(words[mixedIndex[index]], textScaleFactor: 1.5,
+                  textAlign: TextAlign.center,
                   style: TextStyle(decoration: TextDecoration.lineThrough)),
             );
 
@@ -103,7 +105,10 @@ class _LearningWordsQuiz2State extends State<LearningWordsQuiz2> {
                         boxShadow: [BoxShadow(color: borderColor, spreadRadius: 0.1)]
                     ),
                     child: Center(
-                      child: Text(words[mixedIndex[index]], textScaleFactor: 1.5),
+                      child: Text(words[mixedIndex[index]],
+                        textScaleFactor: 1.5,
+                        textAlign: TextAlign.center,
+                      ),
                     )
                 ),
               ),

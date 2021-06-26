@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:podo_words/learning_words_complete.dart';
@@ -14,7 +15,6 @@ import 'package:podo_words/play_audio_button.dart';
 class LearningWords extends StatefulWidget {
 
   List<Word> words;
-
   LearningWords(this.words);
 
 
@@ -68,28 +68,37 @@ class _LearningWordsState extends State<LearningWords> {
     );
   }
 
+
+
+  bool isNextQuiz = false;
+
   @override
   Widget build(BuildContext context) {
     words = widget.words;
-    if(wordIndex < words.length) {
-      front = words[wordIndex].front;
-      back = words[wordIndex].back;
-      if(words[wordIndex].pronunciation != '-') {
-        pronunciation = '[${words[wordIndex].pronunciation}]';
-      } else {
-        pronunciation = '-';
+    front = words[wordIndex].front;
+    back = words[wordIndex].back;
+    if(words[wordIndex].pronunciation != '-') {
+      pronunciation = '[${words[wordIndex].pronunciation}]';
+    } else {
+      pronunciation = '-';
+    }
+    audio = words[wordIndex].audio;
+
+    if(isNextQuiz) {
+      List<Word> wordQuizList = [];
+
+      for (int i = wordIndex-4; i < wordIndex; i++) {
+        Word word = Word(words[i].front, words[i].back, words[i].pronunciation, words[i].audio);
+        wordQuizList.add(word);
       }
-      audio = words[wordIndex].audio;
-      print(audio);
-      PlayAudio().playWord(audio);
+      SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => LearningWordsQuiz1(wordQuizList)));
+      });
+      isNextQuiz = false;
 
     } else {
-      front = '';
-      back = '';
-      pronunciation = '';
-      audio = '';
+      PlayAudio().playWord(audio);
     }
-
 
     return Scaffold(
       body: SafeArea(
@@ -152,18 +161,11 @@ class _LearningWordsState extends State<LearningWords> {
                         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LearningWordsComplete(words)));
                       }
 
-                    } else if(isQuizOn && index != 0 && index % 4 == 0) {
-                      List<Word> wordQuizList = [];
-
-                      for (int i = 1; i < 5; i++) {
-                        int count = index - i;
-                        Word word = Word(words[count].front, words[count].back, words[count].pronunciation, words[count].audio);
-                        wordQuizList.add(word);
-                      }
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => LearningWordsQuiz1(wordQuizList)));
-
                     } else {
                       setState(() {
+                        if(isQuizOn && index != 0 && index % 4 == 0) {
+                          isNextQuiz = true;
+                        }
                         wordIndex = index;
                       });
                     }

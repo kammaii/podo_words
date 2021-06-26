@@ -140,5 +140,4 @@ class _WordListState extends State<WordList> {
       ),
     );
   }
-
 }

@@ -25,7 +25,7 @@ class Logo extends StatelessWidget {
         if(snapshot.hasData) {
           print('데이타 있음 : $snapshot');
           SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
-            Timer(Duration(seconds: 3), () {  //todo: 3초로 수정하기
+            Timer(Duration(seconds: 0), () {  //todo: 3초로 수정하기
               Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => MainFrame()));
             });
           });

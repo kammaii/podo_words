@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:podo_words/data_storage.dart';
 import 'package:podo_words/main_frame.dart';
 import 'package:podo_words/my_colors.dart';
+import 'package:podo_words/play_audio.dart';
 import 'package:podo_words/word.dart';
 import 'package:podo_words/words.dart';
 
 class LearningWordsComplete extends StatelessWidget {
 
-  int totalWords = 0;
-  int myWords = 0;
-  double percent = 0;
+  late int totalWords;
+  late int myWords;
+  late double percent;
   List<Word> words;
 
   LearningWordsComplete(this.words);
@@ -21,7 +23,7 @@ class LearningWordsComplete extends StatelessWidget {
     DataStorage().addMyWords(words);
     myWords = DataStorage().myWords.length;
     percent = (myWords / totalWords).toDouble();
-    //PlayAudio().playYay();
+    PlayAudio().playYay();
 
 
     return Scaffold(
@@ -44,22 +46,39 @@ class LearningWordsComplete extends StatelessWidget {
                       radius: 200.0,
                       lineWidth: 10.0,
                       percent: percent,
-                      center: Text('${(percent*100).toInt().toString()}%', textScaleFactor: 3,
-                        style: TextStyle(color: MyColors().purple)),
+                      center: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('${(percent*100).toInt().toString()}%', textScaleFactor: 3,
+                            style: TextStyle(color: MyColors().purple)),
+                          Text('($myWords / $totalWords)',
+                              style: TextStyle(color: MyColors().purple)),
+                        ],
+                      ),
                       progressColor: MyColors().purple,
                     ),
                   ),
                   Text('You have learned', textScaleFactor: 1.5,
                     style: TextStyle(color: MyColors().purple)),
                   SizedBox(height: 10.0),
-                  Text('${words.length} words', textScaleFactor: 2,
-                    style: TextStyle(color: MyColors().purple)),
+                  Text('${words.length} new words', textScaleFactor: 2,
+                    style: TextStyle(color: MyColors().purple, fontWeight: FontWeight.bold)),
                   SizedBox(height: 30.0),
                   Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: InkWell(
                       onTap: (){
                         DataStorage().addMyWords(words);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              backgroundColor: MyColors().pink,
+                              content: Text(
+                                '${words.length} new words are added on your review page',
+                                style: TextStyle(color: MyColors().red, fontSize: 15.0),
+                                textAlign: TextAlign.center,
+                              ),
+                            )
+                        );
                         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => MainFrame()), (Route<dynamic> route) => false);
                       },
                       child: Material(

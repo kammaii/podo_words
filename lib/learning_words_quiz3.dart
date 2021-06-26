@@ -104,6 +104,7 @@ class _LearningWordsQuiz3State extends State<LearningWordsQuiz3> {
     print('자모십진수 : $jamoDecimal');
   }
 
+  bool isHintOn = false;
 
   @override
   Widget build(BuildContext context) {
@@ -127,17 +128,45 @@ class _LearningWordsQuiz3State extends State<LearningWordsQuiz3> {
                       icon: Icon(Icons.arrow_back),
                       onPressed: () => Navigator.pop(context),
                     ),
+                    Expanded(child: SizedBox()),
+                    Text('Hint'),
+                    Switch(
+                      value: isHintOn,
+                      activeTrackColor: MyColors().navyLight,
+                      activeColor: MyColors().purple,
+                      onChanged: (value) {
+                        setState(() {
+                          isHintOn = value;
+                        });
+                      },
+                    ),
                   ],
                 ),
-                SizedBox(height: 20.0),
-                PlayAudioButton(audio),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20.0),
+                  child: Center(child: PlayAudioButton(audio)),
+                ),
+                Center(
+                  child: Visibility(
+                    child: Text(back),
+                    visible: isHintOn,
+                    maintainSize: true,
+                    maintainAnimation: true,
+                    maintainState: true,
+                  ),
+                ),
                 DividerText().getDivider('Listen & Answer'),
                 Material(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10.0),
                   child: Padding(
                     padding: const EdgeInsets.all(15.0),
-                    child: Center(child: Text(answer, textScaleFactor: 1.5)),
+                    child: Container(
+                        height: 30.0,
+                        child: Center(
+                            child: Text(answer, textScaleFactor: 1.5)
+                        )
+                    ),
                   ),
                 ),
                 SizedBox(height: 20.0),
@@ -194,6 +223,7 @@ class _LearningWordsQuiz3State extends State<LearningWordsQuiz3> {
                                         setState(() {
                                           answerCount = 0;
                                           quizIndex++;
+                                          isHintOn = false;
                                           if (quizIndex >= widget.words.length) { // 모든 퀴즈 완료
                                             Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => LearningWordsComplete(widget.words)), (Route<dynamic> route) => false);
                                           }
