@@ -3,6 +3,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:podo_words/learning_words_complete.dart';
+import 'package:podo_words/learning_words_quiz_frame.dart';
 import 'package:podo_words/learning_words_quiz1.dart';
 import 'package:podo_words/my_colors.dart';
 import 'package:podo_words/play_audio.dart';
@@ -23,12 +24,12 @@ class LearningWords extends StatefulWidget {
 }
 
 class _LearningWordsState extends State<LearningWords> {
-  List<Word> words = [];
+  late List<Word> words;
   int wordIndex = 0;
-  String front = "";
-  String back = "";
-  String pronunciation = "";
-  String audio = "";
+  late String front;
+  late String back;
+  late String pronunciation;
+  late String audio;
   bool isQuizOn = true;
 
   Widget wordCard() {
@@ -68,36 +69,80 @@ class _LearningWordsState extends State<LearningWords> {
     );
   }
 
+  List<Word> getWordsListForQuiz(int wordsNoForQuiz) {
+    int index = wordIndex - 1;
+    List<Word> wordList = [];
+    for (int i = 0; i < wordsNoForQuiz; i++) {
+      Word word = Word(words[index-i].front, words[index-i].back, words[index-i].pronunciation, words[index-i].audio);
+      wordList.add(word);
+    }
+    wordList = List.from(wordList.reversed);
+
+    if(wordsNoForQuiz < 4) {
+      for(int i=0; i<4-wordsNoForQuiz; i++) {
+        wordList.insert(i, Word(words[i].front, words[i].back, words[i].pronunciation, words[i].audio));
+      }
+    }
+    return wordList;
+  }
 
 
-  bool isNextQuiz = false;
+  @override
+  void initState() {
+    super.initState();
+    words = widget.words;
+  }
 
   @override
   Widget build(BuildContext context) {
-    words = widget.words;
-    front = words[wordIndex].front;
-    back = words[wordIndex].back;
-    if(words[wordIndex].pronunciation != '-') {
-      pronunciation = '[${words[wordIndex].pronunciation}]';
-    } else {
-      pronunciation = '-';
-    }
-    audio = words[wordIndex].audio;
-
-    if(isNextQuiz) {
-      List<Word> wordQuizList = [];
-
-      for (int i = wordIndex-4; i < wordIndex; i++) {
-        Word word = Word(words[i].front, words[i].back, words[i].pronunciation, words[i].audio);
-        wordQuizList.add(word);
+    if(wordIndex < words.length) {
+      front = words[wordIndex].front;
+      back = words[wordIndex].back;
+      if (words[wordIndex].pronunciation != '-') {
+        pronunciation = '[${words[wordIndex].pronunciation}]';
+      } else {
+        pronunciation = '-';
       }
-      SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => LearningWordsQuiz1(wordQuizList)));
-      });
-      isNextQuiz = false;
+      audio = words[wordIndex].audio;
 
     } else {
-      PlayAudio().playWord(audio);
+      front = '';
+      back = '';
+      pronunciation = 'Last card';
+      audio = '';
+    }
+
+    if(wordIndex >= words.length) { // 마지막 단어 -> 퀴즈 1&2 -> 퀴즈3
+      int leftWordsCount = words.length % 4;
+      List<Word> wordsListForQuiz;
+
+
+      if(leftWordsCount == 0) {
+        leftWordsCount = 4;
+      }
+      wordsListForQuiz = getWordsListForQuiz(leftWordsCount);
+
+      SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+        Navigator.push(context, MaterialPageRoute(
+            builder: (context) => LearningWordsQuizFrame(leftWordsCount, wordsListForQuiz)))
+            .then((value) => Navigator.push(context, MaterialPageRoute(
+            builder: (context) => LearningWordsQuiz3(words)))
+        );
+      });
+
+    } else {
+      if (isQuizOn && wordIndex != 0 && wordIndex % 4 == 0) { // 퀴즈 1&2 -> 다음 단어 오디오 재생
+        List<Word> wordsListForQuiz = getWordsListForQuiz(4);
+        SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+          Navigator.push(context, MaterialPageRoute(
+              builder: (context) => LearningWordsQuizFrame(4, wordsListForQuiz)))
+              .then((value) => PlayAudio().playWord(audio)
+          );
+        });
+
+      } else {
+        PlayAudio().playWord(audio);
+      }
     }
 
     return Scaffold(
@@ -154,21 +199,9 @@ class _LearningWordsState extends State<LearningWords> {
                   viewportFraction: 0.7,
                   scale: 0.7,
                   onIndexChanged: (index) {
-                    if(index >= words.length) {
-                      if(isQuizOn) {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => LearningWordsQuiz3(words)));
-                      } else {
-                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LearningWordsComplete(words)));
-                      }
-
-                    } else {
-                      setState(() {
-                        if(isQuizOn && index != 0 && index % 4 == 0) {
-                          isNextQuiz = true;
-                        }
-                        wordIndex = index;
-                      });
-                    }
+                    setState(() {
+                      wordIndex = index;
+                    });
                   },
                 ),
               ),

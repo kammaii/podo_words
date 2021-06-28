@@ -19,14 +19,14 @@ class LearningWordsQuiz3 extends StatefulWidget {
 
 class _LearningWordsQuiz3State extends State<LearningWordsQuiz3> {
   int quizIndex = 0;
-  String front = "";
-  String back = "";
-  String audio = "";
-  List<String> jamo = [];
-  List<String> mixedJamo = [];
-  List<int> jamoDecimal = [];
+  late String front;
+  late String back;
+  late String audio;
+  late List<String> jamo;
+  late List<String> mixedJamo;
+  late List<int> jamoDecimal;
   int answerCount = 0;
-  List<int> clickedIndex = [];
+  late List<int> clickedIndex;
 
   List<String> choList = ["ㄱ", "ㄲ", "ㄴ", "ㄷ", "ㄸ", "ㄹ", "ㅁ", "ㅂ", "ㅃ", "ㅅ" ,"ㅆ", "ㅇ" ,"ㅈ", "ㅉ", "ㅊ", "ㅋ", "ㅌ" ,"ㅍ", "ㅎ"];
   List<String> jungList =["ㅏ", "ㅐ", "ㅑ", "ㅒ", "ㅓ", "ㅔ", "ㅕ", "ㅖ", "ㅗ", "ㅘ", "ㅙ", "ㅚ", "ㅛ", "ㅜ", "ㅝ", "ㅞ", "ㅟ", "ㅠ", "ㅡ", "ㅢ", "ㅣ"];

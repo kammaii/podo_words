@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:podo_words/divider_text.dart';
 import 'package:podo_words/learning_words_quiz2.dart';
+import 'package:podo_words/learning_words_quiz_frame.dart';
 import 'package:podo_words/list_mix.dart';
 import 'package:podo_words/my_colors.dart';
 import 'package:podo_words/play_audio.dart';
 import 'package:podo_words/play_audio_button.dart';
 import 'package:podo_words/word.dart';
+import 'package:podo_words/words.dart';
 
 class LearningWordsQuiz1 extends StatefulWidget {
 
   List<Word> wordList;
-  LearningWordsQuiz1(this.wordList);
+  int wordsNoForQuiz;
+  LearningWordsQuiz1(this.wordsNoForQuiz, this.wordList);
 
   @override
   _LearningWordsQuiz1State createState() => _LearningWordsQuiz1State();
@@ -18,13 +21,14 @@ class LearningWordsQuiz1 extends StatefulWidget {
 
 class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
   int quizIndex = 0;
-  String front = "";
-  String back = "";
-  String audio = "";
+  late String front;
+  late String back;
+  late String audio;
   List<int> mixedIndex = List<int>.generate(4, (index) => index);
   List<Color> borderColor = List<Color>.generate(4, (index) => Colors.white);
   bool isAnswerCheck = false;
   bool isCorrectAnswer = false;
+  LearningWordsQuizFrameState? learningWordsQuizFrameState;
 
 
   void checkAnswer() {
@@ -45,8 +49,12 @@ class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
               borderColor[i] = Colors.white;
             }
           });
+
         } else {
-          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LearningWordsQuiz2(widget.wordList)));
+          learningWordsQuizFrameState!.setState(() {
+            learningWordsQuizFrameState!.quizNo = 1;
+          });
+          //Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LearningWordsQuiz2(widget.wordList)));
         }
       });
 
@@ -58,7 +66,18 @@ class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
 
 
   @override
+  void initState() {
+    super.initState();
+    if(widget.wordsNoForQuiz != 4) {
+      quizIndex = 4 - widget.wordsNoForQuiz;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    learningWordsQuizFrameState = context.findAncestorStateOfType<LearningWordsQuizFrameState>();
+    print('러닝 : $learningWordsQuizFrameState');
+
     front = widget.wordList[quizIndex].front;
     back = widget.wordList[quizIndex].back;
     audio = widget.wordList[quizIndex].audio;

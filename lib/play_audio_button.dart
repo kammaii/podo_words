@@ -25,7 +25,9 @@ class _PlayAudioButtonState extends State<PlayAudioButton> {
         child: InkWell(
           child: Icon(Icons.play_circle_outline_rounded, color: color, size: 100.0),
           onTap: () {
-            PlayAudio().playWord(widget.audio);
+            if(widget.audio != '') {
+              PlayAudio().playWord(widget.audio);
+            }
           }
         ),
       ),
