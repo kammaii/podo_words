@@ -113,22 +113,32 @@ class _LearningWordsState extends State<LearningWords> {
     }
 
     if(wordIndex >= words.length) { // 마지막 단어 -> 퀴즈 1&2 -> 퀴즈3
-      int leftWordsCount = words.length % 4;
-      List<Word> wordsListForQuiz;
+      if(isQuizOn) {
+        int leftWordsCount = words.length % 4;
+        List<Word> wordsListForQuiz;
 
 
-      if(leftWordsCount == 0) {
-        leftWordsCount = 4;
+        if (leftWordsCount == 0) {
+          leftWordsCount = 4;
+        }
+        wordsListForQuiz = getWordsListForQuiz(leftWordsCount);
+
+        SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+          Navigator.push(context, MaterialPageRoute(
+              builder: (context) =>
+                  LearningWordsQuizFrame(leftWordsCount, wordsListForQuiz)))
+              .then((value) =>
+              Navigator.push(context, MaterialPageRoute(
+                  builder: (context) => LearningWordsQuiz3(words)))
+          );
+        });
+
+      } else {
+        SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+          Navigator.push(context, MaterialPageRoute(
+              builder: (context) => LearningWordsComplete(words)));
+        });
       }
-      wordsListForQuiz = getWordsListForQuiz(leftWordsCount);
-
-      SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
-        Navigator.push(context, MaterialPageRoute(
-            builder: (context) => LearningWordsQuizFrame(leftWordsCount, wordsListForQuiz)))
-            .then((value) => Navigator.push(context, MaterialPageRoute(
-            builder: (context) => LearningWordsQuiz3(words)))
-        );
-      });
 
     } else {
       if (isQuizOn && wordIndex != 0 && wordIndex % 4 == 0) { // 퀴즈 1&2 -> 다음 단어 오디오 재생

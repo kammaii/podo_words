@@ -83,7 +83,8 @@ class DataStorage {
     setMyWords();
   }
 
-  void addMyWords(List<Word> wordList) {
+  int addMyWords(List<Word> wordList) {
+    int countNewWords = 0;
     for(Word word in wordList) {
       String front = word.front;
       bool isNew = true;
@@ -94,9 +95,11 @@ class DataStorage {
       }
       if(isNew) {
         myWords.add(word);
+        countNewWords++;
       }
     }
     setMyWords();
+    return countNewWords;
   }
 
   void setMyWords() {

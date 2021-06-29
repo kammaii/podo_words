@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:podo_words/list_mix.dart';
 import 'package:podo_words/play_audio.dart';
+import 'package:podo_words/play_audio_button.dart';
 import 'package:podo_words/word.dart';
 
 import 'my_colors.dart';
@@ -126,11 +127,7 @@ class _ReviewFlashCardsState extends State<ReviewFlashCards> {
                     ),
                   ),
                 ),
-                IconButton(
-                  icon: Icon(Icons.play_circle_outline_rounded, color: MyColors().purple,),
-                  iconSize: 80.0,
-                  onPressed: () => PlayAudio().playWord(audio),
-                ),
+                Center(child: PlayAudioButton(audio)),
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: InkWell(

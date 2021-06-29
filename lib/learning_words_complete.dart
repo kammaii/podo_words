@@ -14,13 +14,14 @@ class LearningWordsComplete extends StatelessWidget {
   late int myWords;
   late double percent;
   List<Word> words;
+  late int countNewWords;
 
   LearningWordsComplete(this.words);
 
   @override
   Widget build(BuildContext context) {
     totalWords = Words().getTotalWordsLength();
-    DataStorage().addMyWords(words);
+    countNewWords = DataStorage().addMyWords(words);
     myWords = DataStorage().myWords.length;
     percent = (myWords / totalWords).toDouble();
     PlayAudio().playYay();
@@ -61,19 +62,18 @@ class LearningWordsComplete extends StatelessWidget {
                   Text('You have learned', textScaleFactor: 1.5,
                     style: TextStyle(color: MyColors().purple)),
                   SizedBox(height: 10.0),
-                  Text('${words.length} new words', textScaleFactor: 2,
+                  Text('${words.length} words', textScaleFactor: 2,
                     style: TextStyle(color: MyColors().purple, fontWeight: FontWeight.bold)),
                   SizedBox(height: 30.0),
                   Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: InkWell(
                       onTap: (){
-                        DataStorage().addMyWords(words);
                         ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               backgroundColor: MyColors().pink,
                               content: Text(
-                                '${words.length} new words are added on your review page',
+                                '$countNewWords new words are added on your review page',
                                 style: TextStyle(color: MyColors().red, fontSize: 15.0),
                                 textAlign: TextAlign.center,
                               ),
