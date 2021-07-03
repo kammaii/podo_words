@@ -22,9 +22,10 @@ class WidgetPurchase extends ChangeNotifier {
     ),
   ];
 
-  bool get beautifiedDash => _beautifiedDashUpgrade;
+  // bool get beautifiedDash => _beautifiedDashUpgrade;
   // ignore: prefer_final_fields
-  bool _beautifiedDashUpgrade = false;
+  // bool _beautifiedDashUpgrade = false;
+
   final iapConnection = IAPConnection.instance;
 
   WidgetPurchase() {
@@ -48,15 +49,20 @@ class WidgetPurchase extends ChangeNotifier {
   }
 
   Future<void> buy(PurchasableProduct product) async {
-    print(product);
     product.status = ProductStatus.pending;
+    print(product.status);
     notifyListeners();
+
     await Future<void>.delayed(const Duration(seconds: 5));
     product.status = ProductStatus.purchased;
+    print(product.status);
     notifyListeners();
+
     await Future<void>.delayed(const Duration(seconds: 5));
     product.status = ProductStatus.purchasable;
+    print(product.status);
     notifyListeners();
+
   }
 
   void _onPurchaseUpdate(List<PurchaseDetails> purchaseDetailsList) {

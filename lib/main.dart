@@ -16,21 +16,15 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
-    ChangeNotifierProvider<WidgetPurchase>(
-      create: (context) => WidgetPurchase(
-        //context.read<DashCounter>(),
-      ),
+    return ChangeNotifierProvider<WidgetPurchase>(
+      create: (context) => WidgetPurchase(),
       lazy: false,
-    );
-
-
-
-    return MaterialApp(
-      title: 'podo_words',
-      theme: ThemeData(
+      child: MaterialApp(
+        title: 'podo_words',
+        theme: ThemeData(
+        ),
+        home: new MainLearning(),
       ),
-      home: new MainLearning(),
     );
   }
 }
