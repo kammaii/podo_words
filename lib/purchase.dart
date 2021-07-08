@@ -5,22 +5,11 @@ import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:podo_words/main.dart';
 import 'package:podo_words/purchasable_product.dart';
 
-class WidgetPurchase extends ChangeNotifier {
+class Purchase extends ChangeNotifier {
   //DashCounter counter;
-  //StoreState storeState = StoreState.notAvailable;
+  //StoreState storeState = StoreState.loading;
   late StreamSubscription<List<PurchaseDetails>> _subscription;
-  List<PurchasableProduct> products = [
-    PurchasableProduct(
-      'Spring is in the air',
-      'Many dashes flying out from their nests',
-      '\$0.99',
-    ),
-    PurchasableProduct(
-      'Jet engine',
-      'Doubles you clicks per second for a day',
-      '\$1.99',
-    ),
-  ];
+  List<PurchasableProduct> products = [];
 
   // bool get beautifiedDash => _beautifiedDashUpgrade;
   // ignore: prefer_final_fields
@@ -28,7 +17,8 @@ class WidgetPurchase extends ChangeNotifier {
 
   final iapConnection = IAPConnection.instance;
 
-  WidgetPurchase() {
+  Purchase() {
+    print('creating Purchase');
     try {
       final purchaseUpdated = iapConnection.purchaseStream;
       _subscription = purchaseUpdated.listen(
@@ -36,11 +26,37 @@ class WidgetPurchase extends ChangeNotifier {
         onDone: _updateStreamOnDone,
         onError: _updateStreamOnError,
       );
+      loadPurchases();
 
     } on Exception catch (error) {
       print('에러 : $error');
     }
   }
+
+  Future<void> loadPurchases() async {
+    final available = await iapConnection.isAvailable();
+
+    if (!available) {
+      //storeState = StoreState.notAvailable;
+      notifyListeners();
+      print('LoadPurchases FAILED');
+      return;
+    }
+
+    const ids = <String> {
+      'test'
+    };
+
+    final response = await iapConnection.queryProductDetails(ids);
+    print('response : $response');
+    response.notFoundIDs.forEach((element) {
+      print('Purchase $element not found');
+    });
+    products = response.productDetails.map((e) => PurchasableProduct(e)).toList();
+    //storeState = StoreState.available;
+    notifyListeners();
+  }
+
 
   @override
   void dispose() {

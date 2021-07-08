@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:podo_words/my_colors.dart';
-import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:provider/provider.dart';
 import 'package:podo_words/purchasable_product.dart';
-import 'package:podo_words/widget_purchase.dart';
+import 'package:podo_words/purchase.dart';
 
 class Premium extends StatelessWidget {
   const Premium({Key? key}) : super(key: key);
@@ -106,10 +106,10 @@ class Premium extends StatelessWidget {
                 SizedBox(height: 30.0),
                 InkWell(
                   onTap: (){
-                     // 인앱구매 실행
+                     //todo: 인앱구매 실행
                     print('버튼');
-                    PurchasableProduct product = WidgetPurchase().products[0];
-                    WidgetPurchase().buy(product);
+                    //PurchasableProduct product = Purchase().products[0];
+                    //Purchase().buy(products[0]);
                   },
                   child: Container(
                     decoration: BoxDecoration(
