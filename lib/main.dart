@@ -16,11 +16,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
 
     Purchase();
-    //
-    // ChangeNotifierProvider<Purchase>(
-    //   create: (context) => Purchase(),
-    //   lazy: false,
-    // );
 
     return MaterialApp(
       title: 'podo_words',
