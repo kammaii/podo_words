@@ -3,28 +3,30 @@ import 'package:podo_words/main_learning.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 import 'package:podo_words/purchase.dart';
-import 'package:podo_words/widget_test.dart';
 import 'package:provider/provider.dart';
 
 
 void main() {
   InAppPurchaseAndroidPlatformAddition.enablePendingPurchases();
-  //IAPConnection.instance = TestIAPConnection();
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<Purchase>(
-      create: (context) => Purchase(),
-      lazy: false,
-      child: MaterialApp(
-        title: 'podo_words',
-        theme: ThemeData(
-        ),
-        home: new MainLearning(),
+
+    Purchase();
+    //
+    // ChangeNotifierProvider<Purchase>(
+    //   create: (context) => Purchase(),
+    //   lazy: false,
+    // );
+
+    return MaterialApp(
+      title: 'podo_words',
+      theme: ThemeData(
       ),
+      home: new MainLearning(),
     );
   }
 }

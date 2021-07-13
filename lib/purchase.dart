@@ -5,20 +5,22 @@ import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:podo_words/main.dart';
 import 'package:podo_words/purchasable_product.dart';
 
-class Purchase extends ChangeNotifier {
-  //DashCounter counter;
-  //StoreState storeState = StoreState.loading;
+class Purchase extends ChangeNotifier{
+
+  static final Purchase _instance = Purchase.init();
+
+  factory Purchase() {
+    return _instance;
+  }
+
   late StreamSubscription<List<PurchaseDetails>> _subscription;
   List<PurchasableProduct> products = [];
 
-  // bool get beautifiedDash => _beautifiedDashUpgrade;
-  // ignore: prefer_final_fields
-  // bool _beautifiedDashUpgrade = false;
-
   final iapConnection = IAPConnection.instance;
+  static const String inAppPurchaseId = 'test';
 
-  Purchase() {
-    print('creating Purchase');
+  Purchase.init() {
+    print('purchase 초기화');
     try {
       final purchaseUpdated = iapConnection.purchaseStream;
       _subscription = purchaseUpdated.listen(
@@ -37,23 +39,20 @@ class Purchase extends ChangeNotifier {
     final available = await iapConnection.isAvailable();
 
     if (!available) {
-      //storeState = StoreState.notAvailable;
       notifyListeners();
       print('LoadPurchases FAILED');
       return;
     }
 
     const ids = <String> {
-      'test'
+      inAppPurchaseId
     };
 
     final response = await iapConnection.queryProductDetails(ids);
-    print('response : $response');
     response.notFoundIDs.forEach((element) {
       print('Purchase $element not found');
     });
     products = response.productDetails.map((e) => PurchasableProduct(e)).toList();
-    //storeState = StoreState.available;
     notifyListeners();
   }
 
@@ -65,25 +64,23 @@ class Purchase extends ChangeNotifier {
   }
 
   Future<void> buy(PurchasableProduct product) async {
-    product.status = ProductStatus.pending;
-    print(product.status);
-    notifyListeners();
-
-    await Future<void>.delayed(const Duration(seconds: 5));
-    product.status = ProductStatus.purchased;
-    print(product.status);
-    notifyListeners();
-
-    await Future<void>.delayed(const Duration(seconds: 5));
-    product.status = ProductStatus.purchasable;
-    print(product.status);
-    notifyListeners();
-
+    final purchaseParam = PurchaseParam(productDetails: product.productDetails);
+    await iapConnection.buyConsumable(purchaseParam: purchaseParam);
   }
 
   void _onPurchaseUpdate(List<PurchaseDetails> purchaseDetailsList) {
     // Handle purchases here
     print('업데이트 : $purchaseDetailsList');
+    PurchaseDetails purchaseDetails = purchaseDetailsList[0];
+
+    if(purchaseDetails.status == PurchaseStatus.purchased) {
+      //todo: 구매완료 코드 추가
+      print('구매완료!');
+    }
+
+    if(purchaseDetails.pendingCompletePurchase) {
+      iapConnection.completePurchase(purchaseDetails);
+    }
   }
 
   void _updateStreamOnDone() {
@@ -92,8 +89,7 @@ class Purchase extends ChangeNotifier {
   }
 
   void _updateStreamOnError(dynamic error) {
-    print('StreemError : $error');
-
     //Handle error here
+    print('StreamError : $error');
   }
 }

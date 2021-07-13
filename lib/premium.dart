@@ -106,10 +106,10 @@ class Premium extends StatelessWidget {
                 SizedBox(height: 30.0),
                 InkWell(
                   onTap: (){
-                     //todo: 인앱구매 실행
-                    print('버튼');
-                    //PurchasableProduct product = Purchase().products[0];
-                    //Purchase().buy(products[0]);
+                   // 인앱구매 실행
+                    print('인앱구매 시작');
+                    PurchasableProduct product = Purchase().products[0];
+                    Purchase().buy(product);
                   },
                   child: Container(
                     decoration: BoxDecoration(
