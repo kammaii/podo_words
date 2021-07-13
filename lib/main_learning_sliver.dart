@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:podo_words/learning_words.dart';
 import 'package:podo_words/my_colors.dart';
+import 'package:podo_words/show_snack_bar.dart';
 import 'package:podo_words/word.dart';
 import 'package:podo_words/word_list.dart';
 import 'package:podo_words/words.dart';
+
 
 class MainLearningSliver extends StatefulWidget {
 
@@ -137,14 +139,7 @@ class MainLearningSliverState extends State<MainLearningSliver> {
                         builder: (context) => LearningWords(activeWords)));
 
                   } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          backgroundColor: MyColors().pink,
-                          content: Text(
-                            'It needs more than 4 words to start learning.',
-                            style: TextStyle(color: MyColors().red, fontWeight: FontWeight.bold, fontSize: 18.0),
-                          ),
-                        ));
+                    ShowSnackBar().getSnackBar(context, 'It needs more than 4 words to start learning.');
                   }
                 },
               ),

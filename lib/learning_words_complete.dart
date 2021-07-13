@@ -5,8 +5,10 @@ import 'package:podo_words/data_storage.dart';
 import 'package:podo_words/main_frame.dart';
 import 'package:podo_words/my_colors.dart';
 import 'package:podo_words/play_audio.dart';
+import 'package:podo_words/show_snack_bar.dart';
 import 'package:podo_words/word.dart';
 import 'package:podo_words/words.dart';
+
 
 class LearningWordsComplete extends StatelessWidget {
 
@@ -69,16 +71,7 @@ class LearningWordsComplete extends StatelessWidget {
                     padding: const EdgeInsets.all(10.0),
                     child: InkWell(
                       onTap: (){
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              backgroundColor: MyColors().pink,
-                              content: Text(
-                                '$countNewWords new words are added on your review page',
-                                style: TextStyle(color: MyColors().red, fontSize: 15.0),
-                                textAlign: TextAlign.center,
-                              ),
-                            )
-                        );
+                        ShowSnackBar().getSnackBar(context, '$countNewWords new words are added on your review page');
                         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => MainFrame()), (Route<dynamic> route) => false);
                       },
                       child: Material(

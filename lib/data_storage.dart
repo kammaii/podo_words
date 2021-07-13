@@ -60,6 +60,10 @@ class DataStorage {
   //   return Future.wait([wait(), initData()]);
   // }
 
+  void setPremiumUser(bool b) {
+    setBool(KEY_IS_PREMIUM_USER, b);
+  }
+
   void setIsActiveMyWords() {
     for(Word myWord in myWords) {
       if(inActiveWords.contains(myWord.front)) {

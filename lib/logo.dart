@@ -7,6 +7,8 @@ import 'data_storage.dart';
 import 'main_frame.dart';
 import 'package:package_info/package_info.dart';
 
+import 'purchase.dart';
+
 class Logo extends StatelessWidget {
   const Logo({Key? key}) : super(key: key);
 
@@ -18,14 +20,16 @@ class Logo extends StatelessWidget {
       version = value.version;
     });
 
-
     return FutureBuilder(
       future: dataStorage.initData(),
       builder: (BuildContext context, AsyncSnapshot<SharedPreferences> snapshot) {
         if(snapshot.hasData) {
           print('데이타 있음 : $snapshot');
+          if(!DataStorage().isPremiumUser) {
+            Purchase();
+          }
           SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
-            Timer(Duration(seconds: 0), () {  //todo: 3초로 수정하기
+            Timer(Duration(seconds: 1), () {
               Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => MainFrame()));
             });
           });

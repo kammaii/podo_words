@@ -24,6 +24,7 @@ class MainBodyLearning extends StatelessWidget {
     List<String> titles = [];
     List<Color> bgColors = [MyColors().navyLight, MyColors().mustardLight, MyColors().greenLight, MyColors().pink];
     List<Color> iconColors = [MyColors().navy, MyColors().mustard, MyColors().greenDark, MyColors().wine];
+    bool isPremiumUser = DataStorage().isPremiumUser;
 
     titles = Words().getTitles();
     double itemHeight = getItemHeight(context);
@@ -48,14 +49,17 @@ class MainBodyLearning extends StatelessWidget {
                         fontWeight: FontWeight.bold
                     ),
                   ),
-                  IconButton(
-                      icon: Icon(Icons.verified,
-                          size: 30.0,
-                          color: MyColors().red),
-                      onPressed: (){
-                        Navigator.push(context, MaterialPageRoute(
-                            builder: (context) => Premium()));
-                      }
+                  Visibility(
+                    visible: !isPremiumUser,
+                    child: IconButton(
+                        icon: Icon(Icons.verified,
+                            size: 30.0,
+                            color: MyColors().red),
+                        onPressed: (){
+                          Navigator.push(context, MaterialPageRoute(
+                              builder: (context) => Premium()));
+                        }
+                    ),
                   )
                 ],
               ),

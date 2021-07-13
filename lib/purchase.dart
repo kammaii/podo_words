@@ -1,11 +1,19 @@
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:podo_words/data_storage.dart';
 import 'package:podo_words/main.dart';
 import 'package:podo_words/purchasable_product.dart';
+import 'package:podo_words/show_snack_bar.dart';
+
+import 'logo.dart';
+
 
 class Purchase{
 
   static final Purchase _instance = Purchase.init();
+
 
   factory Purchase() {
     return _instance;
@@ -29,7 +37,7 @@ class Purchase{
       loadPurchases();
 
     } on Exception catch (error) {
-      print('에러 : $error');
+      Get.snackbar('Purchase init error', '$error');
     }
   }
 
@@ -37,7 +45,7 @@ class Purchase{
     final available = await iapConnection.isAvailable();
 
     if (!available) {
-      print('LoadPurchases FAILED');
+      Get.snackbar('loadPurchases failed', '');
       return;
     }
 
@@ -47,11 +55,10 @@ class Purchase{
 
     final response = await iapConnection.queryProductDetails(ids);
     response.notFoundIDs.forEach((element) {
-      print('Purchase $element not found');
+      Get.snackbar('not found IDs', '$element');
     });
     products = response.productDetails.map((e) => PurchasableProduct(e)).toList();
   }
-
 
   @override
   void dispose() {
@@ -66,22 +73,25 @@ class Purchase{
   void _onPurchaseUpdate(List<PurchaseDetails> purchaseDetailsList) {
     PurchaseDetails purchaseDetails = purchaseDetailsList[0];
 
-    if(purchaseDetails.status == PurchaseStatus.purchased) {
-      //todo: 구매완료 코드 추가
-      print('구매완료!');
-    }
+    if(purchaseDetails.status != PurchaseStatus.pending) {
+      if (purchaseDetails.status == PurchaseStatus.purchased) {
+        DataStorage().setPremiumUser(true);
+        if (purchaseDetails.pendingCompletePurchase) {
+          iapConnection.completePurchase(purchaseDetails);
+        }
+        Get.offAll(Logo());
 
-    if(purchaseDetails.pendingCompletePurchase) {
-      iapConnection.completePurchase(purchaseDetails);
+      } else if(purchaseDetails.status == PurchaseStatus.error) {
+        Get.snackbar('Purchasing is failed', 'Please try it again');
+      }
     }
   }
 
   void _updateStreamOnDone() {
-    print('Done!');
     _subscription.cancel();
   }
 
   void _updateStreamOnError(dynamic error) {
-    print('StreamError : $error');
+    Get.snackbar('StreamError','$error');
   }
 }
