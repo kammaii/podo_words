@@ -31,6 +31,7 @@ class _LearningWordsState extends State<LearningWords> {
   late String pronunciation;
   late String audio;
   bool isQuizOn = true;
+  bool isRightSwipe = false;
 
   Widget wordCard() {
     return Padding(
@@ -141,7 +142,7 @@ class _LearningWordsState extends State<LearningWords> {
       }
 
     } else {
-      if (isQuizOn && wordIndex != 0 && wordIndex % 4 == 0) { // 퀴즈 1&2 -> 다음 단어 오디오 재생
+      if (isQuizOn && isRightSwipe && wordIndex != 0 && wordIndex % 4 == 0) { // 퀴즈 1&2 -> 다음 단어 오디오 재생
         List<Word> wordsListForQuiz = getWordsListForQuiz(4);
         SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
           Navigator.push(context, MaterialPageRoute(
@@ -209,6 +210,11 @@ class _LearningWordsState extends State<LearningWords> {
                   viewportFraction: 0.7,
                   scale: 0.7,
                   onIndexChanged: (index) {
+                    if(index > wordIndex) {
+                      isRightSwipe = true;
+                    } else {
+                      isRightSwipe = false;
+                    }
                     setState(() {
                       wordIndex = index;
                     });
