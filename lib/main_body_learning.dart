@@ -52,9 +52,8 @@ class MainBodyLearning extends StatelessWidget {
                   Visibility(
                     visible: !isPremiumUser,
                     child: IconButton(
-                        icon: Icon(Icons.verified,
-                            size: 30.0,
-                            color: MyColors().red),
+                        icon: Image.asset('assets/images/premium.png',
+                        ),
                         onPressed: (){
                           Navigator.push(context, MaterialPageRoute(
                               builder: (context) => Premium()));
@@ -85,15 +84,13 @@ class MainBodyLearning extends StatelessWidget {
                     ),
                     itemBuilder: (context, index) {
                       String imageAsset;
-                      // todo: 각 레슨 타이틀에 맞는 아이콘 설정하기
-                      // todo: 테스트용
                       if(DataStorage().isPremiumUser) {
-                        imageAsset = 'assets/images/sample_icon.png';
+                        imageAsset = 'assets/images/$index.png';
                       } else {
                         if(freeLesson.contains(index)) {
-                          imageAsset = 'assets/images/sample_icon.png';
+                          imageAsset = 'assets/images/$index.png';
                         } else {
-                          imageAsset = 'assets/images/sample_icon_lock.png';
+                          imageAsset = 'assets/images/lock.png';
                         }
                       }
 
@@ -135,8 +132,8 @@ class MainBodyLearning extends StatelessWidget {
                                     Padding(
                                       padding: const EdgeInsets.all(10.0),
                                       child: Hero(
-                                        child: Image.asset(imageAsset, //todo: title_[index].png
-                                          color: Colors.white,
+                                        child: Image.asset(imageAsset,
+                                          color: iconColors[index%4],
                                           width: 50.0,
                                         ),
                                         tag: 'wordTitleImage$index',

@@ -158,9 +158,9 @@ class MainLearningSliverState extends State<MainLearningSliver> {
             child: Hero(
               tag: 'wordTitleImage${widget.index}',
               child: Image.asset(
-                'assets/images/sample_icon.png',
+                'assets/images/${widget.index}.png',
                 width: 250.0,
-                color: Colors.white,)  //todo: title_[index].png
+                color: Colors.white,)
             ),
             bottom: -50.0,
             right: -50.0,

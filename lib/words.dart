@@ -203,7 +203,7 @@ class Words{
     },
 // 21
     {
-      'title' : ['people condition'],
+      'title' : ['people description'],
       'front' : ['어리다','나이가 많다','태어나다','자라다','결혼하다','사귀다','헤어지다','피곤하다','배고프다','배부르다','졸리다=잠이 오다','졸다','아이를 낳다','아이를 키우다','죽다','돌아가시다'],
       'back' : ['young','old','be born','grow up','get married','going out','break up','tired','hungry','full','sleepy','doze off','give birth','raise a child','die','pass away'],
       'pronunciation' : ['-','나이가만타','-','-','-','-','-','-','-','-','자미오다','-','아이를나타','-','죽따','도라가시다']
