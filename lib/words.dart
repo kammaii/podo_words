@@ -58,14 +58,14 @@ class Words{
     {
       'title' : ['food'],
       'front' : ['밥','국','반찬','고기','김치','만두','김','두부','생선','해산물','면','빵','떡볶이','김밥','비빔밥','햄버거','피자','한식','양식','중식','일식'],
-      'back' : ['rice/meal','soup','side dish','meat','kimchi','dumplings','laver/dried seaweed','tofu','fish','seafood','noodles','bread','tteok-bokki','gimbap','bibimbap','hamburger','pizza','Korean food','Western food','Chinese food','Japanese food'],
+      'back' : ['rice/meal','soup','side dish','meat','kimchi','dumplings','dried seaweed','tofu','fish','seafood','noodles','bread','tteok-bokki','gimbap','bibimbap','hamburger','pizza','Korean food','Western food','Chinese food','Japanese food'],
       'pronunciation' : ['-','-','-','-','-','-','-','-','-','-','-','-','떡보끼','김빱','비빔빱','-','-','-','-','-','-']
     },
 // 1
     {
       'title' : ['dessert'],
       'front' : ['과일','음료','초콜릿','케이크','팥빙수','얼음','아이스크림','떡','사탕','과자'],
-      'back' : ['fruit','beverage','chocolate','cake','patbingsu/Korean shaved ice','ice','ice cream','tteok/rice cake','candy','snacks'],
+      'back' : ['fruit','beverage','chocolate','cake','Korean shaved ice','ice','ice cream','rice cake','candy','snacks'],
       'pronunciation' : ['-','음뇨','-','-','팓삥수','어름','-','-','-','-']
     },
 // 2

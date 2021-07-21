@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:podo_words/logo.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
-import 'package:podo_words/purchase.dart';
 
 
 void main() {
@@ -18,6 +17,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'podo_words',
       theme: ThemeData(
       ),
