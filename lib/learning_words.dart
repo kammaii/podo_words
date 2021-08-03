@@ -30,10 +30,14 @@ class _LearningWordsState extends State<LearningWords> {
   late String back;
   late String pronunciation;
   late String audio;
+  late String image;
   bool isQuizOn = true;
   bool isRightSwipe = false;
 
   Widget wordCard() {
+    Image searchedImage = Image.asset('assets/images/words/$image');
+    // todo: 이미지가 없을 때 어떻게 하지?
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 30.0),
       child: Material(
@@ -45,9 +49,15 @@ class _LearningWordsState extends State<LearningWords> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: searchedImage,
+                )
+              ),
               Text(
                 front,
-                textScaleFactor: 3,
+                textScaleFactor: 2.5,
                 style: TextStyle(
                   fontWeight: FontWeight.bold
                 ),
@@ -57,12 +67,13 @@ class _LearningWordsState extends State<LearningWords> {
                 pronunciation,
                 textScaleFactor: 2,
               ),
-              SizedBox(height: 30.0),
+              SizedBox(height: 20.0),
               Text(
                 back,
                 textScaleFactor: 2,
                 textAlign: TextAlign.center,
-              )
+              ),
+              SizedBox(height: 30.0),
             ],
           ),
         ),
@@ -74,14 +85,14 @@ class _LearningWordsState extends State<LearningWords> {
     int index = wordIndex - 1;
     List<Word> wordList = [];
     for (int i = 0; i < wordsNoForQuiz; i++) {
-      Word word = Word(words[index-i].front, words[index-i].back, words[index-i].pronunciation, words[index-i].audio);
+      Word word = words[index-i];
       wordList.add(word);
     }
     wordList = List.from(wordList.reversed);
 
     if(wordsNoForQuiz < 4) {
       for(int i=0; i<4-wordsNoForQuiz; i++) {
-        wordList.insert(i, Word(words[i].front, words[i].back, words[i].pronunciation, words[i].audio));
+        wordList.insert(i, words[i]);
       }
     }
     return wordList;
@@ -105,6 +116,7 @@ class _LearningWordsState extends State<LearningWords> {
         pronunciation = '-';
       }
       audio = words[wordIndex].audio;
+      image = words[wordIndex].image;
 
     } else {
       front = '';

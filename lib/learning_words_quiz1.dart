@@ -24,6 +24,7 @@ class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
   late String front;
   late String back;
   late String audio;
+  late String image;
   List<int> mixedIndex = List<int>.generate(4, (index) => index);
   List<Color> borderColor = List<Color>.generate(4, (index) => Colors.white);
   bool isAnswerCheck = false;
@@ -76,11 +77,11 @@ class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
   @override
   Widget build(BuildContext context) {
     learningWordsQuizFrameState = context.findAncestorStateOfType<LearningWordsQuizFrameState>();
-    print('러닝 : $learningWordsQuizFrameState');
 
     front = widget.wordList[quizIndex].front;
     back = widget.wordList[quizIndex].back;
     audio = widget.wordList[quizIndex].audio;
+    image = widget.wordList[quizIndex].image;
     PlayAudio().playWord(audio);
 
     checkAnswer();
@@ -137,10 +138,20 @@ class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
                               boxShadow: [BoxShadow(color: borderColor[index], spreadRadius: 0.1)]
                             ),
                             child: Center(
-                                child: Text(
-                                  widget.wordList[mixedIndex[index]].back,
-                                  textScaleFactor: 1.5,
-                                  textAlign: TextAlign.center,
+                                child: Column(
+                                  children: [
+                                    Expanded(
+                                      child: Image.asset('assets/images/words/${widget.wordList[mixedIndex[index]].image}')
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: Text(
+                                        widget.wordList[mixedIndex[index]].back,
+                                        textScaleFactor: 1.5,
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  ],
                                 )
                             ),
                           ),

@@ -34,7 +34,7 @@ class Words{
     Map<String, List<String>> wordsMap = words[index];
     List<Word> wordList = [];
     for(int i=0; i<wordsMap[FRONT]!.length; i++) {
-      Word word = Word(wordsMap[FRONT]![i], wordsMap[BACK]![i], wordsMap[PRONUNCIATION]![i], '$index'+'_'+'$i.mp3');
+      Word word = Word(wordsMap[FRONT]![i], wordsMap[BACK]![i], wordsMap[PRONUNCIATION]![i], '${index}_$i.mp3', '$index-$i.png');
       if(DataStorage().inActiveWords.contains(word.front)) {
         word.isActive = false;
       } else {
@@ -401,7 +401,7 @@ class Words{
     {
       'title' : ['emotion1'],
       'front' : ['좋아하다','싫어하다','기쁘다','슬프다','무섭다','울다','웃다','기분이 좋다','기분이 나쁘다','사랑하다','걱정하다','외롭다','놀라다','심심하다','짜증이 나다','행복하다','부럽다','마음에 들다','관심이 있다','스트레스를 받다','스트레스를 풀다','화가 나다','화를 풀다'],
-      'back' : ['like','hate','glad','sad','scary','cry','laugh','feel good','not feel good','love','worry','lonely','be surprised','bored','irritated','happy','envy','take a liking','interested','under stress','relieve stress','get angry','blow off steam'],
+      'back' : ['like','hate','glad','sad','scary','cry','laugh','feel good','feel bad','love','worry','lonely','be surprised','bored','irritated','happy','envy','take a liking','interested','under stress','relieve stress','get angry','blow off steam'],
       'pronunciation' : ['조아하다','시러하다','-','-','무섭따','-','욷따','기부니조타','기부니나쁘다','-','걱쩡하다','외롭따','-','-','-','행보카다','부럽따','-','관시미읻따','스트레스를받따','-','-','-']
     },
 // 50
@@ -429,7 +429,7 @@ class Words{
     {
       'title' : ['adjective1'],
       'front' : ['좋다','나쁘다','재미있다','재미없다','바쁘다','힘들다','어렵다','쉽다','인기가 많다','유명하다','필요하다','필요없다','더럽다','깨끗하다','많다','적다','같다','다르다','빠르다','느리다'],
-      'back' : ['good','bad','funny','not funny','busy','hard','difficult','easy','popular','famous','need','not need','dirty','clean','a lot','few','same','different','fast','slow'],
+      'back' : ['good','bad','funny','not funny','busy','hard','difficult','easy','popular','famous','need','no need','dirty','clean','a lot','few','same','different','fast','slow'],
       'pronunciation' : ['조타','-','재미읻따','재미업따','-','-','어렵따','쉽따','인끼가만타','-','피료하다','피료업따','더럽따','깨끄타다','만타','적따','갇따','-','-','-']
     },
 // 54
