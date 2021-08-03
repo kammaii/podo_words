@@ -219,7 +219,7 @@ class Words{
     {
       'title' : ['body2'],
       'front' : ['수염','눈썹','혀','목구멍','입술','볼','턱','팔꿈치','손목','손등','손바닥','손톱','발목','발등','발바닥','발톱','허리','엉덩이','무릎'],
-      'back' : ['beard','eyebrows','tongue','throat','lips','cheek','chin','elbow','wrist','back of hand','palm','nail','ankle','instep','sole','toenail','waist','hop','knee'],
+      'back' : ['beard','eyebrows','tongue','throat','lips','cheek','chin','elbow','wrist','back of hand','palm','nail','ankle','top of the foot','sole','toenail','waist','butt','knee'],
       'pronunciation' : ['-','-','-','목꾸멍','입쑬','-','-','-','-','손뜽','손빠닥','-','-','발뜽','발빠닥','-','-','-','-']
     },
 // 24
@@ -240,7 +240,7 @@ class Words{
     {
       'title' : ['job'],
       'front' : ['선생님','학생','회사원','경찰','소방관','요리사','의사','간호사','공무원','변호사','배우','가수','운동선수','아르바이트','군인','사진작가','사업가','대통령'],
-      'back' : ['teacher','student','office worker','police','firefighter','cook','doctor','nurse','officer','lawyer','actor','singer','athlete','part-timer','soldier','photographer','businessman','president'],
+      'back' : ['teacher','student','office worker','police','firefighter','chef','doctor','nurse','officer','lawyer','actor','singer','athlete','part-timer','soldier','photographer','businessman','president'],
       'pronunciation' : ['-','학쌩','-','-','-','-','-','-','-','-','-','-','-','-','구닌','사진작까','사업까','대통녕']
     },
 // 27
@@ -282,7 +282,7 @@ class Words{
     {
       'title' : ['movement'],
       'front' : ['가다','오다','걷다','뛰다','타다','내리다','다니다','들르다','마중나가다','배웅하다','환승하다','돌다','옮기다','올라가다/올라오다','내려가다/내려오다','건너가다/건너오다','지나가다/지나오다','들어가다/들어오다','나가다/나오다','돌아가다/돌아오다','가져가다/가져오다','데려가다/데려오다','따라가다/따라오다'],
-      'back' : ['go','come','walk','run','ride','take off','go to ~ regularly','stop by','go pick someone up','see someone off','transfer','turn','move','go up/come up','go down/come down','come over','pass by','enter/come in','go out/come out','go back/come back','take/bring','take/bring(people)','follow'],
+      'back' : ['go','come','walk','run','ride','get off','go to ~ regularly','stop by','go pick someone up','see someone off','transfer','turn','move','go up/come up','go down/come down','go over/come over','pass by','enter/come in','go out/come out','go back/come back','take/bring','take/bring(people)','follow'],
       'pronunciation' : ['-','-','걷따','-','-','-','-','-','-','-','-','-','옴기다','-','-','-','-','드러가다/드러오다','-','도라가다/도라오다']
     },
 // 33
@@ -296,21 +296,21 @@ class Words{
     {
       'title' : ['clothes'],
       'front' : ['옷','바지','반바지','치마','셔츠','티셔츠','원피스','수영복','속옷','운동복','청바지','스웨터','코트','정장','한복','교복'],
-      'back' : ['clothes','pants','shorts','skirt','shirts','T-shirt','one-piece','swimming suit','underwear','sportswear','jeans','sweater','coat','suit','Hanbok','school uniform'],
+      'back' : ['clothes','pants','shorts','skirt','shirts','T-shirt','dress','swimming suit','underwear','sportswear','jeans','sweater','coat','suit','Hanbok','school uniform'],
       'pronunciation' : ['옫','-','-','-','-','-','-','-','소곧','-','-','-','-','-','-','-']
     },
 // 35
     {
       'title' : ['accessory'],
       'front' : ['신발','운동화','양말','스타킹','슬리퍼','구두','모자','안경','선글라스','마스크','귀걸이','목걸이','넥타이','시계','팔찌','반지','장갑','벨트'],
-      'back' : ['shoes','sneakers','socks','stockings','slippers','dress shoes','hat/cap','glasses','sunglasses','mask','earrings','necklace','tie','watch/clock','wristband','ring','gloves','belt'],
+      'back' : ['shoes','sneakers','socks','stockings','slippers','dress shoes','hat/cap','glasses','sunglasses','mask','earrings','necklace','tie','watch/clock','bracelet','ring','gloves','belt'],
       'pronunciation' : ['-','-','-','-','-','-','-','-','썬글라스','-','귀거리','목거리','-','-','-','-','-','-']
     },
 // 36
     {
       'title' : ['location'],
       'front' : ['앞','뒤','왼쪽','오른쪽','옆','안','밖','위','아래','가운데','가깝다','멀다','처음','중간','마지막','근처','건너편'],
-      'back' : ['front','back','left','right','next to','inside','outside','above','below','center','close','far','first','middle','last','near','opposite side'],
+      'back' : ['front','behind','left','right','next to','inside','outside','above','below','center','close','far','first','middle','last','near','opposite side'],
       'pronunciation' : ['압','-','-','-','엽','-','-','-','-','-','가깝따','-','-','-','-','-','-']
     },
 // 37
