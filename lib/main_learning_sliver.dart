@@ -71,7 +71,7 @@ class MainLearningSliverState extends State<MainLearningSliver> {
         topMarginPlayBtn -= scrollController.offset;
 
       } else {
-        topMargin = -70.0;
+        topMargin = -100.0;
         topMarginPlayBtn = 5.0;
       }
     }

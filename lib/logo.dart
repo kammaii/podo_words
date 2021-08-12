@@ -6,11 +6,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'data_storage.dart';
 import 'main_frame.dart';
 import 'package:package_info/package_info.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 
-import 'purchase.dart';
 
 class Logo extends StatelessWidget {
+
   const Logo({Key? key}) : super(key: key);
+  static const String apiKey = "LRxYKUXrCOWeznKDBOlaqWuLaNJYEZCF";
+
+  Future<void> initPlatformState() async {
+    await Purchases.setDebugLogsEnabled(true);
+    await Purchases.setup(apiKey);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,14 +27,13 @@ class Logo extends StatelessWidget {
       version = value.version;
     });
 
+    initPlatformState();
+
     return FutureBuilder(
       future: dataStorage.initData(),
       builder: (BuildContext context, AsyncSnapshot<SharedPreferences> snapshot) {
         if(snapshot.hasData) {
           print('데이타 있음 : $snapshot');
-          if(!DataStorage().isPremiumUser) {
-            Purchase();
-          }
           SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
             Timer(Duration(seconds: 1), () {
               Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => MainFrame()));
