@@ -4,13 +4,11 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:podo_words/learning_words_complete.dart';
 import 'package:podo_words/learning_words_quiz_frame.dart';
-import 'package:podo_words/learning_words_quiz1.dart';
 import 'package:podo_words/my_colors.dart';
 import 'package:podo_words/play_audio.dart';
 import 'package:podo_words/word.dart';
 import 'package:podo_words/learning_words_quiz3.dart';
 import 'package:podo_words/play_audio_button.dart';
-
 
 
 class LearningWords extends StatefulWidget {
@@ -35,8 +33,14 @@ class _LearningWordsState extends State<LearningWords> {
   bool isRightSwipe = false;
 
   Widget wordCard() {
-    Image searchedImage = Image.asset('assets/images/words/$image');
-    // todo: 이미지가 없을 때 어떻게 하지?
+    Image searchedImage = Image.asset(
+      'assets/images/words/$image',
+      fit: BoxFit.fitWidth,
+      errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+        return SizedBox(height: 0);
+      },
+    );
+
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 30.0),
@@ -49,11 +53,9 @@ class _LearningWordsState extends State<LearningWords> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: searchedImage,
-                )
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 50.0),
+                child: searchedImage,
               ),
               Text(
                 front,

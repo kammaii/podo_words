@@ -114,6 +114,15 @@ class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
                       mainAxisSpacing: 20.0,
                     ),
                     itemBuilder: (context, index) {
+                      print('인덱스: $index');
+                      print(mixedIndex[index]);
+                      Image searchedImage = Image.asset(
+                          'assets/images/words/${widget.wordList[mixedIndex[index]].image}',
+                          errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                            return SizedBox(height: 0);
+                          }
+                      );
+
                       return Padding(
                         padding: const EdgeInsets.all(1.0),
                         child: InkWell(
@@ -141,7 +150,10 @@ class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
                                 child: Column(
                                   children: [
                                     Expanded(
-                                      child: Image.asset('assets/images/words/${widget.wordList[mixedIndex[index]].image}')
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: searchedImage,
+                                      )
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.all(10.0),
