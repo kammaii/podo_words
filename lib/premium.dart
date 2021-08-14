@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:podo_words/data_storage.dart';
+import 'package:podo_words/logo.dart';
 import 'package:podo_words/my_colors.dart';
+import 'package:podo_words/show_snack_bar.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
 class Premium extends StatefulWidget {
@@ -36,12 +39,12 @@ class _PremiumState extends State<Premium> {
 
   makePurchase() async {
     try {
-      print('Line24 : $package');
       PurchaserInfo purchaserInfo = await Purchases.purchasePackage(package);
       var isPro = purchaserInfo.entitlements.all["test"]!.isActive;
-      print('PRO : $isPro');
       if (isPro) {
-        print("이즈프로");
+        DataStorage().setPremiumUser(true);
+        ShowSnackBar().getSnackBar(context, 'Thank you for purchasing.');
+        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => Logo()), (Route<dynamic> route) => false);
       }
     } on PlatformException catch (e) {
       showErrorMsg('Purchase error', e);

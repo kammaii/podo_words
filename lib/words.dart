@@ -443,14 +443,14 @@ class Words{
     {
       'title' : ['adjective3'],
       'front' : ['이상하다','고장나다','잃어버리다','이기다','지다','늘다','줄다','생기다','궁금하다','얼다','녹다','오르다','내리다','깨지다','부러지다','남다','모이다','막히다'],
-      'back' : ['weird','break down','lost','win','defeated','increase','decrease','come up','curious','frozen','melt','rise','fall','broken','break','remain','gather','blocked'],
+      'back' : ['weird','break down','lost','win','defeated','increase','decrease','come up','curious','frozen','melt','rise','fall','broken','break','remain','get together','blocked'],
       'pronunciation' : ['-','-','이러버리다','-','-','-','-','-','-','-','녹따','-','-','-','-','남따','-','마키다']
     },
 // 56
     {
       'title' : ['adjective4'],
       'front' : ['바뀌다','시끄럽다','효과가 있다','익숙하다','어울리다','찢어지다','충분하다','부족하다','운이 좋다','도움이 되다','건강하다'],
-      'back' : ['changed','noisy','effective','familiar','suit','tear','enough','lack','lucky','helpful','healthy'],
+      'back' : ['changed','noisy','effective','familiar','match','tear','enough','lack','lucky','helpful','healthy'],
       'pronunciation' : ['-','시끄럽따','효꽈가읻따','익쑤카다','-','찌저지다','-','부조카다','우니조타','도우미되다','-']
     },
 // 57
@@ -464,21 +464,21 @@ class Words{
     {
       'title' : ['verb2'],
       'front' : ['앉다','서다','놀다','찾다','버리다','도와주다','질문하다','대답하다','소개하다','추천하다','켜다','끄다','들다','생각하다','기억하다','경험하다','연습하다','운전하다','기다리다','화장하다','잡다','놓다','사과하다','외우다'],
-      'back' : ['sit','stand','hang out','find','throw away','help','ask','answer','introduce','recommend','turn on','turn off','lift','think','remember','experience','practice','drive','wait','put on makeup','catch','put','apologize','memorize'],
+      'back' : ['sit','stand','play/hang out','find','throw away','help','ask','answer','introduce','recommend','turn on','turn off','hold/pick up','think','remember','experience','practice','drive','wait','put on makeup','catch','put','apologize','memorize'],
       'pronunciation' : ['안따','-','-','찯따','-','-','-','대다파다','-','-','-','-','-','생가카다','기어카다','-','연스파다','-','-','-','잡따','노타','-','-']
     },
 // 59
     {
       'title' : ['verb3'],
       'front' : ['주문하다','초대하다','줄을 서다','꿈을 꾸다','담배를 피우다','담배를 끄다','담배를 끊다','거짓말을 하다','눕다','늦잠을 자다','싸우다','펴다','덮다','밀다','당기다','눈을 감다','눈을 뜨다','냄새를 맡다','제안하다','거절하다','빌려주다','빌리다','돌려주다','알리다','세우다'],
-      'back' : ['order','invite','line up','dream','smoke','put out a cigarette','quit smoking','tell a lie','lie down','oversleep','fight','spread','cover','push','pull','close eyes','open eyes','smell','propose','refuse','lend','rent','give back','notify','set up'],
+      'back' : ['order','invite','stand in line','dream','smoke','put out a cigarette','quit smoking','tell a lie','lie down','oversleep','fight','unfold','cover','push','pull','close eyes','open eyes','smell','propose','refuse','lend','rent','give back','notify','set up'],
       'pronunciation' : ['-','-','주를서다','꾸믈꾸다','-','-','담배를끈타','거진마를하다','눕따','늗짜믈자다','-','-','덥따','-','-','누늘감따','누늘뜨다','냄새를맏따','-','-','-','-','-','-','-']
     },
 // 60
     {
       'title' : ['verb4'],
       'front' : ['만지다','악수하다','때리다','맞다','부탁하다','박수치다','칭찬하다','선택하다/고르다','월세를 내다','혼내다','혼나다','밟다','하품하다','뽀뽀하다','불평하다','변명하다','묶다','풀다','속다','속이다','남기다','맡기다','모으다'],
-      'back' : ['touch','shake hands','hit','be hit','request','clap','praise','choose','pay monthly rent','scold','get scolded','step on','yawn','kiss','complain','give an excuse','tie','solve','tricked','deceive','leave','leave sth to sb','gather'],
+      'back' : ['touch','shake hands','hit','be hit','request','clap','praise','choose','pay monthly rent','scold','get scolded','step on','yawn','kiss','complain','give an excuse','tie','solve','be deceived','deceive','leave','leave sth to sb','gather'],
       'pronunciation' : ['-','악쑤하다','-','맏따','부타카다','박쑤치다','-','선태카다','월쎄를내다','-','-','밥따','-','-','-','-','묵따','-','속따','소기다','-','맏끼다','-']
     },
 
