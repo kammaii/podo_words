@@ -64,12 +64,12 @@ class _LearningWordsState extends State<LearningWords> {
                   fontWeight: FontWeight.bold
                 ),
               ),
-              SizedBox(height: 20.0),
+              SizedBox(height: 5.0),
               Text(
                 pronunciation,
                 textScaleFactor: 2,
               ),
-              SizedBox(height: 20.0),
+              SizedBox(height: 30.0),
               Text(
                 back,
                 textScaleFactor: 2,

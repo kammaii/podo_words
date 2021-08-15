@@ -151,27 +151,19 @@ class _PremiumState extends State<Premium> {
                         ),
                       ),
                       SizedBox(height: 50.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(originalPrice, textScaleFactor: 1.5,
-                            style: TextStyle(
-                                decoration: TextDecoration.lineThrough,
-                                color: MyColors().navy,
-                                fontWeight: FontWeight.bold
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                            child: Icon(Icons.arrow_forward_outlined, color: MyColors().navy),
-                          ),
-                          Text(discountPrice, textScaleFactor: 2,
-                            style: TextStyle(
-                                color: MyColors().purple,
-                                fontWeight: FontWeight.bold
-                            ),
-                          ),
-                        ],
+                      Text(originalPrice, textScaleFactor: 1.5,
+                        style: TextStyle(
+                            decoration: TextDecoration.lineThrough,
+                            color: MyColors().navy,
+                            fontWeight: FontWeight.bold
+                        ),
+                      ),
+                      SizedBox(height: 10.0),
+                      Text(discountPrice, textScaleFactor: 2,
+                        style: TextStyle(
+                            color: MyColors().purple,
+                            fontWeight: FontWeight.bold
+                        ),
                       ),
                     ],
                   ),

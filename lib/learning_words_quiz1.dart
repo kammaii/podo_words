@@ -55,7 +55,6 @@ class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
           learningWordsQuizFrameState!.setState(() {
             learningWordsQuizFrameState!.quizNo = 1;
           });
-          //Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LearningWordsQuiz2(widget.wordList)));
         }
       });
 
