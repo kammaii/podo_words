@@ -33,24 +33,29 @@ class _LearningWordsQuiz3State extends State<LearningWordsQuiz3> {
   List<String> jongList = ["", "ㄱ", "ㄲ", "ㄳ", "ㄴ", "ㄵ", "ㄶ", "ㄷ", "ㄹ", "ㄺ", "ㄻ", "ㄼ", "ㄽ", "ㄾ", "ㄿ", "ㅀ", "ㅁ", "ㅂ", "ㅄ", "ㅅ", "ㅆ", "ㅇ", "ㅈ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ"];
 
 
-  List<String> decomposeHangul(String front) {
-    List<String> frontSplit = front.split('');
+  List<String> decomposeHangul(String front) { // 돈을 벌다
+    List<String> frontSplit = front.split(''); // 돈,을, ,벌,다
     List<String> decomposed = [];
     jamoDecimal = [];
     for(String str in frontSplit) {
-      var uniCode = toRune(str);
+      if(str != ' ' && str != '=') {
+        var uniCode = toRune(str);
 
-      int cho = ((uniCode - 44032) / 28) ~/ 21;
-      int jung = (((uniCode - 44032) / 28) % 21).toInt();
-      int jong = ((uniCode - 44032) % 28).toInt();
+        int cho = ((uniCode - 44032) / 28) ~/ 21;
+        int jung = (((uniCode - 44032) / 28) % 21).toInt();
+        int jong = ((uniCode - 44032) % 28).toInt();
 
-      decomposed.add(choList[cho]);
-      decomposed.add(jungList[jung]);
-      decomposed.add(jongList[jong]);
+        decomposed.add(choList[cho]); //ㄷ
+        decomposed.add(jungList[jung]); //ㅗ
+        decomposed.add(jongList[jong]); //ㄴ
 
-      jamoDecimal.add(cho);
-      jamoDecimal.add(jung);
-      jamoDecimal.add(jong);
+        jamoDecimal.add(cho);
+        jamoDecimal.add(jung);
+        jamoDecimal.add(jong);
+
+      } else {
+        decomposed.add(str);
+      }
     }
     return decomposed;
   }

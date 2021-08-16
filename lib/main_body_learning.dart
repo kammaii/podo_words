@@ -114,12 +114,12 @@ class MainBodyLearning extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Expanded(
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                                  children: [
-                                    Expanded(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(10.0),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                                    children: [
+                                      Expanded(
                                         child: Text('$index',
                                           style: TextStyle(
                                               fontSize: 40.0,
@@ -128,18 +128,16 @@ class MainBodyLearning extends StatelessWidget {
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: Hero(
+                                      SizedBox(width: 10.0),
+                                      Hero(
                                         child: Image.asset(imageAsset,
                                           color: iconColors[index%4],
                                           width: 50.0,
                                         ),
                                         tag: 'wordTitleImage$index',
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                               Expanded(
