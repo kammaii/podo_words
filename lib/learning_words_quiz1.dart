@@ -101,74 +101,74 @@ class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
               ),
               PlayAudioButton(audio),
               DividerText().getDivider('select correct word'),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: GridView.builder(
-                    shrinkWrap: true,
-                    itemCount: 4,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount (
-                      crossAxisCount: 2,
-                      childAspectRatio: 1,
-                      crossAxisSpacing: 20.0,
-                      mainAxisSpacing: 20.0,
-                    ),
-                    itemBuilder: (context, index) {
-                      print('인덱스: $index');
-                      print(mixedIndex[index]);
-                      Image searchedImage = Image.asset(
-                          'assets/images/words/${widget.wordList[mixedIndex[index]].image}',
-                          errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-                            return SizedBox(height: 0);
-                          }
-                      );
-
-                      return Padding(
-                        padding: const EdgeInsets.all(1.0),
-                        child: InkWell(
-                          onTap: (){
-                            if(!isAnswerCheck) {
-                              setState(() {
-                                if (mixedIndex[index] == quizIndex) {
-                                  isCorrectAnswer = true;
-                                  borderColor[index] = MyColors().purple;
-                                } else {
-                                  isCorrectAnswer = false;
-                                  borderColor[index] = MyColors().red;
-                                }
-                                isAnswerCheck = true;
-                              });
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: GridView.builder(
+                      shrinkWrap: true,
+                      itemCount: 4,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount (
+                        crossAxisCount: 2,
+                        childAspectRatio: 1,
+                        crossAxisSpacing: 20.0,
+                        mainAxisSpacing: 20.0,
+                      ),
+                      itemBuilder: (context, index) {
+                        Image searchedImage = Image.asset(
+                            'assets/images/words/${widget.wordList[mixedIndex[index]].image}',
+                            errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                              return SizedBox(height: 0);
                             }
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(20.0),
-                              boxShadow: [BoxShadow(color: borderColor[index], spreadRadius: 0.1)]
-                            ),
-                            child: Center(
-                                child: Column(
-                                  children: [
-                                    Expanded(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: searchedImage,
-                                      )
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: Text(
-                                        widget.wordList[mixedIndex[index]].back,
-                                        textScaleFactor: 1.5,
-                                        textAlign: TextAlign.center,
+                        );
+
+                        return Padding(
+                          padding: const EdgeInsets.all(1.0),
+                          child: InkWell(
+                            onTap: (){
+                              if(!isAnswerCheck) {
+                                setState(() {
+                                  if (mixedIndex[index] == quizIndex) {
+                                    isCorrectAnswer = true;
+                                    borderColor[index] = MyColors().purple;
+                                  } else {
+                                    isCorrectAnswer = false;
+                                    borderColor[index] = MyColors().red;
+                                  }
+                                  isAnswerCheck = true;
+                                });
+                              }
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(20.0),
+                                boxShadow: [BoxShadow(color: borderColor[index], spreadRadius: 0.1)]
+                              ),
+                              child: Center(
+                                  child: Column(
+                                    children: [
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: searchedImage,
+                                        )
                                       ),
-                                    ),
-                                  ],
-                                )
+                                      Padding(
+                                        padding: const EdgeInsets.all(10.0),
+                                        child: Text(
+                                          widget.wordList[mixedIndex[index]].back,
+                                          textScaleFactor: 1.5,
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    }
+                        );
+                      }
+                  ),
                 ),
               ),
             ],

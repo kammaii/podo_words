@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:percent_indicator/percent_indicator.dart';
@@ -42,23 +43,29 @@ class LearningWordsComplete extends StatelessWidget {
                   Text('Congratulations!', textScaleFactor: 2,
                     style: TextStyle(color: MyColors().purple, fontWeight: FontWeight.bold)),
                   Expanded(
-                    child: CircularPercentIndicator(
-                      animation: true,
-                      animationDuration: 1200,
-                      circularStrokeCap: CircularStrokeCap.round,
-                      radius: 200.0,
-                      lineWidth: 10.0,
-                      percent: percent,
-                      center: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text('${(percent*100).toInt().toString()}%', textScaleFactor: 3,
-                            style: TextStyle(color: MyColors().purple)),
-                          Text('($myWords / $totalWords)',
-                              style: TextStyle(color: MyColors().purple)),
-                        ],
-                      ),
-                      progressColor: MyColors().purple,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        CircularPercentIndicator(
+                          animation: true,
+                          animationDuration: 1200,
+                          circularStrokeCap: CircularStrokeCap.round,
+                          radius: 200.0,
+                          lineWidth: 10.0,
+                          percent: percent,
+                          center: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('${(percent*100).toInt().toString()}%', textScaleFactor: 3,
+                                  style: TextStyle(color: MyColors().purple)),
+                              Text('($myWords / $totalWords)',
+                                  style: TextStyle(color: MyColors().purple)),
+                            ],
+                          ),
+                          progressColor: MyColors().purple,
+                        ),
+                        Image.asset('assets/images/confetti.png')
+                      ],
                     ),
                   ),
                   Text('You have learned', textScaleFactor: 1.5,

@@ -6,6 +6,8 @@ import 'package:podo_words/logo.dart';
 import 'package:podo_words/my_colors.dart';
 import 'package:podo_words/show_snack_bar.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:intl/intl.dart';
+
 
 class Premium extends StatefulWidget {
   @override
@@ -26,9 +28,10 @@ class _PremiumState extends State<Premium> {
       if (offerings.current != null) {
         package = offerings.current!.availablePackages[0];
         String currency = package.product.currencyCode;
+        var f = NumberFormat('$currency ###,###,###,###.##');
         double price = package.product.price;
-        discountPrice = currency + ' ' + price.toStringAsFixed(2);
-        originalPrice = currency + ' ' + (price.round() * 10).toString();
+        discountPrice = f.format(price);
+        originalPrice = f.format(price.round() * 10);
         haveOfferings = true;
         btnColor = MyColors().purple;
       }
@@ -106,12 +109,10 @@ class _PremiumState extends State<Premium> {
                       fontWeight: FontWeight.bold
                   ),
                 ),
-                SizedBox(height: 20.0),
                 Expanded(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SizedBox(height: 30.0),
                       Stack(
                         children: [
                           Material(
@@ -168,7 +169,6 @@ class _PremiumState extends State<Premium> {
                     ],
                   ),
                 ),
-                SizedBox(height: 30.0),
                 IgnorePointer(
                   ignoring: !haveOfferings,
                   child: ElevatedButton(

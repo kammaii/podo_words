@@ -125,8 +125,9 @@ class MainLearningSliverState extends State<MainLearningSliver> {
               top: topMarginPlayBtn,
               right: 60.0,
               child: FloatingActionButton(
+                elevation: 10,
                 backgroundColor: Colors.white,
-                child: Icon(Icons.play_arrow_rounded, color: MyColors().green, size: 50.0,),
+                child: Icon(Icons.play_arrow_rounded, color: widget.iconColor, size: 50.0,),
                 onPressed: () {
                   if(activeWordCount >= 4) {
                     List<Word> activeWords = [];
@@ -176,7 +177,7 @@ class MainLearningSliverState extends State<MainLearningSliver> {
   }
 
   Widget wordsList(context, index) {
-    return WordList(true, words[index], false);
+    return WordList(true, words[index], false, widget.iconColor, widget.bgColor);
   }
 
 
@@ -184,7 +185,7 @@ class MainLearningSliverState extends State<MainLearningSliver> {
     return SliverAppBar(
       leading: IconButton(
         icon: Icon(Icons.arrow_back_ios_rounded),
-        color: MyColors().purple,
+        color: widget.iconColor,
         onPressed: () {
           Navigator.pop(context);
         },
@@ -196,7 +197,7 @@ class MainLearningSliverState extends State<MainLearningSliver> {
       title: Text(Words().getTitles()[widget.index], style: TextStyle(
         fontSize: 25.0,
         fontWeight: FontWeight.bold,
-        color: MyColors().purple
+        color: widget.iconColor,
       ),),
       flexibleSpace: wordTitle(),
       bottom: PreferredSize(

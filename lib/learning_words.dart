@@ -42,42 +42,44 @@ class _LearningWordsState extends State<LearningWords> {
     );
 
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 30.0),
-      child: Material(
-        elevation: 1,
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 50.0),
-                child: searchedImage,
-              ),
-              Text(
-                front,
-                textScaleFactor: 2.5,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold
+    return Material(
+      elevation: 1,
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(20),
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 50.0),
+              child: searchedImage,
+            ),
+            SizedBox(height: 20.0),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  front,
+                  textScaleFactor: 2.5,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold
+                  ),
                 ),
-              ),
-              SizedBox(height: 5.0),
-              Text(
-                pronunciation,
-                textScaleFactor: 2,
-              ),
-              SizedBox(height: 30.0),
-              Text(
-                back,
-                textScaleFactor: 2,
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 30.0),
-            ],
-          ),
+                SizedBox(height: 5.0),
+                Text(
+                  pronunciation,
+                  textScaleFactor: 2,
+                ),
+                SizedBox(height: 30.0),
+                Text(
+                  back,
+                  textScaleFactor: 2,
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
@@ -236,7 +238,7 @@ class _LearningWordsState extends State<LearningWords> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20.0),
+                padding: const EdgeInsets.symmetric(vertical: 10.0),
                 child: PlayAudioButton(audio)
               )
             ],

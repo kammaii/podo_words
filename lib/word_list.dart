@@ -15,15 +15,17 @@ class WordList extends StatefulWidget {
   Word word;
   bool isFromMainLearning;
   bool isDeleteMode;
-  WordList(this.isFromMainLearning, this.word, this.isDeleteMode);
+  Color textColor;
+  Color textColorLight;
+  WordList(this.isFromMainLearning, this.word, this.isDeleteMode, this.textColor, this.textColorLight);
 
   @override
   _WordListState createState() => _WordListState();
 }
 
 class _WordListState extends State<WordList> {
-  Color textColor = MyColors().purple;
-  Color backColor = Colors.white;
+  late Color textColor;
+  late Color backColor;
   double itemHeight = 80.0;
   double iconHeight = 70.0;
   double leftMargin = 0.0;
@@ -40,10 +42,10 @@ class _WordListState extends State<WordList> {
     }
 
     if(widget.word.isActive) {
-      textColor = MyColors().purple;
+      textColor = widget.textColor;
       backColor = Colors.white;
     } else {
-      textColor = MyColors().navyLight;
+      textColor = widget.textColorLight;
       backColor = MyColors().navyLightLight;
     }
 
@@ -117,9 +119,9 @@ class _WordListState extends State<WordList> {
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(widget.word.front, style: TextStyle(color: textColor, fontSize: 20.0),),
+                          Text(widget.word.front, style: TextStyle(color: textColor, fontSize: 20.0)),
                           VerticalDivider(color: MyColors().navyLight, thickness: 2.0,),
-                          Text(widget.word.back, style: TextStyle(color: textColor, fontSize: 20.0),)
+                          Text(widget.word.back, style: TextStyle(color: textColor, fontSize: 20.0))
                         ]
                     ),
                   ),

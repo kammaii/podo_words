@@ -5,7 +5,7 @@ class DividerText {
 
   Widget getDivider(String text) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 50.0),
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
       child: Row(
         children: [
           Expanded(child: Divider(color: MyColors().navy)),

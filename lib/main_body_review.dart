@@ -192,7 +192,7 @@ class MainBodyReviewState extends State<MainBodyReview> {
                   child: ListView.builder (
                     itemCount: myWordsInList.length,
                     itemBuilder: (context, index) {
-                      return WordList(false, myWordsInList[index], !isPlayBtn);
+                      return WordList(false, myWordsInList[index], !isPlayBtn, MyColors().purple, MyColors().navyLight);
                     },
                   ),
                   onLongPress: () {
