@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:podo_words/data_storage.dart';
 import 'package:podo_words/logo.dart';
@@ -16,12 +17,12 @@ class Premium extends StatefulWidget {
 
 class _PremiumState extends State<Premium> {
   late Package package;
-  bool haveOfferings = false;
+  bool btnEnabled = false;
   Color btnColor = Colors.grey;
   bool isRestoring = false;
   String originalPrice = "";
   String discountPrice = "";
-  static const String productId = "test";
+  static const String productId = "podo_words_1000";
 
   getOfferings() async {
     try {
@@ -33,13 +34,14 @@ class _PremiumState extends State<Premium> {
         double price = package.product.price;
         discountPrice = f.format(price);
         originalPrice = f.format(price.round() * 10);
-        haveOfferings = true;
+        btnEnabled = true;
         btnColor = MyColors().purple;
       }
     } on PlatformException catch (e) {
       showErrorMsg('getOfferings error', e);
     }
   }
+
 
   makePurchase() async {
     try {
@@ -62,18 +64,27 @@ class _PremiumState extends State<Premium> {
   restorePurchase() async {
     setState(() {
       isRestoring = true;
+      btnEnabled = false;
+      btnColor = Colors.grey;
     });
     try {
       PurchaserInfo restoredInfo = await Purchases.restoreTransactions();
-      var isPremium = restoredInfo.entitlements.all[productId]!.isActive;
-      if(isPremium) {
+      print('리스토어: $restoredInfo');
+      var isPremium = restoredInfo.entitlements.all[productId];
+      print('이즈액티브 : $isPremium');
+      if(isPremium != null && isPremium.isActive) {
         setPremiumUser();
+      } else {
+        Get.snackbar('restorePurchase error', 'There\'s no purchasing record');
       }
+
     } on PlatformException catch (e) {
       showErrorMsg('restorePurchase error', e);
     }
     setState(() {
       isRestoring = false;
+      btnEnabled = true;
+      btnColor = MyColors().purple;
     });
   }
 
@@ -105,88 +116,94 @@ class _PremiumState extends State<Premium> {
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(15.0),
           child: Center(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Get podo premium', textScaleFactor: 1.5,
-                  style: TextStyle(
-                      color: MyColors().purple,
-                      fontWeight: FontWeight.bold
-                  ),
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Stack(
-                      children: [
-                        Material(
-                          shape: CircleBorder(),
-                          elevation: 5.0,
-                          child: Container(
-                            height: 100.0,
-                            width: 100.0,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Get podo premium', textScaleFactor: 1.5,
+                        style: TextStyle(
+                            color: MyColors().purple,
+                            fontWeight: FontWeight.bold
+                        ),
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Stack(
+                            children: [
+                              Material(
+                                shape: CircleBorder(),
+                                elevation: 5.0,
+                                child: Container(
+                                  height: 100.0,
+                                  width: 100.0,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      shape: BoxShape.circle
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                height: 100.0,
+                                width: 100.0,
+                                child: Icon(Icons.lock_open,
+                                  size: 50.0,
+                                  color: MyColors().purple,
+                                ),
+                              )
+                            ],
+                          ),
+                          SizedBox(height: 20.0),
+                          Text('Unlock every lessons', textScaleFactor: 1.3,
+                            style: TextStyle(
+                                color: MyColors().purple,
+                                fontWeight: FontWeight.bold
                             ),
                           ),
-                        ),
-                        Container(
-                          height: 100.0,
-                          width: 100.0,
-                          child: Icon(Icons.lock_open,
-                            size: 50.0,
-                            color: MyColors().purple,
+                          SizedBox(height: 10.0),
+                          Text('(life-time)', textScaleFactor: 1.2,
+                            style: TextStyle(
+                                color: MyColors().purple,
+                                fontWeight: FontWeight.bold
+                            ),
                           ),
-                        )
-                      ],
-                    ),
-                    SizedBox(height: 20.0),
-                    Text('Unlock every lessons', textScaleFactor: 1.3,
-                      style: TextStyle(
-                          color: MyColors().purple,
-                          fontWeight: FontWeight.bold
+                        ],
                       ),
-                    ),
-                    SizedBox(height: 10.0),
-                    Text('(life-time)', textScaleFactor: 1.2,
-                      style: TextStyle(
-                          color: MyColors().purple,
-                          fontWeight: FontWeight.bold
+                      Column(
+                        children: [
+                          Text(originalPrice, textScaleFactor: 1.5,
+                            style: TextStyle(
+                                decoration: TextDecoration.lineThrough,
+                                color: MyColors().navy,
+                                fontWeight: FontWeight.bold
+                            ),
+                          ),
+                          SizedBox(height: 10.0),
+                          Text(discountPrice, textScaleFactor: 2,
+                            style: TextStyle(
+                                color: MyColors().purple,
+                                fontWeight: FontWeight.bold
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-                Column(
-                  children: [
-                    Text(originalPrice, textScaleFactor: 1.5,
-                      style: TextStyle(
-                          decoration: TextDecoration.lineThrough,
-                          color: MyColors().navy,
-                          fontWeight: FontWeight.bold
-                      ),
-                    ),
-                    SizedBox(height: 10.0),
-                    Text(discountPrice, textScaleFactor: 2,
-                      style: TextStyle(
-                          color: MyColors().purple,
-                          fontWeight: FontWeight.bold
-                      ),
-                    ),
-                  ],
-                ),
+                SizedBox(height: 30.0),
                 IgnorePointer(
-                  ignoring: !haveOfferings,
+                  ignoring: !btnEnabled,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      elevation: 5.0,
-                      shape: StadiumBorder(),
-                      primary: btnColor
+                        elevation: 5.0,
+                        shape: StadiumBorder(),
+                        primary: btnColor
                     ),
                     onPressed: (){
-                     // 인앱구매 실행
                       print('인앱구매 시작');
                       makePurchase();
                     },
@@ -199,34 +216,34 @@ class _PremiumState extends State<Premium> {
                     ),
                   ),
                 ),
-                SizedBox(height: 20.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        restorePurchase();
-                      },
-                      child: Text('Do you want to restore your purchase?', style: TextStyle(color: MyColors().purple)),
-                    ),
-                    SizedBox(width: 10.0),
-                    Visibility(
-                      visible: isRestoring,
-                      child: SizedBox(
-                        width: 10.0, height: 10.0,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 1.0,
-                          color: MyColors().purple,
-                        ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          restorePurchase();
+                        },
+                        child: Text('Do you want to restore your purchase?', style: TextStyle(color: MyColors().purple)),
                       ),
-                    )
-                  ],
+                      SizedBox(width: 10.0),
+                      Visibility(
+                        visible: isRestoring,
+                        child: SizedBox(
+                          width: 10.0, height: 10.0,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 1.0,
+                            color: MyColors().purple,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-                SizedBox(height: 10.0),
-                Text('The payment will be charged after the confirmation of purchase.'
-                    ' This purchase is one-time purchase. You can request a refund within 24 hours.'
-                    ' Premium benefit is applied only to the device that have been paid.'
-                    ' If you have any trouble with purchasing, please contact \'akorean.app@gmail.com\'.',
+                Text('The fee will be charged after the confirmation of purchase.'
+                    ' This is one-time purchase for life-time use. You can request a refund within 24 hours.'
+                    ' To report a system error, please contact \'akorean.app@gmail.com\'.',
                   textScaleFactor: 1,
                   style: TextStyle(color: Colors.grey.shade400),
                 )
