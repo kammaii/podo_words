@@ -21,6 +21,7 @@ class _PremiumState extends State<Premium> {
   bool isRestoring = false;
   String originalPrice = "";
   String discountPrice = "";
+  static const String productId = "test";
 
   getOfferings() async {
     try {
@@ -43,15 +44,19 @@ class _PremiumState extends State<Premium> {
   makePurchase() async {
     try {
       PurchaserInfo purchaserInfo = await Purchases.purchasePackage(package);
-      var isPro = purchaserInfo.entitlements.all["test"]!.isActive;
-      if (isPro) {
-        DataStorage().setPremiumUser(true);
-        ShowSnackBar().getSnackBar(context, 'Thank you for purchasing.');
-        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => Logo()), (Route<dynamic> route) => false);
+      var isPremium = purchaserInfo.entitlements.all[productId]!.isActive;
+      if (isPremium) {
+        setPremiumUser();
       }
     } on PlatformException catch (e) {
       showErrorMsg('Purchase error', e);
     }
+  }
+
+  setPremiumUser() {
+    DataStorage().setPremiumUser(true);
+    ShowSnackBar().getSnackBar(context, 'Thank you for purchasing.');
+    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => Logo()), (Route<dynamic> route) => false);
   }
 
   restorePurchase() async {
@@ -60,7 +65,10 @@ class _PremiumState extends State<Premium> {
     });
     try {
       PurchaserInfo restoredInfo = await Purchases.restoreTransactions();
-      print('리스토어 : $restoredInfo');
+      var isPremium = restoredInfo.entitlements.all[productId]!.isActive;
+      if(isPremium) {
+        setPremiumUser();
+      }
     } on PlatformException catch (e) {
       showErrorMsg('restorePurchase error', e);
     }
@@ -86,8 +94,6 @@ class _PremiumState extends State<Premium> {
   @override
   Widget build(BuildContext context) {
 
-
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -102,6 +108,7 @@ class _PremiumState extends State<Premium> {
           padding: const EdgeInsets.all(20.0),
           child: Center(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text('Get podo premium', textScaleFactor: 1.5,
                   style: TextStyle(
@@ -109,65 +116,66 @@ class _PremiumState extends State<Premium> {
                       fontWeight: FontWeight.bold
                   ),
                 ),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Stack(
-                        children: [
-                          Material(
-                            shape: CircleBorder(),
-                            elevation: 5.0,
-                            child: Container(
-                              height: 100.0,
-                              width: 100.0,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  shape: BoxShape.circle
-                              ),
-                            ),
-                          ),
-                          Container(
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Stack(
+                      children: [
+                        Material(
+                          shape: CircleBorder(),
+                          elevation: 5.0,
+                          child: Container(
                             height: 100.0,
                             width: 100.0,
-                            child: Icon(Icons.lock_open,
-                              size: 50.0,
-                              color: MyColors().purple,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle
                             ),
-                          )
-                        ],
-                      ),
-                      SizedBox(height: 30.0),
-                      Text('Unlock every lessons', textScaleFactor: 1.3,
-                        style: TextStyle(
+                          ),
+                        ),
+                        Container(
+                          height: 100.0,
+                          width: 100.0,
+                          child: Icon(Icons.lock_open,
+                            size: 50.0,
                             color: MyColors().purple,
-                            fontWeight: FontWeight.bold
-                        ),
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBox(height: 20.0),
+                    Text('Unlock every lessons', textScaleFactor: 1.3,
+                      style: TextStyle(
+                          color: MyColors().purple,
+                          fontWeight: FontWeight.bold
                       ),
-                      SizedBox(height: 10.0),
-                      Text('(life-time)', textScaleFactor: 1.2,
-                        style: TextStyle(
-                            color: MyColors().purple,
-                            fontWeight: FontWeight.bold
-                        ),
+                    ),
+                    SizedBox(height: 10.0),
+                    Text('(life-time)', textScaleFactor: 1.2,
+                      style: TextStyle(
+                          color: MyColors().purple,
+                          fontWeight: FontWeight.bold
                       ),
-                      SizedBox(height: 50.0),
-                      Text(originalPrice, textScaleFactor: 1.5,
-                        style: TextStyle(
-                            decoration: TextDecoration.lineThrough,
-                            color: MyColors().navy,
-                            fontWeight: FontWeight.bold
-                        ),
+                    ),
+                  ],
+                ),
+                Column(
+                  children: [
+                    Text(originalPrice, textScaleFactor: 1.5,
+                      style: TextStyle(
+                          decoration: TextDecoration.lineThrough,
+                          color: MyColors().navy,
+                          fontWeight: FontWeight.bold
                       ),
-                      SizedBox(height: 10.0),
-                      Text(discountPrice, textScaleFactor: 2,
-                        style: TextStyle(
-                            color: MyColors().purple,
-                            fontWeight: FontWeight.bold
-                        ),
+                    ),
+                    SizedBox(height: 10.0),
+                    Text(discountPrice, textScaleFactor: 2,
+                      style: TextStyle(
+                          color: MyColors().purple,
+                          fontWeight: FontWeight.bold
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
                 IgnorePointer(
                   ignoring: !haveOfferings,
