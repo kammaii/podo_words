@@ -5,6 +5,8 @@ import 'package:podo_words/words.dart';
 import 'data_storage.dart';
 import 'main_learning_sliver.dart';
 import 'my_colors.dart';
+import 'package:responsive_framework/responsive_framework.dart';
+
 
 class MainBodyLearning extends StatelessWidget {
   const MainBodyLearning({Key? key}) : super(key: key);
@@ -20,6 +22,7 @@ class MainBodyLearning extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     ScrollController _controller = new ScrollController();
     List<String> titles = [];
     List<Color> bgColors = [MyColors().navyLight, MyColors().mustardLight, MyColors().greenLight, MyColors().pink];
@@ -117,7 +120,6 @@ class MainBodyLearning extends StatelessWidget {
                                 child: Padding(
                                   padding: const EdgeInsets.all(10.0),
                                   child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.stretch,
                                     children: [
                                       Expanded(
                                         child: Text('$index',
@@ -143,9 +145,13 @@ class MainBodyLearning extends StatelessWidget {
                               Expanded(
                                 child: Padding(
                                   padding: const EdgeInsets.all(10.0),
-                                  child: Text(titles[index],
-                                    textScaleFactor: 1.5,
-                                    style: TextStyle(color: iconColors[index % 4]),
+                                  child: Row(
+                                    children: [
+                                      Text(titles[index],
+                                        textScaleFactor: 1.5,
+                                        style: TextStyle(color: iconColors[index % 4]),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               )
