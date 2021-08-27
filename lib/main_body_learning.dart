@@ -11,7 +11,7 @@ import 'package:responsive_framework/responsive_framework.dart';
 class MainBodyLearning extends StatelessWidget {
   const MainBodyLearning({Key? key}) : super(key: key);
 
-  static const List<int> freeLesson = [0,3,5,6,9,12,15,20,22,24,28,34,36,44,47];
+  static const List<int> freeLesson = [0,3,5,6,12,22];
   static const double axisSpacing = 30.0;
 
   double getItemHeight(BuildContext context) {
