@@ -283,7 +283,7 @@ class Words{
       'title' : ['movement'],
       'front' : ['가다','오다','걷다','뛰다','타다','내리다','다니다','들르다','마중나가다','배웅하다','환승하다','돌다','옮기다','올라가다/올라오다','내려가다/내려오다','건너가다/건너오다','지나가다/지나오다','들어가다/들어오다','나가다/나오다','돌아가다/돌아오다','가져가다/가져오다','데려가다/데려오다','따라가다/따라오다'],
       'back' : ['go','come','walk','run','ride','get off','go to ~ regularly','stop by','go pick someone up','see someone off','transfer','turn','move','go up/come up','go down/come down','go over/come over','pass by','enter/come in','go out/come out','go back/come back','take/bring','take/bring(people)','follow'],
-      'pronunciation' : ['-','-','걷따','-','-','-','-','-','-','-','-','-','옴기다','-','-','-','-','드러가다/드러오다','-','도라가다/도라오다']
+      'pronunciation' : ['-','-','걷따','-','-','-','-','-','-','-','-','-','옴기다','-','-','-','-','드러가다/드러오다','-','도라가다/도라오다','-','-','-']
     },
 // 33
     {
