@@ -28,7 +28,11 @@ packages:
       name: async
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "2.6.1"
+=======
+    version: "2.8.1"
+>>>>>>> dev
   audio_session:
     dependency: transitive
     description:

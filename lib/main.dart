@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
         minWidth: 450,
         defaultScale: true,
         breakpoints: [
-          ResponsiveBreakpoint.autoScale(780)
+        ResponsiveBreakpoint.autoScale(780)
         ],
         background: Container(color: Color(0xFFF5F5F5))
       ),
