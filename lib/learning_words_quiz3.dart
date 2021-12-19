@@ -38,7 +38,7 @@ class _LearningWordsQuiz3State extends State<LearningWordsQuiz3> {
     List<String> decomposed = [];
     jamoDecimal = [];
     for(String str in frontSplit) {
-      if(str != ' ' && str != '=') {
+      if(str != ' ' && str != '=' && str != '/') {
         var uniCode = toRune(str);
 
         int cho = ((uniCode - 44032) / 28) ~/ 21;
@@ -65,25 +65,34 @@ class _LearningWordsQuiz3State extends State<LearningWordsQuiz3> {
   int answerJung = 0;
   int answerJong = 0;
 
-  void setAnswer(int answeredDecimal) { // mixedIndex
-    if(answerCount%3 == 0) { // 초성
-      answer = answer + jamo[answerCount];
+  void setAnswer(int answeredDecimal) {
+    if (answerCount % 3 == 0) { // 초성
+      answer += jamo[answerCount];
       answerCho = answeredDecimal;
       answerCount++;
-
-    } else if (answerCount%3 == 1) { // 중성
+    } else if (answerCount % 3 == 1) { // 중성
       answer = answer.substring(0, answer.length - 1);
-      answer = answer + assembleHangul(cho: answerCho, jung: answeredDecimal);
+      answer += assembleHangul(cho: answerCho, jung: answeredDecimal);
       answerJung = answeredDecimal;
       answerCount++;
-
-    } else {  // 종성
+    } else { // 종성
       answer = answer.substring(0, answer.length - 1);
-      answer = answer + assembleHangul(cho: answerCho, jung: answerJung, jong: answeredDecimal);
+      answer += assembleHangul(cho: answerCho, jung: answerJung, jong: answeredDecimal);
       answerCho = 0;
       answerJung = 0;
       answerJong = 0;
       answerCount++;
+    }
+
+    if(jamo[answerCount] == '') { // 받침 없는 경우
+      answerCount++;
+    }
+
+    if(answerCount < jamo.length) {
+      if (jamo[answerCount] == ' ' || jamo[answerCount] == '=' || jamo[answerCount] == '/') {
+        answer += jamo[answerCount];
+        jamo.removeAt(answerCount);
+      }
     }
   }
 
@@ -100,6 +109,9 @@ class _LearningWordsQuiz3State extends State<LearningWordsQuiz3> {
     jamo = decomposeHangul(front);
     mixedJamo = new List<String>.from(jamo);
     mixedJamo.removeWhere((element) => element == '');
+    mixedJamo.removeWhere((element) => element == '/');
+    mixedJamo.removeWhere((element) => element == '=');
+    mixedJamo.removeWhere((element) => element == ' ');
     ListMix().getMixedList(mixedJamo);
     answer = '';
     clickedIndex = [];
@@ -175,67 +187,54 @@ class _LearningWordsQuiz3State extends State<LearningWordsQuiz3> {
                   ),
                 ),
                 SizedBox(height: 20.0),
-                GridView.builder(
-                    shrinkWrap: true,
-                    itemCount: mixedJamo.length,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount (
-                      crossAxisCount: 4,
-                      childAspectRatio: 1,
-                      crossAxisSpacing: 10.0,
-                      mainAxisSpacing: 10.0,
-                    ),
+                Expanded(
+                  child: GridView.builder(
+                      shrinkWrap: true,
+                      itemCount: mixedJamo.length,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount (
+                        crossAxisCount: 4,
+                        childAspectRatio: 1,
+                        crossAxisSpacing: 10.0,
+                        mainAxisSpacing: 10.0,
+                      ),
 
-                    itemBuilder: (context, index) {
-                      bool visible;
-                      Color bgBtn;
-                      TextDecoration textDecoration;
+                      itemBuilder: (context, index) {
+                        Color bgBtn;
+                        TextDecoration textDecoration;
 
-                      if(clickedIndex.contains(index)) {
-                        bgBtn = MyColors().purpleLight;
-                        textDecoration = TextDecoration.lineThrough;
-                      } else {
-                        bgBtn = Colors.white;
-                        textDecoration = TextDecoration.none;
-                      }
+                        if(clickedIndex.contains(index)) {
+                          bgBtn = MyColors().purpleLight;
+                          textDecoration = TextDecoration.lineThrough;
+                        } else {
+                          bgBtn = Colors.white;
+                          textDecoration = TextDecoration.none;
+                        }
 
-                      if(mixedJamo[index] == '') {
-                        visible = false;
-                      } else {
-                        visible = true;
-                      }
-
-                      return Visibility(
-                        visible: visible,
-                        child: Padding(
+                        return Padding(
                           padding: const EdgeInsets.all(1.0),
                           child: InkWell(
                             onTap: () {
                               if (!clickedIndex.contains(index)) {
                                 //정답 체크
-                                if (jamo[answerCount] == '') { // 받침 없는 경우
-                                  answerCount++;
-                                }
                                 if (jamo[answerCount] == mixedJamo[index]) { // 정답
                                   setState(() {
                                     clickedIndex.add(index);
                                     setAnswer(jamoDecimal[answerCount]);
-
-                                    if (answerCount >= jamo.length - 1 &&
-                                        jamo[jamo.length - 1] == '' ||
-                                        answerCount >= jamo.length) { // 다음 퀴즈로 넘어가기
-                                      PlayAudio().playCorrect();
-                                      Future.delayed(const Duration(seconds: 1), () {
-                                        setState(() {
-                                          answerCount = 0;
-                                          quizIndex++;
-                                          isHintOn = false;
-                                          if (quizIndex >= widget.words.length) { // 모든 퀴즈 완료
-                                            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => LearningWordsComplete(widget.words)), (Route<dynamic> route) => false);
-                                          }
-                                        });
-                                      });
-                                    }
                                   });
+
+                                  if (answer == front) { // 다음 퀴즈로 넘어가기
+                                    PlayAudio().playCorrect();
+                                    Future.delayed(const Duration(seconds: 1), () {
+                                      setState(() {
+                                        answerCount = 0;
+                                        quizIndex++;
+                                        isHintOn = false;
+                                        if (quizIndex >= widget.words.length) { // 모든 퀴즈 완료
+                                          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => LearningWordsComplete(widget.words)), (Route<dynamic> route) => false);
+                                        }
+                                      });
+                                    });
+                                  }
                                 } else {
                                   PlayAudio().playWrong();
                                 }
@@ -256,9 +255,9 @@ class _LearningWordsQuiz3State extends State<LearningWordsQuiz3> {
                                 )
                             ),
                           ),
-                        ),
-                      );
-                    }
+                        );
+                      }
+                  ),
                 ),
               ],
             ),
