@@ -84,7 +84,7 @@ class _LearningWordsQuiz3State extends State<LearningWordsQuiz3> {
       answerCount++;
     }
 
-    if(jamo[answerCount] == '') { // 받침 없는 경우
+    if(answerCount < jamo.length && jamo[answerCount] == '') { // 받침 없는 경우
       answerCount++;
     }
 
