@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:card_swiper/card_swiper.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:podo_words/learning_words_complete.dart';
 import 'package:podo_words/learning_words_quiz_frame.dart';

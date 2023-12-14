@@ -28,9 +28,10 @@ class _PremiumState extends State<Premium> {
       Offerings offerings = await Purchases.getOfferings();
       if (offerings.current != null) {
         package = offerings.current!.availablePackages[0];
-        String currency = package.product.currencyCode;
+        print(package);
+        String currency = package.storeProduct.currencyCode;
         var f = NumberFormat('$currency ###,###,###,###.##');
-        double price = package.product.price;
+        double price = package.storeProduct.price;
         discountPrice = f.format(price);
         originalPrice = f.format(price.round() * 10);
         btnEnabled = true;
@@ -44,7 +45,7 @@ class _PremiumState extends State<Premium> {
 
   makePurchase() async {
     try {
-      PurchaserInfo purchaserInfo = await Purchases.purchasePackage(package);
+      CustomerInfo purchaserInfo = await Purchases.purchasePackage(package);
       var isPremium = purchaserInfo.entitlements.all[productId]!.isActive;
       if (isPremium) {
         setPremiumUser();
@@ -67,7 +68,7 @@ class _PremiumState extends State<Premium> {
       btnColor = Colors.grey;
     });
     try {
-      PurchaserInfo restoredInfo = await Purchases.restoreTransactions();
+      CustomerInfo restoredInfo = await Purchases.restorePurchases();
       print('리스토어: $restoredInfo');
       var isPremium = restoredInfo.entitlements.all[productId];
       print('이즈액티브 : $isPremium');
@@ -172,23 +173,11 @@ class _PremiumState extends State<Premium> {
                           ),
                         ],
                       ),
-                      Column(
-                        children: [
-                          Text(originalPrice, textScaleFactor: 1.5,
-                            style: TextStyle(
-                                decoration: TextDecoration.lineThrough,
-                                color: MyColors().navy,
-                                fontWeight: FontWeight.bold
-                            ),
-                          ),
-                          SizedBox(height: 10.0),
-                          Text(discountPrice, textScaleFactor: 2,
-                            style: TextStyle(
-                                color: MyColors().purple,
-                                fontWeight: FontWeight.bold
-                            ),
-                          ),
-                        ],
+                      Text(discountPrice, textScaleFactor: 2,
+                        style: TextStyle(
+                            color: MyColors().purple,
+                            fontWeight: FontWeight.bold
+                        ),
                       ),
                     ],
                   ),
