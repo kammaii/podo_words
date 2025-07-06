@@ -58,7 +58,7 @@ class _WordListState extends State<WordList> {
       padding: EdgeInsets.symmetric(horizontal: 10.0),
       height: itemHeight,
       child: SwipeTo(
-        onLeftSwipe: () {
+        onLeftSwipe: (detail) {
           if(widget.isFromMainLearning) {
             mainLearningSliverState!.setState(() {
               DataStorage().addInActiveWord(widget.word.front);
@@ -69,7 +69,7 @@ class _WordListState extends State<WordList> {
             });
           }
         },
-        onRightSwipe: () {
+        onRightSwipe: (detail) {
           if(widget.isFromMainLearning) {
             mainLearningSliverState!.setState(() {
               DataStorage().removeInActiveWord(widget.word.front);

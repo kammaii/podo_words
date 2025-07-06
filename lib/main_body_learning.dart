@@ -55,8 +55,7 @@ class MainBodyLearning extends StatelessWidget {
                   Visibility(
                     visible: !isPremiumUser,
                     child: IconButton(
-                        icon: Image.asset('assets/images/premium.png',
-                        ),
+                        icon: Image.asset('assets/images/premium.png', width: 50, height: 50),
                         onPressed: (){
                           Navigator.push(context, MaterialPageRoute(
                               builder: (context) => Premium()));

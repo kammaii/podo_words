@@ -1,4 +1,4 @@
-package com.example.podo_words
+package net.awesomekorean.podo_words
 
 import io.flutter.embedding.android.FlutterActivity
 

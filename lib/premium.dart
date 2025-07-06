@@ -187,10 +187,11 @@ class _PremiumState extends State<Premium> {
                   ignoring: !btnEnabled,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
+                        backgroundColor: MyColors().purple,
                         elevation: 5.0,
                         shape: StadiumBorder(),
-                        primary: btnColor
-                    ),
+
+                   ),
                     onPressed: (){
                       print('인앱구매 시작');
                       makePurchase();
