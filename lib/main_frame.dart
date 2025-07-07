@@ -1,8 +1,8 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
-import 'package:podo_words/my_colors.dart';
-import 'package:podo_words/main_body_learning.dart';
-import 'package:podo_words/main_body_review.dart';
+import 'package:podo_words/common/my_colors.dart';
+import 'package:podo_words/learning/main_title_list.dart';
+import 'package:podo_words/review/main_review.dart';
 
 class MainFrame extends StatefulWidget {
 
@@ -11,7 +11,7 @@ class MainFrame extends StatefulWidget {
 }
 
 class _MainFrameState extends State<MainFrame> {
-  List<Widget> pageList = [MainBodyLearning(), MainBodyReview()];
+  List<Widget> pageList = [MainTitleList(), MainReview()];
   int pageIndex = 0;
 
   @override

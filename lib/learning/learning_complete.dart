@@ -2,16 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-import 'package:podo_words/data_storage.dart';
+import 'package:podo_words/common/data_storage.dart';
 import 'package:podo_words/main_frame.dart';
-import 'package:podo_words/my_colors.dart';
-import 'package:podo_words/play_audio.dart';
-import 'package:podo_words/show_snack_bar.dart';
-import 'package:podo_words/word.dart';
-import 'package:podo_words/words.dart';
+import 'package:podo_words/common/my_colors.dart';
+import 'package:podo_words/common/play_audio.dart';
+import 'package:podo_words/common/show_snack_bar.dart';
+import 'package:podo_words/common/word.dart';
+import 'package:podo_words/common/words.dart';
 
 
-class LearningWordsComplete extends StatelessWidget {
+class LearningComplete extends StatelessWidget {
 
   late int totalWords;
   late int myWords;
@@ -19,7 +19,7 @@ class LearningWordsComplete extends StatelessWidget {
   List<Word> words;
   late int countNewWords;
 
-  LearningWordsComplete(this.words);
+  LearningComplete(this.words);
 
   @override
   Widget build(BuildContext context) {
@@ -40,8 +40,8 @@ class LearningWordsComplete extends StatelessWidget {
               child: Column(
                 children: [
                   SizedBox(height: 20.0),
-                  Text('Congratulations!', textScaleFactor: 2,
-                    style: TextStyle(color: MyColors().purple, fontWeight: FontWeight.bold)),
+                  Text('Congratulations!',
+                    style: TextStyle(fontSize: 30, color: MyColors().purple, fontWeight: FontWeight.bold)),
                   Expanded(
                     child: Stack(
                       alignment: Alignment.center,
@@ -50,7 +50,7 @@ class LearningWordsComplete extends StatelessWidget {
                           animation: true,
                           animationDuration: 1200,
                           circularStrokeCap: CircularStrokeCap.round,
-                          radius: 200.0,
+                          radius: 150.0,
                           lineWidth: 10.0,
                           percent: percent,
                           center: Column(

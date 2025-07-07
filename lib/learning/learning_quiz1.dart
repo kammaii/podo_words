@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:podo_words/divider_text.dart';
-import 'package:podo_words/learning_words_quiz2.dart';
-import 'package:podo_words/learning_words_quiz_frame.dart';
-import 'package:podo_words/list_mix.dart';
-import 'package:podo_words/my_colors.dart';
-import 'package:podo_words/play_audio.dart';
-import 'package:podo_words/play_audio_button.dart';
-import 'package:podo_words/word.dart';
-import 'package:podo_words/words.dart';
+import 'package:podo_words/common/divider_text.dart';
+import 'package:podo_words/common/list_mix.dart';
+import 'package:podo_words/common/my_colors.dart';
+import 'package:podo_words/common/play_audio.dart';
+import 'package:podo_words/common/play_audio_button.dart';
+import 'package:podo_words/common/word.dart';
+import 'package:podo_words/common/words.dart';
 
-class LearningWordsQuiz1 extends StatefulWidget {
+import 'learning_quiz_frame.dart';
+
+class LearningQuiz1 extends StatefulWidget {
 
   List<Word> wordList;
   int wordsNoForQuiz;
-  LearningWordsQuiz1(this.wordsNoForQuiz, this.wordList);
+  LearningQuiz1(this.wordsNoForQuiz, this.wordList);
 
   @override
-  _LearningWordsQuiz1State createState() => _LearningWordsQuiz1State();
+  _LearningQuiz1State createState() => _LearningQuiz1State();
 }
 
-class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
+class _LearningQuiz1State extends State<LearningQuiz1> {
   int quizIndex = 0;
   late String front;
   late String back;
@@ -29,7 +29,7 @@ class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
   List<Color> borderColor = List<Color>.generate(4, (index) => Colors.white);
   bool isAnswerCheck = false;
   bool isCorrectAnswer = false;
-  LearningWordsQuizFrameState? learningWordsQuizFrameState;
+  LearningQuizFrameState? learningQuizFrameState;
 
 
   void checkAnswer() {
@@ -52,8 +52,8 @@ class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
           });
 
         } else {
-          learningWordsQuizFrameState!.setState(() {
-            learningWordsQuizFrameState!.quizNo = 1;
+          learningQuizFrameState!.setState(() {
+            learningQuizFrameState!.quizNo = 1;
           });
         }
       });
@@ -75,7 +75,7 @@ class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
 
   @override
   Widget build(BuildContext context) {
-    learningWordsQuizFrameState = context.findAncestorStateOfType<LearningWordsQuizFrameState>();
+    learningQuizFrameState = context.findAncestorStateOfType<LearningQuizFrameState>();
 
     front = widget.wordList[quizIndex].front;
     back = widget.wordList[quizIndex].back;
@@ -142,7 +142,7 @@ class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(20.0),
-                                boxShadow: [BoxShadow(color: borderColor[index], spreadRadius: 0.1)]
+                                boxShadow: [BoxShadow(color: borderColor[index], spreadRadius: 1)]
                               ),
                               child: Center(
                                   child: Column(
@@ -157,8 +157,10 @@ class _LearningWordsQuiz1State extends State<LearningWordsQuiz1> {
                                         padding: const EdgeInsets.all(10.0),
                                         child: Text(
                                           widget.wordList[mixedIndex[index]].back,
-                                          textScaleFactor: 1.5,
                                           textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                          ),
                                         ),
                                       ),
                                     ],

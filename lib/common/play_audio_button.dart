@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:podo_words/my_colors.dart';
-import 'package:podo_words/play_audio.dart';
+import 'package:podo_words/common/my_colors.dart';
+import 'package:podo_words/common/play_audio.dart';
 
 class PlayAudioButton extends StatefulWidget {
 

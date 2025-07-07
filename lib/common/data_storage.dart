@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:podo_words/word.dart';
+import 'package:podo_words/common/word.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DataStorage {
@@ -20,6 +20,7 @@ class DataStorage {
   int lastClickedItem = 0;
   bool isPremiumUser = false;
 
+
   static const String KEY_IN_ACTIVE_WORDS = 'inActiveWords';
   static const String KEY_MY_WORDS = 'myWords';
   static const String KEY_LAST_CLICKED_ITEM = 'lastClickedItem';
@@ -28,6 +29,22 @@ class DataStorage {
 
   DataStorage.init() {
     print('DataStorage 초기화');
+  }
+
+  Future<void> initLocalData(bool isPremium) async {
+    sp ??= await SharedPreferences.getInstance();
+    isPremiumUser = isPremium;
+    inActiveWords = getStringList(KEY_IN_ACTIVE_WORDS);
+    lastClickedItem = getInt(KEY_LAST_CLICKED_ITEM);
+    isPremiumUser = getBool(KEY_IS_PREMIUM_USER);
+    List<String> myWordsJson = getStringList(KEY_MY_WORDS);
+
+    myWords = [];
+    for(int i=0; i<myWordsJson.length; i++) {
+      Word myWord = Word.fromJson(json.decode(myWordsJson[i]));
+      myWords.add(myWord);
+    }
+    setIsActiveMyWords();
   }
 
   Future<SharedPreferences> initData() {
@@ -49,16 +66,6 @@ class DataStorage {
 
     return f;
   }
-
-  // Future<bool> wait() {
-  //   return Future.delayed(const Duration(seconds: 3), () { //todo: 3초로 수정하기
-  //     return true;
-  //   });
-  // }
-  //
-  // Future<List<Object>> init() {
-  //   return Future.wait([wait(), initData()]);
-  // }
 
   void setPremiumUser(bool b) {
     setBool(KEY_IS_PREMIUM_USER, b);

@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:podo_words/divider_text.dart';
-import 'package:podo_words/learning_words.dart';
-import 'package:podo_words/learning_words_quiz_frame.dart';
-import 'package:podo_words/play_audio.dart';
-import 'package:podo_words/word.dart';
-import 'list_mix.dart';
-import 'my_colors.dart';
+import 'package:podo_words/common/divider_text.dart';
+import 'package:podo_words/common/list_mix.dart';
+import 'package:podo_words/common/my_colors.dart';
+import 'package:podo_words/common/play_audio.dart';
+import 'package:podo_words/common/word.dart';
 
-class LearningWordsQuiz2 extends StatefulWidget {
+class LearningQuiz2 extends StatefulWidget {
 
   List<Word> words;
 
-  LearningWordsQuiz2(this.words);
+  LearningQuiz2(this.words);
 
   @override
-  _LearningWordsQuiz2State createState() => _LearningWordsQuiz2State();
+  _LearningQuiz2State createState() => _LearningQuiz2State();
 }
 
-class _LearningWordsQuiz2State extends State<LearningWordsQuiz2> {
+class _LearningQuiz2State extends State<LearningQuiz2> {
   List<String> front = [];
   List<String> back = [];
   List<String> audio = [];
@@ -65,9 +63,9 @@ class _LearningWordsQuiz2State extends State<LearningWordsQuiz2> {
           if(answeredIndex.contains(mixedIndex[index])) {
             backgroundColor = MyColors().purpleLight;
             return Center(
-              child: Text(words[mixedIndex[index]], textScaleFactor: 1.5,
+              child: Text(words[mixedIndex[index]],
                   textAlign: TextAlign.center,
-                  style: TextStyle(decoration: TextDecoration.lineThrough)),
+                  style: TextStyle(fontSize: 20, decoration: TextDecoration.lineThrough)),
             );
 
           } else {
@@ -108,12 +106,12 @@ class _LearningWordsQuiz2State extends State<LearningWordsQuiz2> {
                     decoration: BoxDecoration(
                         color: backgroundColor,
                         borderRadius: BorderRadius.circular(20.0),
-                        boxShadow: [BoxShadow(color: borderColor, spreadRadius: 0.1)]
+                        boxShadow: [BoxShadow(color: borderColor, spreadRadius: 1)]
                     ),
                     child: Center(
                       child: Text(words[mixedIndex[index]],
-                        textScaleFactor: 1.5,
                         textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 20),
                       ),
                     )
                 ),

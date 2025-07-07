@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:podo_words/divider_text.dart';
-import 'package:podo_words/learning_words_complete.dart';
-import 'package:podo_words/play_audio.dart';
-import 'package:podo_words/play_audio_button.dart';
-import 'package:podo_words/word.dart';
-import 'list_mix.dart';
-import 'my_colors.dart';
+import 'package:podo_words/common/divider_text.dart';
+import 'package:podo_words/learning/learning_complete.dart';
+import 'package:podo_words/common/play_audio.dart';
+import 'package:podo_words/common/play_audio_button.dart';
+import 'package:podo_words/common/word.dart';
+import '../common/list_mix.dart';
+import '../common/my_colors.dart';
 import 'package:unicode/unicode.dart';
 
-class LearningWordsQuiz3 extends StatefulWidget {
+class LearningQuiz3 extends StatefulWidget {
 
   List<Word> words = [];
-  LearningWordsQuiz3(this.words);
+  LearningQuiz3(this.words);
 
   @override
-  _LearningWordsQuiz3State createState() => _LearningWordsQuiz3State();
+  _LearningQuiz3State createState() => _LearningQuiz3State();
 }
 
-class _LearningWordsQuiz3State extends State<LearningWordsQuiz3> {
+class _LearningQuiz3State extends State<LearningQuiz3> {
   int quizIndex = 0;
   late String front;
   late String back;
@@ -230,7 +230,7 @@ class _LearningWordsQuiz3State extends State<LearningWordsQuiz3> {
                                         quizIndex++;
                                         isHintOn = false;
                                         if (quizIndex >= widget.words.length) { // 모든 퀴즈 완료
-                                          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => LearningWordsComplete(widget.words)), (Route<dynamic> route) => false);
+                                          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => LearningComplete(widget.words)), (Route<dynamic> route) => false);
                                         }
                                       });
                                     });

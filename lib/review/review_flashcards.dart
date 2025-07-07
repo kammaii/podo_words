@@ -2,12 +2,12 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:podo_words/list_mix.dart';
-import 'package:podo_words/play_audio.dart';
-import 'package:podo_words/play_audio_button.dart';
-import 'package:podo_words/word.dart';
+import 'package:podo_words/common/list_mix.dart';
+import 'package:podo_words/common/play_audio.dart';
+import 'package:podo_words/common/play_audio_button.dart';
+import 'package:podo_words/common/word.dart';
 
-import 'my_colors.dart';
+import '../common/my_colors.dart';
 
 class ReviewFlashCards extends StatefulWidget {
 

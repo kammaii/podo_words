@@ -2,26 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
-import 'package:podo_words/learning_words_complete.dart';
-import 'package:podo_words/learning_words_quiz_frame.dart';
-import 'package:podo_words/my_colors.dart';
-import 'package:podo_words/play_audio.dart';
-import 'package:podo_words/word.dart';
-import 'package:podo_words/learning_words_quiz3.dart';
-import 'package:podo_words/play_audio_button.dart';
+import 'package:podo_words/learning/learning_complete.dart';
+import 'package:podo_words/learning/learning_quiz_frame.dart';
+import 'package:podo_words/common/my_colors.dart';
+import 'package:podo_words/common/play_audio.dart';
+import 'package:podo_words/common/word.dart';
+import 'package:podo_words/learning/learning_quiz3.dart';
+import 'package:podo_words/common/play_audio_button.dart';
 
 
-class LearningWords extends StatefulWidget {
+class LearningFrame extends StatefulWidget {
 
   List<Word> words;
-  LearningWords(this.words);
+  LearningFrame(this.words);
 
 
   @override
-  _LearningWordsState createState() => _LearningWordsState();
+  _LearningFrameState createState() => _LearningFrameState();
 }
 
-class _LearningWordsState extends State<LearningWords> {
+class _LearningFrameState extends State<LearningFrame> {
   late List<Word> words;
   int wordIndex = 0;
   late String front;
@@ -61,21 +61,25 @@ class _LearningWordsState extends State<LearningWords> {
               children: [
                 Text(
                   front,
-                  textScaleFactor: 2.5,
                   style: TextStyle(
-                    fontWeight: FontWeight.bold
+                    fontWeight: FontWeight.bold,
+                    fontSize: 30
                   ),
                 ),
                 SizedBox(height: 5.0),
                 Text(
                   pronunciation,
-                  textScaleFactor: 2,
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
                 ),
                 SizedBox(height: 30.0),
                 Text(
                   back,
-                  textScaleFactor: 2,
                   textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 20
+                  ),
                 ),
               ],
             ),
@@ -85,7 +89,7 @@ class _LearningWordsState extends State<LearningWords> {
     );
   }
 
-  List<Word> getWordsListForQuiz(int wordsNoForQuiz) {
+  List<Word> getWordListForQuiz(int wordsNoForQuiz) {
     int index = wordIndex - 1;
     List<Word> wordList = [];
     for (int i = 0; i < wordsNoForQuiz; i++) {
@@ -138,31 +142,31 @@ class _LearningWordsState extends State<LearningWords> {
         if (leftWordsCount == 0) {
           leftWordsCount = 4;
         }
-        wordsListForQuiz = getWordsListForQuiz(leftWordsCount);
+        wordsListForQuiz = getWordListForQuiz(leftWordsCount);
 
-        SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+        SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
           Navigator.push(context, MaterialPageRoute(
               builder: (context) =>
-                  LearningWordsQuizFrame(leftWordsCount, wordsListForQuiz)))
+                  LearningQuizFrame(leftWordsCount, wordsListForQuiz)))
               .then((value) =>
               Navigator.push(context, MaterialPageRoute(
-                  builder: (context) => LearningWordsQuiz3(words)))
+                  builder: (context) => LearningQuiz3(words)))
           );
         });
 
       } else {
-        SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+        SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
           Navigator.push(context, MaterialPageRoute(
-              builder: (context) => LearningWordsComplete(words)));
+              builder: (context) => LearningComplete(words)));
         });
       }
 
     } else {
       if (isQuizOn && isRightSwipe && wordIndex != 0 && wordIndex % 4 == 0) { // 퀴즈 1&2 -> 다음 단어 오디오 재생
-        List<Word> wordsListForQuiz = getWordsListForQuiz(4);
-        SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+        List<Word> wordListForQuiz = getWordListForQuiz(4);
+        SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
           Navigator.push(context, MaterialPageRoute(
-              builder: (context) => LearningWordsQuizFrame(4, wordsListForQuiz)))
+              builder: (context) => LearningQuizFrame(4, wordListForQuiz)))
               .then((value) => PlayAudio().playWord(audio)
           );
         });
@@ -192,6 +196,7 @@ class _LearningWordsState extends State<LearningWords> {
                       percent: wordIndex / words.length,
                       backgroundColor: MyColors().navyLight,
                       progressColor: MyColors().purple,
+                      barRadius: Radius.circular(15),
                     ),
                   ),
                   Padding(
@@ -204,6 +209,7 @@ class _LearningWordsState extends State<LearningWords> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text('Quiz'),
+                  const SizedBox(width: 10),
                   Switch(
                     value: isQuizOn,
                     activeTrackColor: MyColors().navyLight,
@@ -214,6 +220,7 @@ class _LearningWordsState extends State<LearningWords> {
                       });
                     },
                   ),
+                  const SizedBox(width: 10),
                 ],
               ),
               Expanded(

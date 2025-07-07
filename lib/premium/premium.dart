@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:podo_words/data_storage.dart';
+import 'package:podo_words/common/data_storage.dart';
 import 'package:podo_words/logo.dart';
-import 'package:podo_words/my_colors.dart';
-import 'package:podo_words/show_snack_bar.dart';
+import 'package:podo_words/common/my_colors.dart';
+import 'package:podo_words/common/show_snack_bar.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:intl/intl.dart';
 
@@ -232,8 +232,7 @@ class _PremiumState extends State<Premium> {
                 ),
                 Text('The fee will be charged after the confirmation of purchase.'
                     ' This is one-time purchase for life-time use. You can request a refund within 24 hours.'
-                    ' To report a system error, please contact \'akorean.app@gmail.com\'.',
-                  textScaleFactor: 1,
+                    ' To report a system error, please contact \'contact@podokorean.com\'.',
                   style: TextStyle(color: Colors.grey.shade400),
                 )
               ],

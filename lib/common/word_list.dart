@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:podo_words/main_learning_sliver.dart';
-import 'package:podo_words/main_body_review.dart';
-import 'package:podo_words/my_colors.dart';
-import 'package:podo_words/play_audio.dart';
-import 'package:podo_words/word.dart';
+import 'package:podo_words/learning/main_word_list.dart';
+import 'package:podo_words/review/main_review.dart';
+import 'package:podo_words/common/my_colors.dart';
+import 'package:podo_words/common/play_audio.dart';
+import 'package:podo_words/common/word.dart';
 import 'package:swipe_to/swipe_to.dart';
 import 'data_storage.dart';
 
@@ -32,8 +32,8 @@ class _WordListState extends State<WordList> {
 
   @override
   Widget build(BuildContext context) {
-    MainBodyReviewState? mainReviewState = context.findAncestorStateOfType<MainBodyReviewState>();
-    MainLearningSliverState? mainLearningSliverState = context.findAncestorStateOfType<MainLearningSliverState>();
+    MainReviewState? mainReviewState = context.findAncestorStateOfType<MainReviewState>();
+    MainWordListState? mainLearningSliverState = context.findAncestorStateOfType<MainWordListState>();
 
     if(widget.isDeleteMode) {
       leftMargin = 50.0;

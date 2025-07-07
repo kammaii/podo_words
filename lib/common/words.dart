@@ -1,6 +1,6 @@
 import 'dart:core';
-import 'package:podo_words/data_storage.dart';
-import 'package:podo_words/word.dart';
+import 'package:podo_words/common/data_storage.dart';
+import 'package:podo_words/common/word.dart';
 
 class Words{
 

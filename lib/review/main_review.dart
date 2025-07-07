@@ -1,22 +1,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:podo_words/my_colors.dart';
-import 'package:podo_words/review_flashcards.dart';
-import 'package:podo_words/show_snack_bar.dart';
-import 'package:podo_words/word.dart';
-import 'package:podo_words/word_list.dart';
-import 'data_storage.dart';
-import 'learning_words.dart';
+import 'package:podo_words/common/my_colors.dart';
+import 'package:podo_words/learning/learning_frame.dart';
+import 'package:podo_words/review/review_flashcards.dart';
+import 'package:podo_words/common/show_snack_bar.dart';
+import 'package:podo_words/common/word.dart';
+import 'package:podo_words/common/word_list.dart';
+import '../common/data_storage.dart';
 
 
 
-class MainBodyReview extends StatefulWidget {
+class MainReview extends StatefulWidget {
   @override
-  MainBodyReviewState createState() => MainBodyReviewState();
+  MainReviewState createState() => MainReviewState();
 }
 
-class MainBodyReviewState extends State<MainBodyReview> {
+class MainReviewState extends State<MainReview> {
 
   late List<Word> myWords;
   late List<Word> myWordsInList;
@@ -258,7 +258,7 @@ class MainBodyReviewState extends State<MainBodyReview> {
             }
             if(activeWords >= 4) {
               Navigator.pushReplacement(context, MaterialPageRoute(
-                  builder: (context) => LearningWords(myWords)));
+                  builder: (context) => LearningFrame(myWords)));
             } else {
               Navigator.pop(context);
               ShowSnackBar().getSnackBar(context, 'It needs more than 4 words to start learning.');
