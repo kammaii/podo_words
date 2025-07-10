@@ -1,7 +1,9 @@
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:podo_words/learning/main_word_list.dart';
 import 'package:podo_words/premium/premium.dart';
+import 'package:podo_words/feedback/main_feedback.dart';
 import 'package:podo_words/common/words.dart';
 import '../common/data_storage.dart';
 import '../common/my_colors.dart';
@@ -39,16 +41,22 @@ class MainTitleList extends StatelessWidget {
           child: Column(
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'Select Title',
-                style: TextStyle(fontSize: 20.0, color: MyColors().purple, fontWeight: FontWeight.bold),
+              Expanded(
+                child: Text(
+                  'Select Title',
+                  style: TextStyle(fontSize: 20.0, color: MyColors().purple, fontWeight: FontWeight.bold),
+                ),
               ),
+              IconButton(
+                  onPressed: () {
+                    Get.to(MainFeedback());
+                  },
+                  icon: Icon(Icons.email, size: 35, color: MyColors().purple)),
               Visibility(
                 visible: !isPremiumUser,
                 child: IconButton(
-                    icon: Image.asset('assets/images/premium.png', width: 50, height: 50),
+                    icon: Icon(Icons.diamond_rounded, color: MyColors().red, size: 40),
                     onPressed: () {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => Premium()));
                     }),
