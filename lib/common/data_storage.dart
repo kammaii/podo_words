@@ -24,7 +24,6 @@ class DataStorage {
   static const String KEY_IN_ACTIVE_WORDS = 'inActiveWords';
   static const String KEY_MY_WORDS = 'myWords';
   static const String KEY_LAST_CLICKED_ITEM = 'lastClickedItem';
-  static const String KEY_IS_PREMIUM_USER = 'isPremiumUser';
 
 
   DataStorage.init() {
@@ -36,7 +35,6 @@ class DataStorage {
     isPremiumUser = isPremium;
     inActiveWords = getStringList(KEY_IN_ACTIVE_WORDS);
     lastClickedItem = getInt(KEY_LAST_CLICKED_ITEM);
-    isPremiumUser = getBool(KEY_IS_PREMIUM_USER);
     List<String> myWordsJson = getStringList(KEY_MY_WORDS);
 
     myWords = [];
@@ -47,29 +45,6 @@ class DataStorage {
     setIsActiveMyWords();
   }
 
-  Future<SharedPreferences> initData() {
-    Future<SharedPreferences> f = SharedPreferences.getInstance();
-    f.then((value) {
-      sp = value;
-      inActiveWords = getStringList(KEY_IN_ACTIVE_WORDS);
-      lastClickedItem = getInt(KEY_LAST_CLICKED_ITEM);
-      isPremiumUser = getBool(KEY_IS_PREMIUM_USER);
-      List<String> myWordsJson = getStringList(KEY_MY_WORDS);
-
-      myWords = [];
-      for(int i=0; i<myWordsJson.length; i++) {
-        Word myWord = Word.fromJson(json.decode(myWordsJson[i]));
-        myWords.add(myWord);
-      }
-      setIsActiveMyWords();
-    });
-
-    return f;
-  }
-
-  void setPremiumUser(bool b) {
-    setBool(KEY_IS_PREMIUM_USER, b);
-  }
 
   void setIsActiveMyWords() {
     for(Word myWord in myWords) {

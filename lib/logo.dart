@@ -29,8 +29,7 @@ class Logo extends StatelessWidget {
     // Premium 정보 가져 오기
     CustomerInfo customerInfo = await Purchases.getCustomerInfo();
     String userId = await Purchases.appUserID;
-    final premiumEntitlement = customerInfo.entitlements.active['podo_words_1000'];
-    bool isPremiumUser = premiumEntitlement != null;
+    final isPremiumUser = customerInfo.entitlements.active.isNotEmpty;
 
     print('유저아이디: $userId');
 
