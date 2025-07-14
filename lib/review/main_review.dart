@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 import 'package:podo_words/common/my_colors.dart';
 import 'package:podo_words/learning/learning_frame.dart';
 import 'package:podo_words/review/review_flashcards.dart';
@@ -244,12 +245,14 @@ class MainReviewState extends State<MainReview> {
   }
 
   CupertinoActionSheet playBtnClick() {
+    bool shouldShowAds = !DataStorage().isPremiumUser;
     return CupertinoActionSheet(
-      message: Text('Select review mode', textScaleFactor: 1.5),
+      message: Text('Select review mode', style: TextStyle(fontSize: 20)),
       actions: [
         CupertinoActionSheetAction(
           child: Text('quiz'),
-          onPressed: (){
+          onPressed: () {
+            Get.back();
             int activeWords = 0;
             for(Word myWord in myWords) {
               if(myWord.isActive) {
@@ -257,10 +260,8 @@ class MainReviewState extends State<MainReview> {
               }
             }
             if(activeWords >= 4) {
-              Navigator.pushReplacement(context, MaterialPageRoute(
-                  builder: (context) => LearningFrame(myWords)));
+              Get.to(() => LearningFrame(myWords), arguments: shouldShowAds);
             } else {
-              Navigator.pop(context);
               ShowSnackBar().getSnackBar(context, 'It needs more than 4 words to start learning.');
             }
           },
@@ -268,13 +269,14 @@ class MainReviewState extends State<MainReview> {
         CupertinoActionSheetAction(
           child: Text('flash card'),
           onPressed: (){
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ReviewFlashCards(myWords)));
+            Get.back();
+            Get.to(() => ReviewFlashCards(myWords), arguments: shouldShowAds);
           },
         )
       ],
       cancelButton: CupertinoActionSheetAction(
         child: Text('cancel'),
-        onPressed: (){Navigator.pop(context);},
+        onPressed: (){Get.back();},
       ),
     );
   }
@@ -291,7 +293,7 @@ class MainReviewState extends State<MainReview> {
             'Cancel',
             style: TextStyle(color: MyColors().wine),
           ),
-          onPressed: (){Navigator.pop(context);},
+          onPressed: (){Get.back();},
         ),
         CupertinoDialogAction(
           child: Text(
@@ -301,7 +303,7 @@ class MainReviewState extends State<MainReview> {
           onPressed: (){
             setState(() {
               DataStorage().removeMyWords();
-              Navigator.of(context).pop();
+              Get.back();;
             });
           },
         )

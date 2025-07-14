@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:podo_words/common/divider_text.dart';
 import 'package:podo_words/common/list_mix.dart';
@@ -95,7 +96,7 @@ class _LearningQuiz2State extends State<LearningQuiz2> {
                       if(answeredIndex.length == 4) {
                         PlayAudio().player.playerStateStream.listen((event) {
                           if(event.processingState == ProcessingState.completed) {
-                            Navigator.pop(context);
+                            Get.back();
                           }
                         });
                       }
@@ -150,7 +151,7 @@ class _LearningQuiz2State extends State<LearningQuiz2> {
                   children: [
                     IconButton(
                       icon: Icon(Icons.arrow_back),
-                      onPressed: () => Navigator.pop(context),
+                      onPressed: () => Get.back(),
                     ),
                   ],
                 ),

@@ -1,4 +1,7 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:podo_words/common/divider_text.dart';
 import 'package:podo_words/common/list_mix.dart';
 import 'package:podo_words/common/my_colors.dart';
@@ -95,7 +98,7 @@ class _LearningQuiz1State extends State<LearningQuiz1> {
                 children: [
                   IconButton(
                     icon: Icon(Icons.arrow_back),
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () => Get.back(),
                   ),
                 ],
               ),

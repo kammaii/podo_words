@@ -2,6 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:podo_words/common/ads_controller.dart';
 import 'package:podo_words/common/list_mix.dart';
 import 'package:podo_words/common/play_audio.dart';
 import 'package:podo_words/common/play_audio_button.dart';
@@ -28,6 +31,8 @@ class _ReviewFlashCardsState extends State<ReviewFlashCards> {
   late String audio;
   bool isAnswer = false;
   String btnText = 'Answer';
+  bool shouldShowAds = Get.arguments;
+
 
   void setFlashCard() {
     if(!isAnswer) {
@@ -51,10 +56,28 @@ class _ReviewFlashCardsState extends State<ReviewFlashCards> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (shouldShowAds) {
+      AdsController().loadBannerAd(context);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     setFlashCard();
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_rounded, color: MyColors().purple),
+          onPressed: () {
+            Get.back();
+          },
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: SafeArea(
@@ -63,22 +86,12 @@ class _ReviewFlashCardsState extends State<ReviewFlashCards> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButton(
-                      icon: Icon(Icons.arrow_back),
-                      onPressed: () => Navigator.pop(context),
-                    ),
-                    Text('$count words')
-                  ],
-                ),
                 Padding(
                   padding: const EdgeInsets.only(left: 10.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Front', textScaleFactor: 1.5, style: TextStyle(fontWeight: FontWeight.bold)),
+                      Text('Front', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
@@ -103,7 +116,7 @@ class _ReviewFlashCardsState extends State<ReviewFlashCards> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20.0),
                     child: Center(
-                      child: Text('$front', textScaleFactor: 2)
+                      child: Text('$front', style: TextStyle(fontSize: 30))
                     ),
                   ),
                 ),
@@ -111,7 +124,7 @@ class _ReviewFlashCardsState extends State<ReviewFlashCards> {
                   padding: const EdgeInsets.all(10.0),
                   child: Row(
                     children: [
-                      Text('Back', textScaleFactor: 1.5, style: TextStyle(fontWeight: FontWeight.bold))
+                      Text('Back', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20))
                     ],
                   ),
                 ),
@@ -122,7 +135,7 @@ class _ReviewFlashCardsState extends State<ReviewFlashCards> {
                     child: Visibility(
                       visible: isAnswer,
                       child: Center(
-                          child: Text('$back', textScaleFactor: 2)
+                          child: Text('$back', style: TextStyle(fontSize: 30))
                         )
                     ),
                   ),
@@ -156,13 +169,28 @@ class _ReviewFlashCardsState extends State<ReviewFlashCards> {
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Center(
-                            child: Text(btnText, textScaleFactor: 1.5, style: TextStyle(color: Colors.white),
+                            child: Text(btnText, style: TextStyle(color: Colors.white, fontSize: 20),
                             )
                         ),
                       ),
                     ),
                   ),
-                )
+                ),
+                const SizedBox(height: 10),
+                shouldShowAds
+                    ? GetBuilder<AdsController>(builder: (controller) {
+                  if (controller.bannerAd != null && controller.isBannerAdLoaded) {
+                    return Container(
+                      color: Theme.of(context).scaffoldBackgroundColor,
+                      width: controller.bannerAd!.size.width.toDouble(),
+                      height: controller.bannerAd!.size.height.toDouble(),
+                      child: AdWidget(ad: controller.bannerAd!),
+                    );
+                  } else {
+                    return const SizedBox.shrink();
+                  }
+                })
+                    : const SizedBox.shrink(),
               ]
             ),
           ),

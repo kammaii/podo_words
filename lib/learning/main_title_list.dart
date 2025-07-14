@@ -11,7 +11,6 @@ import '../common/my_colors.dart';
 class MainTitleList extends StatelessWidget {
   const MainTitleList({Key? key}) : super(key: key);
 
-  static const List<int> freeLesson = [0, 3, 5, 6, 12, 22];
   static const double axisSpacing = 30.0;
 
   double getItemHeight(BuildContext context) {
@@ -56,9 +55,9 @@ class MainTitleList extends StatelessWidget {
               Visibility(
                 visible: !isPremiumUser,
                 child: IconButton(
-                    icon: Icon(Icons.diamond_rounded, color: MyColors().red, size: 40),
+                    icon: Image.asset('assets/images/premium.png', width: 40),
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => Premium()));
+                      Get.to(Premium());
                     }),
               )
             ],
@@ -84,31 +83,13 @@ class MainTitleList extends StatelessWidget {
                   mainAxisSpacing: axisSpacing,
                 ),
                 itemBuilder: (context, index) {
-                  String imageAsset;
-                  if (DataStorage().isPremiumUser) {
-                    imageAsset = 'assets/images/$index.png';
-                  } else {
-                    if (freeLesson.contains(index)) {
-                      imageAsset = 'assets/images/$index.png';
-                    } else {
-                      imageAsset = 'assets/images/lock.png';
-                    }
-                  }
+                  String imageAsset = 'assets/images/$index.png';
 
                   return InkWell(
                     onTap: () {
                       int clickedItem = index ~/ 2;
                       DataStorage().setLastClickedItem(clickedItem);
-
-                      if (DataStorage().isPremiumUser || freeLesson.contains(index)) {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    MainWordList(index, bgColors[index % 4], iconColors[index % 4])));
-                      } else {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => Premium()));
-                      }
+                      Get.to(() => MainWordList(index, bgColors[index % 4], iconColors[index % 4]));
                     },
                     child: Container(
                       decoration: BoxDecoration(

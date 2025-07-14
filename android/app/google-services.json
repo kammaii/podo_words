@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "410427289728",
+    "project_id": "podo-words",
+    "storage_bucket": "podo-words.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:410427289728:android:02a82c89c47db8f617b665",
+        "android_client_info": {
+          "package_name": "net.awesomekorean.podo_words"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjvZV52zaOLl34ASqgvmKuGR8dIdDqb4g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,11 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:get/get.dart';
+import 'package:podo_words/common/ads_controller.dart';
+import 'package:podo_words/common/data_storage.dart';
 import 'package:podo_words/common/my_colors.dart';
 import 'package:podo_words/common/show_snack_bar.dart';
 import 'package:podo_words/common/word.dart';
 import 'package:podo_words/common/words.dart';
 import 'package:podo_words/learning/learning_frame.dart';
+import 'package:podo_words/premium/premium.dart';
 
 import '../common/word_list.dart';
 
@@ -39,6 +43,65 @@ class MainWordListState extends State<MainWordList> {
   void dispose() {
     super.dispose();
     scrollController.dispose();
+  }
+
+  runLesson({required bool shouldShowAds}) {
+    List<Word> activeWords = [];
+    for (int i = 0; i < words.length; i++) {
+      if (words[i].isActive) {
+        activeWords.add(words[i]);
+      }
+    }
+    Get.to(LearningFrame(activeWords), arguments: shouldShowAds);
+  }
+
+  showDialog() {
+    Get.dialog(
+      AlertDialog(
+        backgroundColor: Colors.white,
+        content: Text(
+          'Would you like to watch an ad to unlock this lesson?',
+          style: TextStyle(fontSize: 18),
+          textAlign: TextAlign.center,
+        ),
+        actionsAlignment: MainAxisAlignment.center,
+        actions: [
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      backgroundColor: MyColors().purple),
+                  onPressed: () {
+                    Get.back();
+                    AdsController().showRewardAdAndStartLesson((){
+                      runLesson(shouldShowAds: true);
+                    });
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 15),
+                    child: Text('Yes', style: TextStyle(color: Colors.white)),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Center(
+              child: Padding(
+            padding: const EdgeInsets.only(top: 5),
+            child: TextButton(
+              onPressed: () {
+                Get.to(Premium());
+              },
+              child: Text('Explore Premium', style: TextStyle(color: MyColors().purple)),
+            ),
+          )),
+        ],
+      ),
+    );
   }
 
   @override
@@ -139,13 +202,13 @@ class MainWordListState extends State<MainWordList> {
                 ),
                 onPressed: () {
                   if (activeWordCount >= 4) {
-                    List<Word> activeWords = [];
-                    for (int i = 0; i < words.length; i++) {
-                      if (words[i].isActive) {
-                        activeWords.add(words[i]);
-                      }
+                    if (!DataStorage().isPremiumUser && DataStorage().myWords.isNotEmpty) {
+                      print('무료 유저');
+                      showDialog();
+                    } else {
+                      print('광고 대상 아님');
+                      runLesson(shouldShowAds: false);
                     }
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => LearningFrame(activeWords)));
                   } else {
                     ShowSnackBar().getSnackBar(context, 'It needs more than 4 words to start learning.');
                   }
@@ -189,7 +252,7 @@ class MainWordListState extends State<MainWordList> {
         icon: Icon(Icons.arrow_back_ios_rounded),
         color: widget.iconColor,
         onPressed: () {
-          Navigator.pop(context);
+          Get.back();
         },
       ),
       backgroundColor: widget.bgColor,
@@ -219,9 +282,15 @@ class MainWordListState extends State<MainWordList> {
         delegate: SliverChildBuilderDelegate(
           (context, index) {
             if (index == 0) {
-              return Padding(
-                padding: const EdgeInsets.only(left: 20, top: 10, bottom: 10),
-                child: Text('- Swipe left/right to pick a word to learn', style: TextStyle(color: widget.iconColor)),
+              return Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20, top: 10, bottom: 10),
+                    child: Text('Swipe left/right to pick a word to learn',
+                        style: TextStyle(color: widget.iconColor)),
+                  ),
+                  getWordList(index),
+                ],
               );
             } else {
               return getWordList(index);

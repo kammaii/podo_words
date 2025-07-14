@@ -45,8 +45,7 @@ class _PremiumState extends State<Premium> {
   setPremiumUser() {
     DataStorage().isPremiumUser = true;
     ShowSnackBar().getSnackBar(context, 'Thank you for purchasing.');
-    Navigator.of(context)
-        .pushAndRemoveUntil(MaterialPageRoute(builder: (context) => Logo()), (Route<dynamic> route) => false);
+    Get.offAll(() => Logo());
   }
 
   restorePurchase() async {
@@ -89,7 +88,7 @@ class _PremiumState extends State<Premium> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_rounded, color: MyColors().purple),
           onPressed: () {
-            Navigator.pop(context);
+            Get.back();
           },
         ),
       ),

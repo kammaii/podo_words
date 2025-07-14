@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:get/get.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:podo_words/common/data_storage.dart';
 import 'package:podo_words/main_frame.dart';
@@ -9,10 +10,9 @@ import 'package:podo_words/common/play_audio.dart';
 import 'package:podo_words/common/show_snack_bar.dart';
 import 'package:podo_words/common/word.dart';
 import 'package:podo_words/common/words.dart';
-
+import 'package:in_app_review/in_app_review.dart';
 
 class LearningComplete extends StatelessWidget {
-
   late int totalWords;
   late int myWords;
   late double percent;
@@ -24,11 +24,11 @@ class LearningComplete extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     totalWords = Words().getTotalWordsLength();
+    bool isFirstLesson = DataStorage().myWords.isEmpty;
     countNewWords = DataStorage().addMyWords(words);
     myWords = DataStorage().myWords.length;
     percent = (myWords / totalWords).toDouble();
     PlayAudio().playYay();
-
 
     return Scaffold(
       body: Padding(
@@ -41,7 +41,7 @@ class LearningComplete extends StatelessWidget {
                 children: [
                   SizedBox(height: 20.0),
                   Text('Congratulations!',
-                    style: TextStyle(fontSize: 30, color: MyColors().purple, fontWeight: FontWeight.bold)),
+                      style: TextStyle(fontSize: 30, color: MyColors().purple, fontWeight: FontWeight.bold)),
                   Expanded(
                     child: Stack(
                       alignment: Alignment.center,
@@ -56,10 +56,9 @@ class LearningComplete extends StatelessWidget {
                           center: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text('${(percent*100).toInt().toString()}%', textScaleFactor: 3,
-                                  style: TextStyle(color: MyColors().purple)),
-                              Text('($myWords / $totalWords)',
-                                  style: TextStyle(color: MyColors().purple)),
+                              Text('${(percent * 100).toInt().toString()}%',
+                                  style: TextStyle(color: MyColors().purple, fontSize: 40)),
+                              Text('($myWords / $totalWords)', style: TextStyle(color: MyColors().purple)),
                             ],
                           ),
                           progressColor: MyColors().purple,
@@ -68,18 +67,18 @@ class LearningComplete extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Text('You have learned', textScaleFactor: 1.5,
-                    style: TextStyle(color: MyColors().purple)),
+                  Text('You have learned', style: TextStyle(color: MyColors().purple, fontSize: 20)),
                   SizedBox(height: 10.0),
-                  Text('${words.length} words', textScaleFactor: 2,
-                    style: TextStyle(color: MyColors().purple, fontWeight: FontWeight.bold)),
+                  Text('${words.length} words',
+                      style: TextStyle(color: MyColors().purple, fontWeight: FontWeight.bold, fontSize: 30)),
                   SizedBox(height: 30.0),
                   Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: InkWell(
-                      onTap: (){
-                        ShowSnackBar().getSnackBar(context, '$countNewWords new words are added on your review page');
-                        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => MainFrame()), (Route<dynamic> route) => false);
+                      onTap: () {
+                        ShowSnackBar()
+                            .getSnackBar(context, '$countNewWords new words are added on your review page');
+                        Get.offAll(() => MainFrame(), arguments: isFirstLesson);
                       },
                       child: Material(
                         color: MyColors().purple,
@@ -88,10 +87,8 @@ class LearningComplete extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(15.0),
                           child: Center(
-                              child: Text('Go to main', textScaleFactor: 1.5,
-                                style: TextStyle(color: Colors.white)
-                              )
-                          ),
+                              child:
+                                  Text('Go to main', style: TextStyle(color: Colors.white, fontSize: 20))),
                         ),
                       ),
                     ),

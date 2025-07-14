@@ -2,7 +2,7 @@ plugins {
     id "com.android.application"
     id "org.jetbrains.kotlin.android"
     id "dev.flutter.flutter-gradle-plugin"
-    //id "com.google.gms.google-services"
+    id "com.google.gms.google-services"
     id "com.google.firebase.crashlytics"
 }
 
@@ -86,5 +86,5 @@ flutter {
 
 dependencies {
     implementation 'com.android.support:multidex:1.0.3'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.25"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.1.20"
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:podo_words/common/divider_text.dart';
 import 'package:podo_words/learning/learning_complete.dart';
 import 'package:podo_words/common/play_audio.dart';
@@ -9,8 +10,8 @@ import '../common/my_colors.dart';
 import 'package:unicode/unicode.dart';
 
 class LearningQuiz3 extends StatefulWidget {
-
   List<Word> words = [];
+
   LearningQuiz3(this.words);
 
   @override
@@ -28,17 +29,88 @@ class _LearningQuiz3State extends State<LearningQuiz3> {
   int answerCount = 0;
   late List<int> clickedIndex;
 
-  List<String> choList = ["ㄱ", "ㄲ", "ㄴ", "ㄷ", "ㄸ", "ㄹ", "ㅁ", "ㅂ", "ㅃ", "ㅅ" ,"ㅆ", "ㅇ" ,"ㅈ", "ㅉ", "ㅊ", "ㅋ", "ㅌ" ,"ㅍ", "ㅎ"];
-  List<String> jungList =["ㅏ", "ㅐ", "ㅑ", "ㅒ", "ㅓ", "ㅔ", "ㅕ", "ㅖ", "ㅗ", "ㅘ", "ㅙ", "ㅚ", "ㅛ", "ㅜ", "ㅝ", "ㅞ", "ㅟ", "ㅠ", "ㅡ", "ㅢ", "ㅣ"];
-  List<String> jongList = ["", "ㄱ", "ㄲ", "ㄳ", "ㄴ", "ㄵ", "ㄶ", "ㄷ", "ㄹ", "ㄺ", "ㄻ", "ㄼ", "ㄽ", "ㄾ", "ㄿ", "ㅀ", "ㅁ", "ㅂ", "ㅄ", "ㅅ", "ㅆ", "ㅇ", "ㅈ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ"];
+  List<String> choList = [
+    "ㄱ",
+    "ㄲ",
+    "ㄴ",
+    "ㄷ",
+    "ㄸ",
+    "ㄹ",
+    "ㅁ",
+    "ㅂ",
+    "ㅃ",
+    "ㅅ",
+    "ㅆ",
+    "ㅇ",
+    "ㅈ",
+    "ㅉ",
+    "ㅊ",
+    "ㅋ",
+    "ㅌ",
+    "ㅍ",
+    "ㅎ"
+  ];
+  List<String> jungList = [
+    "ㅏ",
+    "ㅐ",
+    "ㅑ",
+    "ㅒ",
+    "ㅓ",
+    "ㅔ",
+    "ㅕ",
+    "ㅖ",
+    "ㅗ",
+    "ㅘ",
+    "ㅙ",
+    "ㅚ",
+    "ㅛ",
+    "ㅜ",
+    "ㅝ",
+    "ㅞ",
+    "ㅟ",
+    "ㅠ",
+    "ㅡ",
+    "ㅢ",
+    "ㅣ"
+  ];
+  List<String> jongList = [
+    "",
+    "ㄱ",
+    "ㄲ",
+    "ㄳ",
+    "ㄴ",
+    "ㄵ",
+    "ㄶ",
+    "ㄷ",
+    "ㄹ",
+    "ㄺ",
+    "ㄻ",
+    "ㄼ",
+    "ㄽ",
+    "ㄾ",
+    "ㄿ",
+    "ㅀ",
+    "ㅁ",
+    "ㅂ",
+    "ㅄ",
+    "ㅅ",
+    "ㅆ",
+    "ㅇ",
+    "ㅈ",
+    "ㅊ",
+    "ㅋ",
+    "ㅌ",
+    "ㅍ",
+    "ㅎ"
+  ];
 
-
-  List<String> decomposeHangul(String front) { // 돈을 벌다
+  List<String> decomposeHangul(String front) {
+    // 돈을 벌다
     List<String> frontSplit = front.split(''); // 돈,을, ,벌,다
     List<String> decomposed = [];
     jamoDecimal = [];
-    for(String str in frontSplit) {
-      if(str != ' ' && str != '=' && str != '/') {
+    for (String str in frontSplit) {
+      if (str != ' ' && str != '=' && str != '/') {
         var uniCode = toRune(str);
 
         int cho = ((uniCode - 44032) / 28) ~/ 21;
@@ -52,7 +124,6 @@ class _LearningQuiz3State extends State<LearningQuiz3> {
         jamoDecimal.add(cho);
         jamoDecimal.add(jung);
         jamoDecimal.add(jong);
-
       } else {
         decomposed.add(str);
       }
@@ -66,16 +137,19 @@ class _LearningQuiz3State extends State<LearningQuiz3> {
   int answerJong = 0;
 
   void setAnswer(int answeredDecimal) {
-    if (answerCount % 3 == 0) { // 초성
+    if (answerCount % 3 == 0) {
+      // 초성
       answer += jamo[answerCount];
       answerCho = answeredDecimal;
       answerCount++;
-    } else if (answerCount % 3 == 1) { // 중성
+    } else if (answerCount % 3 == 1) {
+      // 중성
       answer = answer.substring(0, answer.length - 1);
       answer += assembleHangul(cho: answerCho, jung: answeredDecimal);
       answerJung = answeredDecimal;
       answerCount++;
-    } else { // 종성
+    } else {
+      // 종성
       answer = answer.substring(0, answer.length - 1);
       answer += assembleHangul(cho: answerCho, jung: answerJung, jong: answeredDecimal);
       answerCho = 0;
@@ -84,11 +158,12 @@ class _LearningQuiz3State extends State<LearningQuiz3> {
       answerCount++;
     }
 
-    if(answerCount < jamo.length && jamo[answerCount] == '') { // 받침 없는 경우
+    if (answerCount < jamo.length && jamo[answerCount] == '') {
+      // 받침 없는 경우
       answerCount++;
     }
 
-    if(answerCount < jamo.length) {
+    if (answerCount < jamo.length) {
       if (jamo[answerCount] == ' ' || jamo[answerCount] == '=' || jamo[answerCount] == '/') {
         answer += jamo[answerCount];
         jamo.removeAt(answerCount);
@@ -125,8 +200,7 @@ class _LearningQuiz3State extends State<LearningQuiz3> {
 
   @override
   Widget build(BuildContext context) {
-
-    if(answerCount == 0 && quizIndex < widget.words.length) {
+    if (answerCount == 0 && quizIndex < widget.words.length) {
       setQuiz();
     }
 
@@ -143,7 +217,7 @@ class _LearningQuiz3State extends State<LearningQuiz3> {
                   children: [
                     IconButton(
                       icon: Icon(Icons.arrow_back),
-                      onPressed: () => Navigator.pop(context),
+                      onPressed: () => Get.back(),
                     ),
                     Expanded(child: SizedBox()),
                     Text('Hint'),
@@ -181,7 +255,7 @@ class _LearningQuiz3State extends State<LearningQuiz3> {
                     child: Container(
                         height: 30.0,
                         child: Center(
-                            child: Text(answer, textScaleFactor: 1.5)
+                            child: Text(answer, style: TextStyle(fontSize: 20))
                         )
                     ),
                   ),
@@ -191,18 +265,17 @@ class _LearningQuiz3State extends State<LearningQuiz3> {
                   child: GridView.builder(
                       shrinkWrap: true,
                       itemCount: mixedJamo.length,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount (
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 4,
                         childAspectRatio: 1,
                         crossAxisSpacing: 10.0,
                         mainAxisSpacing: 10.0,
                       ),
-
                       itemBuilder: (context, index) {
                         Color bgBtn;
                         TextDecoration textDecoration;
 
-                        if(clickedIndex.contains(index)) {
+                        if (clickedIndex.contains(index)) {
                           bgBtn = MyColors().purpleLight;
                           textDecoration = TextDecoration.lineThrough;
                         } else {
@@ -216,21 +289,24 @@ class _LearningQuiz3State extends State<LearningQuiz3> {
                             onTap: () {
                               if (!clickedIndex.contains(index)) {
                                 //정답 체크
-                                if (jamo[answerCount] == mixedJamo[index]) { // 정답
+                                if (jamo[answerCount] == mixedJamo[index]) {
+                                  // 정답
                                   setState(() {
                                     clickedIndex.add(index);
                                     setAnswer(jamoDecimal[answerCount]);
                                   });
 
-                                  if (answer == front) { // 다음 퀴즈로 넘어가기
+                                  if (answer == front) {
+                                    // 다음 퀴즈로 넘어가기
                                     PlayAudio().playCorrect();
                                     Future.delayed(const Duration(seconds: 1), () {
                                       setState(() {
                                         answerCount = 0;
                                         quizIndex++;
                                         isHintOn = false;
-                                        if (quizIndex >= widget.words.length) { // 모든 퀴즈 완료
-                                          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => LearningComplete(widget.words)), (Route<dynamic> route) => false);
+                                        if (quizIndex >= widget.words.length) {
+                                          // 모든 퀴즈 완료
+                                          Get.offAll(() => LearningComplete(widget.words));
                                         }
                                       });
                                     });
@@ -246,18 +322,14 @@ class _LearningQuiz3State extends State<LearningQuiz3> {
                                   borderRadius: BorderRadius.circular(20.0),
                                 ),
                                 child: Center(
-                                  child: Text(mixedJamo[index],
-                                    textScaleFactor: 1.5,
-                                    style: TextStyle(
-                                        decoration: textDecoration
-                                    ),
+                                  child: Text(
+                                    mixedJamo[index],
+                                    style: TextStyle(decoration: textDecoration, fontSize: 20),
                                   ),
-                                )
-                            ),
+                                )),
                           ),
                         );
-                      }
-                  ),
+                      }),
                 ),
               ],
             ),

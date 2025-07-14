@@ -1,14 +1,13 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:podo_words/common/ads_controller.dart';
 import 'common/data_storage.dart';
 import 'main_frame.dart';
-import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
 class Logo extends StatelessWidget {
@@ -28,13 +27,10 @@ class Logo extends StatelessWidget {
 
     // Premium 정보 가져 오기
     CustomerInfo customerInfo = await Purchases.getCustomerInfo();
-    String userId = await Purchases.appUserID;
     final isPremiumUser = customerInfo.entitlements.active.isNotEmpty;
 
-    print('유저아이디: $userId');
-
     if (!isPremiumUser) {
-      //todo: admob 광고 초기화
+      Get.put(AdsController());
     }
 
     await DataStorage().initLocalData(isPremiumUser);

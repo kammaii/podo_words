@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:podo_words/common/my_colors.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:http/http.dart' as http;
@@ -26,7 +27,7 @@ class _MainFeedbackState extends State<MainFeedback> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_rounded, color: MyColors().purple),
           onPressed: () {
-            Navigator.pop(context);
+            Get.back();
           },
         ),
       ),
@@ -90,7 +91,7 @@ class _MainFeedbackState extends State<MainFeedback> {
                           }
                         }
                       : null,
-                  label: const Text('Send Email', style: TextStyle(fontSize: 15)),
+                  label: const Text('Send Feedback', style: TextStyle(fontSize: 15)),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: isFormValid ? MyColors().purple : Colors.grey.shade300,
                     foregroundColor: isFormValid ? Colors.white : Colors.grey.shade700,
