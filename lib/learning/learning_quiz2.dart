@@ -96,7 +96,7 @@ class _LearningQuiz2State extends State<LearningQuiz2> {
                       if(answeredIndex.length == 4) {
                         PlayAudio().player.playerStateStream.listen((event) {
                           if(event.processingState == ProcessingState.completed) {
-                            Get.back();
+                            Navigator.pop(context);
                           }
                         });
                       }

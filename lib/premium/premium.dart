@@ -294,11 +294,6 @@ class _PremiumState extends State<Premium> {
                   ]),
                 ),
               ),
-              const SizedBox(height: 50),
-              // Text(
-              //   'Premium subscriptions are automatically renewed and billed through the payment method registered to your app store account. Subscriptions will renew at the current price unless canceled at least 24 hours before the end of the current billing period. You may cancel auto-renewal at any time through your device’s account settings. Once canceled, your subscription will remain active until the end of the current period. To report a system error, please contact \'contact@podokorean.com\'.',
-              //   style: TextStyle(fontSize: 15),
-              // ),
             ],
           ),
         ),
