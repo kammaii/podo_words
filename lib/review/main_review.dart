@@ -88,26 +88,26 @@ class MainReviewState extends State<MainReview> {
           padding: const EdgeInsets.all(1.0),
           child: OutlinedButton(
             style: ButtonStyle(
-                shape: MaterialStateProperty.all(
+                shape: WidgetStateProperty.all(
                     RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0)
                     )
                 ),
-                backgroundColor: MaterialStateProperty.resolveWith((_) {
+                backgroundColor: WidgetStateProperty.resolveWith((_) {
                   if(toggleSelections[toggleIndex]) {
                     return MyColors().purple;
                   } else {
                     return Colors.white;
                   }
                 }),
-                foregroundColor: MaterialStateProperty.resolveWith((_) {
+                foregroundColor: WidgetStateProperty.resolveWith((_) {
                   if(toggleSelections[toggleIndex]) {
                     return Colors.white;
                   } else {
                     return MyColors().navyLight;
                   }
                 }),
-                side: MaterialStateProperty.resolveWith((_) {
+                side: WidgetStateProperty.resolveWith((_) {
                   return BorderSide(color: Colors.transparent);
                 })
             ),
@@ -177,8 +177,8 @@ class MainReviewState extends State<MainReview> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    Expanded(child: Text('- Long press a word to delete.', style: TextStyle(color: MyColors().purple, fontSize: 15))),
                     Icon(Icons.assistant_photo_outlined, color: MyColors().purple,),
                     Text(myWordsInList.length.toString(), style: TextStyle(
                         fontSize: 20.0,

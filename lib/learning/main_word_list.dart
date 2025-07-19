@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -204,7 +205,11 @@ class MainWordListState extends State<MainWordList> {
                   if (activeWordCount >= 4) {
                     if (!DataStorage().isPremiumUser && DataStorage().myWords.isNotEmpty) {
                       print('무료 유저');
-                      showDialog();
+                      if(kReleaseMode) {
+                        showDialog();
+                      } else {
+                        runLesson(shouldShowAds: true);
+                      }
                     } else {
                       print('광고 대상 아님');
                       runLesson(shouldShowAds: false);

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:podo_words/common/ads_controller.dart';
+import 'package:podo_words/learning/learning_controller.dart';
 import 'common/data_storage.dart';
 import 'main_frame.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -34,6 +35,7 @@ class Logo extends StatelessWidget {
     }
 
     await DataStorage().initLocalData(isPremiumUser);
+    Get.put(LearningController());
 
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
       Get.off(() => MainFrame());

@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:podo_words/common/data_storage.dart';
+import 'package:podo_words/learning/learning_controller.dart';
 import 'package:podo_words/main_frame.dart';
 import 'package:podo_words/common/my_colors.dart';
 import 'package:podo_words/common/play_audio.dart';
@@ -16,13 +17,13 @@ class LearningComplete extends StatelessWidget {
   late int totalWords;
   late int myWords;
   late double percent;
-  List<Word> words;
   late int countNewWords;
 
-  LearningComplete(this.words);
+  final controller = Get.find<LearningController>();
 
   @override
   Widget build(BuildContext context) {
+    final words = List<Word>.from(controller.words)..removeLast(); // Last Word 카드 제거
     totalWords = Words().getTotalWordsLength();
     bool isFirstLesson = DataStorage().myWords.isEmpty;
     countNewWords = DataStorage().addMyWords(words);
@@ -76,6 +77,7 @@ class LearningComplete extends StatelessWidget {
                     padding: const EdgeInsets.all(10.0),
                     child: InkWell(
                       onTap: () {
+                        print('바이)');
                         ShowSnackBar()
                             .getSnackBar(context, '$countNewWords new words are added on your review page');
                         Get.offAll(() => MainFrame(), arguments: isFirstLesson);
