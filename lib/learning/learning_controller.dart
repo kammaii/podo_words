@@ -13,12 +13,10 @@ class LearningController extends GetxController {
   RxBool isQuizOn = true.obs;
   bool isRightSwipe = false;
   List<Widget> content = [];
-  final LAST_WORD = 'Last Word';
   bool isLastWord = false;
 
   void initController(List<Word> wordList) {
     words = wordList;
-    words.add(Word(LAST_WORD, '', '', '', ''));
     quizBuffer = [];
     content = [];
     content.add(WordCard());
@@ -28,8 +26,8 @@ class LearningController extends GetxController {
 
   List<Word> getQuizWords() {
     List<Word> words = [];
-    for(Word word in quizBuffer) {
-      if(word.shouldQUiz!) {
+    for (Word word in quizBuffer) {
+      if (word.shouldQUiz!) {
         words.add(word);
       }
     }
@@ -37,15 +35,17 @@ class LearningController extends GetxController {
   }
 
   void setQuizComplete() {
-    for(Word word in quizBuffer) {
+    for (Word word in quizBuffer) {
       word.shouldQUiz = false;
     }
   }
 
   void swipeWordCard({required bool isNext}) {
-    if(isNext) {
+    print('여기');
+    
+    if (isNext) {
       Word word = getThisWord();
-      if(!quizBuffer.contains(word)) {
+      if (!quizBuffer.contains(word)) {
         print('${word.front} is add to quizButter');
         word.shouldQUiz = true;
         quizBuffer.add(word);
@@ -57,10 +57,11 @@ class LearningController extends GetxController {
       isRightSwipe = false;
     }
 
-    isLastWord = getThisWord().front == LAST_WORD;
+    isLastWord = wordIndex >= words.length;
+    
     int shouldQuizWords = 0;
-    for(Word word in quizBuffer) {
-      if(word.shouldQUiz!) {
+    for (Word word in quizBuffer) {
+      if (word.shouldQUiz!) {
         shouldQuizWords++;
       }
     }
@@ -83,23 +84,22 @@ class LearningController extends GetxController {
     }
   }
 
-
   void setQuizToggle() {
     isQuizOn.toggle();
-    if(!isQuizOn.value && content.length >= 2) {
+    if (!isQuizOn.value && content.length >= 2) {
       content.removeLast();
-      update();
-      if(isLastWord) {
+      if (isLastWord) {
         Get.to(LearningComplete());
       }
+      update();
     }
   }
 
   Word getThisWord() {
-    if(wordIndex.value < words.length) {
-      return words[wordIndex.value];
+    if(isLastWord) {
+      return Word('', '', '', '', 'transparent.png');
     } else {
-      return Word('Last Card', '', '', '', '-');
+      return words[wordIndex.value];
     }
   }
 }

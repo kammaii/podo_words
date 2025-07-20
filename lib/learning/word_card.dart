@@ -74,7 +74,7 @@ class _WordCardState extends State<WordCard> {
               );
             },
             loop: false,
-            itemCount: controller.words.length,
+            itemCount: controller.words.length+1,
             viewportFraction: 0.7,
             scale: 0.7,
             onIndexChanged: (index) {
