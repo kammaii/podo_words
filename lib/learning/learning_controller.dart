@@ -27,7 +27,7 @@ class LearningController extends GetxController {
   List<Word> getQuizWords() {
     List<Word> words = [];
     for (Word word in quizBuffer) {
-      if (word.shouldQUiz!) {
+      if (word.shouldQuiz!) {
         words.add(word);
       }
     }
@@ -36,18 +36,16 @@ class LearningController extends GetxController {
 
   void setQuizComplete() {
     for (Word word in quizBuffer) {
-      word.shouldQUiz = false;
+      word.shouldQuiz = false;
     }
   }
 
   void swipeWordCard({required bool isNext}) {
-    print('여기');
-    
     if (isNext) {
       Word word = getThisWord();
       if (!quizBuffer.contains(word)) {
         print('${word.front} is add to quizButter');
-        word.shouldQUiz = true;
+        word.shouldQuiz = true;
         quizBuffer.add(word);
       }
       wordIndex++;
@@ -58,10 +56,10 @@ class LearningController extends GetxController {
     }
 
     isLastWord = wordIndex >= words.length;
-    
+
     int shouldQuizWords = 0;
     for (Word word in quizBuffer) {
-      if (word.shouldQUiz!) {
+      if (word.shouldQuiz!) {
         shouldQuizWords++;
       }
     }
