@@ -18,7 +18,6 @@ class _LearningQuiz1State extends State<LearningQuiz1> {
   int quizIndex = 0;
   late List<int> mixedIndex;
   late List<Color> borderColor;
-  bool shouldCheckAnswer = false;
   bool isCorrectAnswer = false;
   final controller = Get.find<LearningController>();
   late List<Word> words;
@@ -30,49 +29,42 @@ class _LearningQuiz1State extends State<LearningQuiz1> {
     mixedIndex = List<int>.generate(words.length, (index) => index);
     borderColor = List<Color>.generate(words.length, (index) => Colors.white);
     ListMix().getMixedList(mixedIndex);
+    PlayAudio().playWord(words.first.audio);
   }
 
   void checkAnswer() {
-    if (shouldCheckAnswer) {
-      if (isCorrectAnswer) {
-        // 정답
-        PlayAudio().playCorrect();
-        quizIndex++;
-      } else {
-        PlayAudio().playWrong();
-      }
-
-      Future.delayed(const Duration(seconds: 1), () {
-        setState(() {
-          if (quizIndex < words.length) {
-            shouldCheckAnswer = false;
-            for (int i = 0; i < borderColor.length; i++) {
-              borderColor[i] = Colors.white;
-            }
-          } else {
-            controller.content.last = LearningQuiz2();
-            controller.update();
-          }
-        });
-      });
+    if (isCorrectAnswer) {
+      // 정답
+      PlayAudio().playCorrect();
+      quizIndex++;
     } else {
-      ListMix().getMixedList(mixedIndex);
+      PlayAudio().playWrong();
     }
+
+    Future.delayed(const Duration(seconds: 1), () {
+      if (quizIndex < words.length) {
+        // 다음 문제
+        setState(() {
+          for (int i = 0; i < borderColor.length; i++) {
+            borderColor[i] = Colors.white;
+          }
+          ListMix().getMixedList(mixedIndex);
+          PlayAudio().playWord(words[quizIndex].audio);
+        });
+      } else {
+        controller.content.last = LearningQuiz2();
+        controller.update();
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    Word word = words[quizIndex];
-    PlayAudio().playWord(word.audio);
-
-    //todo: checkAnswer()를 onTap 안에 넣어보기
-    checkAnswer();
-
     return Container(
       color: MyColors().purpleLight,
       child: Column(
         children: [
-          PlayAudioButton(word.audio),
+          PlayAudioButton(words[quizIndex].audio),
           DividerText().getDivider('select correct word'),
           Expanded(
             child: Padding(
@@ -98,18 +90,18 @@ class _LearningQuiz1State extends State<LearningQuiz1> {
                       padding: const EdgeInsets.all(1.0),
                       child: InkWell(
                         onTap: () {
-                          if (!shouldCheckAnswer) {
-                            setState(() {
-                              if (mixedIndex[index] == quizIndex) {
-                                isCorrectAnswer = true;
-                                borderColor[index] = MyColors().purple;
-                              } else {
-                                isCorrectAnswer = false;
-                                borderColor[index] = MyColors().red;
-                              }
-                              shouldCheckAnswer = true;
-                            });
-                          }
+                          setState(() {
+                            if (mixedIndex[index] == quizIndex) {
+                              isCorrectAnswer = true;
+                              borderColor[index] = MyColors().purple;
+                            } else {
+                              isCorrectAnswer = false;
+                              borderColor[index] = MyColors().red;
+                            }
+                          });
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            checkAnswer();
+                          });
                         },
                         child: Container(
                           decoration: BoxDecoration(

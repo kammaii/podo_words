@@ -10,7 +10,7 @@ class Word {
   int? wordId;
   bool isActive = true;
   bool isChecked = false;
-  bool? shouldQUiz;
+  bool? shouldQuiz;
 
 
   Word(this.front, this.back, this.pronunciation, this.audio, this.image);

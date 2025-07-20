@@ -83,7 +83,7 @@ class _LearningFrameState extends State<LearningFrame> {
                           },
                         ),
                         lineHeight: 8.0,
-                        percent: controller.wordIndex / controller.words.length,
+                        percent: controller.wordIndex.value / controller.words.length,
                         backgroundColor: MyColors().navyLight,
                         progressColor: MyColors().purple,
                         barRadius: Radius.circular(15),
@@ -91,7 +91,7 @@ class _LearningFrameState extends State<LearningFrame> {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                      child: Text('(${controller.wordIndex} / ${controller.words.length})'),
+                      child: Text('(${controller.wordIndex.value} / ${controller.words.length})'),
                     )
                   ],
                 ),
