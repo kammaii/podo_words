@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart' hide User;
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -10,6 +12,7 @@ import 'common/data_storage.dart';
 import 'main_frame.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:podo_words/user/user.dart';
 
 class Logo extends StatelessWidget {
   const Logo({Key? key}) : super(key: key);
@@ -24,7 +27,10 @@ class Logo extends StatelessWidget {
     } else {
       configuration = PurchasesConfiguration('appl_QkaeYBpxiJcmfjJICEOXDCoBqlf');
     }
-    await Purchases.configure(configuration);
+    await FirebaseAuth.instance.signInAnonymously();
+    String userId = FirebaseAuth.instance.currentUser!.uid;
+    await Purchases.configure(configuration..appUserID = userId);
+    await FirebaseCrashlytics.instance.setUserIdentifier(userId);
 
     // Premium 정보 가져 오기
     CustomerInfo customerInfo = await Purchases.getCustomerInfo();
