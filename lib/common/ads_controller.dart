@@ -36,9 +36,9 @@ class AdsController extends GetxController {
     MobileAds.instance.initialize();
     UNIT_ID = kReleaseMode
         ? {
-            ANDROID_REWARD: 'ca-app-pub-4839718329129134/6572686120',
+            ANDROID_REWARD: 'ca-app-pub-4839718329129134/3832177999',
             ANDROID_BANNER: 'ca-app-pub-4839718329129134/6607225588',
-            IOS_REWARD: 'ca-app-pub-4839718329129134/8784433414',
+            IOS_REWARD: 'ca-app-pub-4839718329129134/6783126033',
             IOS_BANNER: 'ca-app-pub-4839718329129134/4517368423',
           }
         : {

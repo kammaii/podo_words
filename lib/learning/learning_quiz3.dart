@@ -5,15 +5,13 @@ import 'package:podo_words/learning/learning_complete.dart';
 import 'package:podo_words/common/play_audio.dart';
 import 'package:podo_words/common/play_audio_button.dart';
 import 'package:podo_words/common/word.dart';
+import 'package:podo_words/learning/learning_controller.dart';
+import 'package:podo_words/learning/word_card.dart';
 import '../common/list_mix.dart';
 import '../common/my_colors.dart';
 import 'package:unicode/unicode.dart';
 
 class LearningQuiz3 extends StatefulWidget {
-  List<Word> words = [];
-
-  LearningQuiz3(this.words);
-
   @override
   _LearningQuiz3State createState() => _LearningQuiz3State();
 }
@@ -104,6 +102,15 @@ class _LearningQuiz3State extends State<LearningQuiz3> {
     "ㅎ"
   ];
 
+  final controller = Get.find<LearningController>();
+  List<Word> words = [];
+
+  @override
+  void initState() {
+    super.initState();
+    words = controller.getQuizWords();
+  }
+
   List<String> decomposeHangul(String front) {
     // 돈을 벌다
     List<String> frontSplit = front.split(''); // 돈,을, ,벌,다
@@ -177,9 +184,9 @@ class _LearningQuiz3State extends State<LearningQuiz3> {
   }
 
   void setQuiz() {
-    front = widget.words[quizIndex].front;
-    back = widget.words[quizIndex].back;
-    audio = widget.words[quizIndex].audio;
+    front = words[quizIndex].front;
+    back = words[quizIndex].back;
+    audio = words[quizIndex].audio;
     PlayAudio().playWord(audio);
     jamo = decomposeHangul(front);
     mixedJamo = new List<String>.from(jamo);
@@ -200,141 +207,116 @@ class _LearningQuiz3State extends State<LearningQuiz3> {
 
   @override
   Widget build(BuildContext context) {
-    if (answerCount == 0 && quizIndex < widget.words.length) {
+    if (answerCount == 0 && quizIndex < words.length) {
       setQuiz();
     }
 
-    return Scaffold(
-      body: SafeArea(
-        child: Container(
-          color: MyColors().purpleLight,
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Row(
-                  children: [
-                    IconButton(
-                      icon: Icon(Icons.arrow_back),
-                      onPressed: () => Get.back(),
-                    ),
-                    Expanded(child: SizedBox()),
-                    Text('Hint'),
-                    Switch(
-                      value: isHintOn,
-                      activeTrackColor: MyColors().navyLight,
-                      activeColor: MyColors().purple,
-                      onChanged: (value) {
-                        setState(() {
-                          isHintOn = value;
-                        });
-                      },
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20.0),
-                  child: Center(child: PlayAudioButton(audio)),
-                ),
-                Center(
-                  child: Visibility(
-                    child: Text(back),
-                    visible: isHintOn,
-                    maintainSize: true,
-                    maintainAnimation: true,
-                    maintainState: true,
-                  ),
-                ),
-                DividerText().getDivider('Listen & Answer'),
-                Material(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10.0),
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Container(
-                        height: 30.0,
-                        child: Center(
-                            child: Text(answer, style: TextStyle(fontSize: 20))
-                        )
-                    ),
-                  ),
-                ),
-                SizedBox(height: 20.0),
-                Expanded(
-                  child: GridView.builder(
-                      shrinkWrap: true,
-                      itemCount: mixedJamo.length,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 4,
-                        childAspectRatio: 1,
-                        crossAxisSpacing: 10.0,
-                        mainAxisSpacing: 10.0,
-                      ),
-                      itemBuilder: (context, index) {
-                        Color bgBtn;
-                        TextDecoration textDecoration;
-
-                        if (clickedIndex.contains(index)) {
-                          bgBtn = MyColors().purpleLight;
-                          textDecoration = TextDecoration.lineThrough;
-                        } else {
-                          bgBtn = Colors.white;
-                          textDecoration = TextDecoration.none;
-                        }
-
-                        return Padding(
-                          padding: const EdgeInsets.all(1.0),
-                          child: InkWell(
-                            onTap: () {
-                              if (!clickedIndex.contains(index)) {
-                                //정답 체크
-                                if (jamo[answerCount] == mixedJamo[index]) {
-                                  // 정답
-                                  setState(() {
-                                    clickedIndex.add(index);
-                                    setAnswer(jamoDecimal[answerCount]);
-                                  });
-
-                                  if (answer == front) {
-                                    // 다음 퀴즈로 넘어가기
-                                    PlayAudio().playCorrect();
-                                    Future.delayed(const Duration(seconds: 1), () {
-                                      setState(() {
-                                        answerCount = 0;
-                                        quizIndex++;
-                                        isHintOn = false;
-                                        if (quizIndex >= widget.words.length) {
-                                          // 모든 퀴즈 완료
-                                          Get.offAll(() => LearningComplete(widget.words));
-                                        }
-                                      });
-                                    });
-                                  }
-                                } else {
-                                  PlayAudio().playWrong();
-                                }
-                              }
-                            },
-                            child: Container(
-                                decoration: BoxDecoration(
-                                  color: bgBtn,
-                                  borderRadius: BorderRadius.circular(20.0),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    mixedJamo[index],
-                                    style: TextStyle(decoration: textDecoration, fontSize: 20),
-                                  ),
-                                )),
-                          ),
-                        );
-                      }),
-                ),
-              ],
+    return Container(
+      color: MyColors().purpleLight,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20.0),
+            child: Center(child: PlayAudioButton(audio)),
+          ),
+          Text(back, style: TextStyle(color: MyColors().purple)),
+          Center(
+            child: Visibility(
+              child: Text(back),
+              visible: isHintOn,
+              maintainSize: true,
+              maintainAnimation: true,
+              maintainState: true,
             ),
           ),
-        ),
+          DividerText().getDivider('Listen & Answer'),
+          Material(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10.0),
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Container(height: 30.0, child: Center(child: Text(answer, style: TextStyle(fontSize: 20)))),
+            ),
+          ),
+          SizedBox(height: 20.0),
+          Expanded(
+            child: GridView.builder(
+                shrinkWrap: true,
+                itemCount: mixedJamo.length,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 4,
+                  childAspectRatio: 1,
+                  crossAxisSpacing: 10.0,
+                  mainAxisSpacing: 10.0,
+                ),
+                itemBuilder: (context, index) {
+                  Color bgBtn;
+                  TextDecoration textDecoration;
+
+                  if (clickedIndex.contains(index)) {
+                    bgBtn = MyColors().purpleLight;
+                    textDecoration = TextDecoration.lineThrough;
+                  } else {
+                    bgBtn = Colors.white;
+                    textDecoration = TextDecoration.none;
+                  }
+
+                  return Padding(
+                    padding: const EdgeInsets.all(1.0),
+                    child: InkWell(
+                      onTap: () {
+                        if (!clickedIndex.contains(index)) {
+                          //정답 체크
+                          if (jamo[answerCount] == mixedJamo[index]) {
+                            // 정답
+                            setState(() {
+                              clickedIndex.add(index);
+                              setAnswer(jamoDecimal[answerCount]);
+                            });
+
+                            if (answer == front) {
+                              // 다음 퀴즈로 넘어가기
+                              PlayAudio().playCorrect();
+                              Future.delayed(const Duration(seconds: 1), () {
+                                setState(() {
+                                  answerCount = 0;
+                                  quizIndex++;
+                                  isHintOn = false;
+                                  if (quizIndex >= words.length) {
+                                    // 퀴즈3 완료
+                                    controller.setQuizComplete();
+                                    if (controller.isLastWord) {
+                                      Get.to(LearningComplete());
+                                    } else {
+                                      controller.content.removeLast();
+                                      PlayAudio().playWord(controller.getThisWord().audio);
+                                      controller.update();
+                                    }
+                                  }
+                                });
+                              });
+                            }
+                          } else {
+                            PlayAudio().playWrong();
+                          }
+                        }
+                      },
+                      child: Container(
+                          decoration: BoxDecoration(
+                            color: bgBtn,
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          child: Center(
+                            child: Text(
+                              mixedJamo[index],
+                              style: TextStyle(decoration: textDecoration, fontSize: 20),
+                            ),
+                          )),
+                    ),
+                  );
+                }),
+          ),
+        ],
       ),
     );
   }
