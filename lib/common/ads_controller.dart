@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:podo_words/learning/main_title_list.dart';
+import 'package:podo_words/learning/main_topic_list.dart';
 
 // ANDROID_앱ID : ca-app-pub-4839718329129134~5372334846
 // IOS_앱ID : ca-app-pub-4839718329129134~4282614457

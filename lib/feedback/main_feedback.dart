@@ -84,11 +84,24 @@ class _MainFeedbackState extends State<MainFeedback> {
                           );
 
                           if (response.statusCode == 200) {
-                            print('피드백 이메일 전송 성공');
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Thank you! Your feedback has been sent.'),
+                                backgroundColor: Colors.green,
+                                behavior: SnackBarBehavior.floating,
+                              ),
+                            );
+                            feedbackController.clear();
+                            emailController.clear();
+                            setState(() {Get.back();});
                           } else {
-                            print('피드백 이메일 전송 실패: ${response.statusCode}');
-                            print(response.body);
-                          }
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Failed to send feedback. Please try again later.'),
+                                backgroundColor: Colors.red,
+                                behavior: SnackBarBehavior.floating,
+                              ),
+                            );                          }
                         }
                       : null,
                   label: const Text('Send Feedback', style: TextStyle(fontSize: 15)),
