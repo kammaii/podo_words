@@ -12,6 +12,7 @@ import 'package:podo_words/common/show_snack_bar.dart';
 import 'package:podo_words/common/word.dart';
 import 'package:podo_words/common/words.dart';
 import 'package:in_app_review/in_app_review.dart';
+import 'package:flutter_timezone/flutter_timezone.dart' as tz;
 
 class LearningComplete extends StatelessWidget {
   late int totalWords;
@@ -30,6 +31,7 @@ class LearningComplete extends StatelessWidget {
     myWords = DataStorage().myWords.length;
     percent = (myWords / totalWords).toDouble();
     PlayAudio().playYay();
+    //checkStreak();
 
     return Scaffold(
       body: Padding(

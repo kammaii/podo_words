@@ -29,6 +29,7 @@ class Logo extends StatelessWidget {
     }
     await FirebaseAuth.instance.signInAnonymously();
     String userId = FirebaseAuth.instance.currentUser!.uid;
+    await User().initUser(userId);
     await Purchases.configure(configuration..appUserID = userId);
     await FirebaseCrashlytics.instance.setUserIdentifier(userId);
 

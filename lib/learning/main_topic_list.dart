@@ -7,6 +7,7 @@ import 'package:podo_words/feedback/main_feedback.dart';
 import 'package:podo_words/common/words.dart';
 import '../common/data_storage.dart';
 import '../common/my_colors.dart';
+import 'package:podo_words/user/user.dart' as user;
 
 class MainTopicList extends StatelessWidget {
   const MainTopicList({Key? key}) : super(key: key);
@@ -78,7 +79,30 @@ class MainTopicList extends StatelessWidget {
                     onPressed: () {
                       Get.to(MainFeedback());
                     },
-                    icon: Icon(Icons.email, size: 35, color: MyColors().purple)),
+                    icon: Icon(Icons.email_rounded, size: 35, color: MyColors().purple)),
+                GestureDetector(
+                  onTap: (){},
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: MyColors().mustardLight,
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.local_fire_department_rounded,
+                          size: 35,
+                          color: MyColors().red,
+                        ),
+                        Text(
+                          'x ${user.User().currentStreak.toString()}',
+                          style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
             Padding(
