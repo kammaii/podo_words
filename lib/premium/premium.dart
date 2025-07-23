@@ -171,8 +171,7 @@ class _PremiumState extends State<Premium> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
                                   side: BorderSide(
-                                      color: selectedPlan == index ? MyColors().purple : Colors.transparent,
-                                      width: 2),
+                                      color: selectedPlan == index ? MyColors().purple : Colors.transparent, width: 2),
                                 ),
                                 backgroundColor: Colors.white,
                               ),
@@ -190,9 +189,7 @@ class _PremiumState extends State<Premium> {
                                     children: [
                                       Text(plan,
                                           style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18,
-                                              color: MyColors().purple)),
+                                              fontWeight: FontWeight.bold, fontSize: 18, color: MyColors().purple)),
                                       selectedPlan == index
                                           ? Icon(Icons.check_circle, color: MyColors().green)
                                           : const SizedBox.shrink()
@@ -208,8 +205,7 @@ class _PremiumState extends State<Premium> {
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black)),
                                       packageType == PackageType.monthly
-                                          ? Text(' / month',
-                                              style: TextStyle(fontSize: 15, color: Colors.black))
+                                          ? Text(' / month', style: TextStyle(fontSize: 15, color: Colors.black))
                                           : const SizedBox.shrink()
                                     ],
                                   ),
@@ -238,9 +234,9 @@ class _PremiumState extends State<Premium> {
                   padding: const EdgeInsets.all(10.0),
                   child: Center(
                       child: Text(
-                    'Start Premium',
-                    style: TextStyle(color: Colors.white, fontSize: 18),
-                  )),
+                        'Start Premium',
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      )),
                 ),
               ),
               const SizedBox(height: 20),
@@ -275,6 +271,8 @@ class _PremiumState extends State<Premium> {
                 child: RichText(
                   text: TextSpan(children: [
                     TextSpan(
+                        text: 'By subscribing, you agree to our ', style: TextStyle(color: Colors.grey, fontSize: 15)),
+                    TextSpan(
                       text: 'Terms of Use',
                       style: TextStyle(color: Colors.blue, fontSize: 15),
                       recognizer: TapGestureRecognizer()
@@ -290,10 +288,14 @@ class _PremiumState extends State<Premium> {
                         ..onTap = () {
                           launchUrl(Uri.parse('https://www.podokorean.com/words_privacyPolicy.html'));
                         },
-                    )
+                    ),
+                    TextSpan(
+                        text:
+                        ' If you choose the Monthly plan, your subscription will automatically renew unless canceled at least 24 hours before the end of the current period.',
+                        style: TextStyle(color: Colors.grey, fontSize: 15))
                   ]),
                 ),
-              ),
+              )
             ],
           ),
         ),
