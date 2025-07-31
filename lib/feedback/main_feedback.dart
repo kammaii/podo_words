@@ -15,6 +15,14 @@ class _MainFeedbackState extends State<MainFeedback> {
   final feedbackController = TextEditingController();
   final emailController = TextEditingController();
   bool isFormValid = false;
+  bool isSending = false;
+
+
+  @override
+  void initState() {
+    super.initState();
+    isSending = false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,8 +76,11 @@ class _MainFeedbackState extends State<MainFeedback> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton.icon(
-                  onPressed: isFormValid
+                  onPressed: isFormValid && !isSending
                       ? () async {
+                    setState(() {
+                      isSending = true;
+                    });
                           final userId = await Purchases.appUserID;
                           final feedback = feedbackController.text;
                           final email = emailController.text;
@@ -93,7 +104,7 @@ class _MainFeedbackState extends State<MainFeedback> {
                             );
                             feedbackController.clear();
                             emailController.clear();
-                            setState(() {Get.back();});
+                            Get.back();
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
@@ -101,7 +112,11 @@ class _MainFeedbackState extends State<MainFeedback> {
                                 backgroundColor: Colors.red,
                                 behavior: SnackBarBehavior.floating,
                               ),
-                            );                          }
+                            );
+                          }
+                          setState(() {
+                            isSending = false;
+                          });
                         }
                       : null,
                   label: const Text('Send Feedback', style: TextStyle(fontSize: 15)),
