@@ -1,37 +1,30 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:podo_words/common/data_storage.dart';
-import 'package:podo_words/learning/learning_controller.dart';
-import 'package:podo_words/main_frame.dart';
 import 'package:podo_words/common/my_colors.dart';
 import 'package:podo_words/common/play_audio.dart';
 import 'package:podo_words/common/show_snack_bar.dart';
 import 'package:podo_words/common/word.dart';
 import 'package:podo_words/common/words.dart';
-import 'package:in_app_review/in_app_review.dart';
-import 'package:flutter_timezone/flutter_timezone.dart' as tz;
+import 'package:podo_words/learning/learning_controller.dart';
+import 'package:podo_words/main_frame.dart';
+import 'package:podo_words/user/user.dart';
 
 class LearningComplete extends StatelessWidget {
-  late int totalWords;
-  late int myWords;
-  late double percent;
-  late int countNewWords;
-
   final controller = Get.find<LearningController>();
+
 
   @override
   Widget build(BuildContext context) {
-    final words = List<Word>.from(controller.words)..removeLast(); // Last Word 카드 제거
-    totalWords = Words().getTotalWordsLength();
+    int totalWords = Words().getTotalWordsLength();
     bool isFirstLesson = DataStorage().myWords.isEmpty;
-    countNewWords = DataStorage().addMyWords(words);
-    myWords = DataStorage().myWords.length;
-    percent = (myWords / totalWords).toDouble();
+    List<Word> learnedWords = controller.words;
+    int countNewWords = DataStorage().addMyWords(learnedWords);
+    int myWords = DataStorage().myWords.length;
+    double percent = (myWords / totalWords).toDouble();
     PlayAudio().playYay();
-    //checkStreak();
+    User().updateStreak();
 
     return Scaffold(
       body: Padding(
@@ -72,7 +65,7 @@ class LearningComplete extends StatelessWidget {
                   ),
                   Text('You have learned', style: TextStyle(color: MyColors().purple, fontSize: 20)),
                   SizedBox(height: 10.0),
-                  Text('${words.length} words',
+                  Text('${learnedWords.length} words',
                       style: TextStyle(color: MyColors().purple, fontWeight: FontWeight.bold, fontSize: 30)),
                   SizedBox(height: 30.0),
                   Padding(

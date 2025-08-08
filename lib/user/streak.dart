@@ -37,12 +37,7 @@ class Streak extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int myWordsLength = DataStorage().myWords.length;
-    DateTime now = DateTime.now();
-    DateTime? lastStudyDate = User().lastStudyDate;
-    bool hasStudyToday = lastStudyDate != null &&
-        now.year == lastStudyDate.year &&
-        now.month == lastStudyDate.month &&
-        now.day == lastStudyDate.day;
+    bool hasStudyToday = User().hasStudyToday();
     final random = Random();
     return Scaffold(
       appBar: AppBar(
@@ -59,7 +54,8 @@ class Streak extends StatelessWidget {
               onPressed: () {
                 Get.dialog(AlertDialog(
                   content: Text(
-                      'Complete your daily word lessons and set a new streak record! Just finish at least one lesson before midnight.'),
+                      'Complete a lesson every day and collect grapes! If you finish at least one lesson before midnight, you can keep collecting grapes. Otherwise, your grape count will be reset.',
+                      style: TextStyle(fontSize: 15)),
                 ));
               },
               icon: Icon(Icons.info_outline_rounded),
@@ -73,20 +69,56 @@ class Streak extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text('Learned Words: ${myWordsLength.toString()}'),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 50),
-                  child: Icon(Icons.local_fire_department_rounded,
-                      color: hasStudyToday ? MyColors().red : Colors.grey, size: 150),
+                  child: Image.asset(
+                    'assets/icon/podo.png',
+                    width: 130,
+                    height: 130,
+                    color: hasStudyToday ? null : Colors.grey,
+                  ),
                 ),
-                Text('Learning Streak', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                Text('Streak Grapes', style: TextStyle(fontSize: 20, color: Colors.grey)),
                 const SizedBox(height: 20),
-                Text('${User().currentStreak.toString()} days',
-                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
+                Text('x ${User().currentStreak.toString()}',
+                    style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 50),
-                Text(hasStudyToday
-                    ? compliments[random.nextInt(compliments.length)]
-                    : encouragements[random.nextInt(encouragements.length)], style: TextStyle(fontSize: 15,  ),)
+                Container(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: Colors.white),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          children: [
+                            Text('Best Record', style: TextStyle(color: Colors.grey)),
+                            const SizedBox(height: 10),
+                            Text('x ${User().maxStreak.toString()}',
+                                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold))
+                          ],
+                        ),
+                      ),
+                      VerticalDivider(),
+                      Expanded(
+                        child: Column(
+                          children: [
+                            Text('Learned Words', style: TextStyle(color: Colors.grey)),
+                            const SizedBox(height: 10),
+                            Text(myWordsLength.toString(),
+                                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold))
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 50),
+                Text(
+                    hasStudyToday
+                        ? compliments[random.nextInt(compliments.length)]
+                        : encouragements[random.nextInt(encouragements.length)],
+                    style: TextStyle(fontSize: 20, color: MyColors().purple, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center)
               ],
             ),
           ),

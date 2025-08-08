@@ -44,6 +44,38 @@ class User {
     return permission;
   }
 
+  Future<void> updateStreak() async {
+    final firestore = FirebaseFirestore.instance;
+    final now = DateTime.now();
+
+    if(!hasStudyToday()) {
+      currentStreak += 1;
+
+      if (currentStreak > maxStreak) {
+        maxStreak = currentStreak;
+      }
+    }
+
+    lastStudyDate = now;
+
+    await firestore.collection('Users').doc(id).update({
+      'lastStudyDate': now,
+      'currentStreak': currentStreak,
+      'maxStreak': maxStreak,
+    });
+  }
+
+  bool hasStudyToday() {
+    bool hasStudyToday = false;
+    if(lastStudyDate != null) {
+      DateTime now = DateTime.now();
+      hasStudyToday = lastStudyDate != null &&
+          now.year == lastStudyDate!.year &&
+          now.month == lastStudyDate!.month &&
+          now.day == lastStudyDate!.day;
+    }
+    return hasStudyToday;
+  }
 
   Future<void> initUser(String userId) async {
     id = userId;
@@ -60,7 +92,25 @@ class User {
         Timestamp stamp = data[LAST_STUDY_DATE];
         lastStudyDate = stamp.toDate();
       }
-      signInDate = DateTime.now();
+
+      if(lastStudyDate != null) {
+        // 어제 날짜 계산
+        DateTime now = DateTime.now();
+        DateTime today = DateTime(now.year, now.month, now.day);
+        DateTime yesterday = today.subtract(Duration(days: 1));
+        DateTime lastDate = DateTime(lastStudyDate!.year, lastStudyDate!.month, lastStudyDate!.day);
+
+        if (lastDate.isBefore(yesterday)) {
+          print('연속 학습이 끊어졌습니다. streak를 0으로 초기화합니다.');
+          currentStreak = 0;
+
+          await docRef.update({
+            CURRENT_STREAK: currentStreak,
+          });
+        }
+      }
+
+    signInDate = DateTime.now();
       fcmPermission = await getFcmPermission();
       fcmToken = await FirebaseMessaging.instance.getToken();
       timezone = await FlutterTimezone.getLocalTimezone();
