@@ -246,6 +246,13 @@ class MainReviewState extends State<MainReview> {
 
   CupertinoActionSheet playBtnClick() {
     bool shouldShowAds = !DataStorage().isPremiumUser;
+    List<Word> activeWords = [];
+    for(Word word in myWords) {
+      if(word.isActive) {
+        activeWords.add(word);
+      }
+    }
+
     return CupertinoActionSheet(
       message: Text('Select review mode', style: TextStyle(fontSize: 20)),
       actions: [
@@ -253,14 +260,8 @@ class MainReviewState extends State<MainReview> {
           child: Text('quiz'),
           onPressed: () {
             Get.back();
-            int activeWords = 0;
-            for(Word myWord in myWords) {
-              if(myWord.isActive) {
-                activeWords++;
-              }
-            }
-            if(activeWords >= 4) {
-              Get.to(() => LearningFrame(myWords), arguments: shouldShowAds);
+            if(activeWords.length >= 4) {
+              Get.to(() => LearningFrame(activeWords), arguments: shouldShowAds);
             } else {
               ShowSnackBar().getSnackBar(context, 'It needs more than 4 words to start learning.');
             }
@@ -270,7 +271,7 @@ class MainReviewState extends State<MainReview> {
           child: Text('flash card'),
           onPressed: (){
             Get.back();
-            Get.to(() => ReviewFlashCards(myWords), arguments: shouldShowAds);
+            Get.to(() => ReviewFlashCards(activeWords), arguments: shouldShowAds);
           },
         )
       ],
