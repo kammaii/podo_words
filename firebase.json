@@ -1,1 +1,48 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"podo-words","appId":"1:410427289728:android:02a82c89c47db8f617b665","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"podo-words","configurations":{"android":"1:410427289728:android:02a82c89c47db8f617b665","ios":"1:410427289728:ios:688527c2c687efef17b665","web":"1:410427289728:web:b49d97391e611b3517b665"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "podo-words",
+          "appId": "1:410427289728:android:02a82c89c47db8f617b665",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "podo-words",
+          "configurations": {
+            "android": "1:410427289728:android:02a82c89c47db8f617b665",
+            "ios": "1:410427289728:ios:688527c2c687efef17b665",
+            "web": "1:410427289728:web:b49d97391e611b3517b665"
+          }
+        }
+      }
+    }
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ]
+    }
+  ],
+  "emulators": {
+    "functions": {
+      "port": 5001
+    },
+    "pubsub": {
+      "port": 8085
+    },
+    "ui": {
+      "enabled": true
+    },
+    "singleProjectMode": true
+  }
+}
