@@ -2,28 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
-import 'package:podo_words/common/ads_controller.dart';
+import 'package:podo_words/learning/controllers/ads_controller.dart';
 import 'package:podo_words/common/my_colors.dart';
-import 'package:podo_words/common/word.dart';
-import 'package:podo_words/learning/learning_controller.dart';
+import 'package:podo_words/learning/models/word.dart';
+import 'package:podo_words/learning/controllers/learning_controller.dart';
 
-class LearningFrame extends StatefulWidget {
-  List<Word> words;
-
-  LearningFrame(this.words);
+class LearningPage extends StatefulWidget {
+  LearningPage({super.key});
 
   @override
   _LearningFrameState createState() => _LearningFrameState();
 }
 
-class _LearningFrameState extends State<LearningFrame> {
-  bool shouldShowAds = Get.arguments;
+class _LearningFrameState extends State<LearningPage> {
+  final Map<String, dynamic> arguments = Get.arguments as Map<String, dynamic>;
+  late bool shouldShowAds;
+  late List<Word> words;
   final controller = Get.find<LearningController>();
 
   @override
   void initState() {
     super.initState();
-    controller.initController(widget.words);
+    shouldShowAds = arguments['shouldShowAds'];
+    words = arguments['words'];
+    controller.initController(words);
   }
 
   @override

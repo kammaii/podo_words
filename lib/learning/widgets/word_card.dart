@@ -1,10 +1,11 @@
+import 'dart:convert';
+
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:podo_words/common/play_audio.dart';
-import 'package:podo_words/common/play_audio_button.dart';
-import 'package:podo_words/common/word.dart';
-import 'package:podo_words/learning/learning_controller.dart';
+import 'package:podo_words/learning/widgets/audio_button.dart';
+import 'package:podo_words/learning/models/word.dart';
+import 'package:podo_words/learning/controllers/learning_controller.dart';
 
 class WordCard extends StatefulWidget {
   WordCard({super.key});
@@ -19,13 +20,12 @@ class _WordCardState extends State<WordCard> {
   @override
   Widget build(BuildContext context) {
     Word word = controller.getThisWord();
-    Image wordImage = Image.asset(
-      'assets/images/words/${word.image}',
-      fit: BoxFit.fitWidth,
-      errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-        return Image.asset('assets/images/words/transparent.png', fit: BoxFit.fitWidth);
-      },
-    );
+    Image wordImage = word.image == null
+        ? Image.asset('assets/images/words/transparent.png', fit: BoxFit.fitWidth)
+        : Image.memory(
+            base64Decode(word.image!),
+            fit: BoxFit.fitWidth,
+          );
 
     return Column(
       children: [
@@ -74,7 +74,7 @@ class _WordCardState extends State<WordCard> {
               );
             },
             loop: false,
-            itemCount: controller.words.length+1,
+            itemCount: controller.words.length + 1,
             viewportFraction: 0.7,
             scale: 0.7,
             onIndexChanged: (index) {
@@ -88,7 +88,7 @@ class _WordCardState extends State<WordCard> {
             },
           ),
         ),
-        Padding(padding: const EdgeInsets.symmetric(vertical: 20.0), child: PlayAudioButton(word.audio)),
+        Padding(padding: const EdgeInsets.symmetric(vertical: 20.0), child: AudioButton(word)),
       ],
     );
   }

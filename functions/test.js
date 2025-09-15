@@ -560,7 +560,7 @@ async function convertToM4a(sourcePath) {
   }
 }
 
-async function test() {
+async function migration() {
 console.log('데이터 마이그레이션을 시작합니다...');
 
   try {
@@ -659,4 +659,74 @@ console.log('데이터 마이그레이션을 시작합니다...');
   }
 }
 
-test();
+async function updateAudioUrls() {
+  console.log('오디오 URL 업데이트 작업을 시작합니다...');
+
+  try {
+    // 1. 모든 Topic 문서 가져오기
+    const topicsSnapshot = await db.collection('Topics').get();
+    console.log(`총 ${topicsSnapshot.size}개의 Topic을 발견했습니다.`);
+
+    // 2. 각 Topic을 순차적으로 순회
+    for (const topicDoc of topicsSnapshot.docs) {
+      const topicId = topicDoc.id;
+      const topicTitle = topicDoc.data().title;
+      console.log(`\n[Topic 처리 시작] ${topicTitle} (ID: ${topicId})`);
+
+      // 3. 해당 Topic 하위의 모든 Word 문서 가져오기
+      const wordsRef = topicDoc.ref.collection('Words');
+      const wordsSnapshot = await wordsRef.get();
+
+      if (wordsSnapshot.empty) {
+        console.log(`  └> 이 Topic에는 단어가 없습니다. 다음으로 넘어갑니다.`);
+        continue; // 다음 Topic으로
+      }
+
+      console.log(`  - ${wordsSnapshot.size}개의 단어를 확인합니다...`);
+
+      // 4. 이 Topic의 모든 Word 업데이트를 위한 WriteBatch 생성
+      const batch = db.batch();
+      let updatesCount = 0;
+
+      // 5. 각 Word에 대한 URL 가져오기 작업을 병렬로 처리
+      const updatePromises = wordsSnapshot.docs.map(async (wordDoc) => {
+        const wordId = wordDoc.id;
+        const filePath = `audios/${topicId}/${wordId}.m4a`;
+        const file = bucket.file(filePath);
+
+        // 6. Storage에 해당 오디오 파일이 있는지 확인
+        const [exists] = await file.exists();
+
+        if (exists) {
+          // 7. 파일이 있으면 공개 URL을 가져와서 배치에 업데이트 작업 추가
+          const [url] = await file.getSignedUrl({
+            action: 'read',
+            expires: '03-09-2491', // 사실상 영구적인 URL
+          });
+
+          batch.update(wordDoc.ref, { audio: url });
+          updatesCount++;
+          // console.log(`    - URL 준비: ${wordId}`);
+        }
+      });
+
+      // 8. 이 Topic의 모든 단어에 대한 URL 가져오기 작업이 끝날 때까지 대기
+      await Promise.all(updatePromises);
+
+      // 9. 업데이트할 내용이 있으면 배치 커밋
+      if (updatesCount > 0) {
+        await batch.commit();
+        console.log(`  └> 성공: ${updatesCount}개의 단어에 오디오 URL을 업데이트했습니다.`);
+      } else {
+        console.log(`  └> 업데이트할 오디오 파일이 없습니다.`);
+      }
+    }
+
+    console.log('\n🎉 모든 Topic의 오디오 URL 업데이트 작업이 완료되었습니다.');
+
+  } catch (error) {
+    console.error('\n💥 작업 중 심각한 오류 발생:', error);
+  }
+}
+
+updateAudioUrls();

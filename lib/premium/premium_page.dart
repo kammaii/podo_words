@@ -2,19 +2,20 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:podo_words/common/data_storage.dart';
-import 'package:podo_words/logo.dart';
+import 'package:podo_words/database/local_storage_service.dart';
+import 'package:podo_words/logo_page.dart';
 import 'package:podo_words/common/my_colors.dart';
-import 'package:podo_words/common/show_snack_bar.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class Premium extends StatefulWidget {
+import '../learning/widgets/show_snack_bar.dart';
+
+class PremiumPage extends StatefulWidget {
   @override
-  State<Premium> createState() => _PremiumState();
+  State<PremiumPage> createState() => _PremiumPageState();
 }
 
-class _PremiumState extends State<Premium> {
+class _PremiumPageState extends State<PremiumPage> {
   Package? selectedPackage;
   bool btnEnabled = false;
   Color btnColor = Colors.grey;
@@ -43,9 +44,9 @@ class _PremiumState extends State<Premium> {
   }
 
   setPremiumUser() {
-    DataStorage().isPremiumUser = true;
+    LocalStorageService().isPremiumUser = true;
     ShowSnackBar().getSnackBar(context, 'Thank you for purchasing.');
-    Get.offAll(() => Logo());
+    Get.offAll(() => LogoPage());
   }
 
   restorePurchase() async {

@@ -1,7 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'my_colors.dart';
+
+import '../../common/my_colors.dart';
 
 class ShowSnackBar {
 

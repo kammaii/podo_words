@@ -2,18 +2,19 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:podo_words/common/my_colors.dart';
-import 'package:podo_words/common/play_audio.dart';
+import 'package:podo_words/learning/controllers/audio_controller.dart';
+import 'package:podo_words/learning/models/word.dart';
 
-class PlayAudioButton extends StatefulWidget {
+class AudioButton extends StatefulWidget {
 
-  String audio;
-  PlayAudioButton(this.audio);
+  Word word;
+  AudioButton(this.word);
 
   @override
-  _PlayAudioButtonState createState() => _PlayAudioButtonState();
+  _AudioButtonState createState() => _AudioButtonState();
 }
 
-class _PlayAudioButtonState extends State<PlayAudioButton> {
+class _AudioButtonState extends State<AudioButton> {
 
   Color color = MyColors().purple;
 
@@ -25,8 +26,8 @@ class _PlayAudioButtonState extends State<PlayAudioButton> {
         child: InkWell(
           child: Icon(Icons.play_circle_outline_rounded, color: color, size: 100.0),
           onTap: () {
-            if(widget.audio != '') {
-              PlayAudio().playWord(widget.audio);
+            if(widget.word != '') {
+              AudioController().playWordAudio(widget.word);
             }
           }
         ),

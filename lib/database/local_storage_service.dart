@@ -1,12 +1,12 @@
 import 'dart:convert';
-import 'package:podo_words/common/word.dart';
+import 'package:podo_words/learning/models/word.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class DataStorage {
+class LocalStorageService {
 
-  static final DataStorage _instance = DataStorage.init();
+  static final LocalStorageService _instance = LocalStorageService.init();
 
-  factory DataStorage() {
+  factory LocalStorageService() {
     return _instance;
   }
 
@@ -26,7 +26,7 @@ class DataStorage {
   static const String KEY_LAST_CLICKED_ITEM = 'lastClickedItem';
 
 
-  DataStorage.init() {
+  LocalStorageService.init() {
     print('DataStorage 초기화');
   }
 
@@ -43,6 +43,12 @@ class DataStorage {
       myWords.add(myWord);
     }
     setIsActiveMyWords();
+  }
+
+  bool needMigration() {
+    if(myWords.isEmpty) return false;
+    if(getBool('migrationCompleted')) return false;
+    return true;
   }
 
 
@@ -93,14 +99,14 @@ class DataStorage {
     for(Word word in myWords) {
       myWordsJson.add(json.encode(word.toJson()));
     }
-    DataStorage().setStringList(KEY_MY_WORDS, myWordsJson);
+    LocalStorageService().setStringList(KEY_MY_WORDS, myWordsJson);
   }
 
   void addInActiveWord(String word) {
     if(!inActiveWords.contains(word)) {
       inActiveWords.add(word);
       setIsActiveMyWords();
-      DataStorage().setStringList(KEY_IN_ACTIVE_WORDS, inActiveWords);
+      LocalStorageService().setStringList(KEY_IN_ACTIVE_WORDS, inActiveWords);
     } else {
       print('이미 비활성화된 단어입니다.');
     }
@@ -110,14 +116,14 @@ class DataStorage {
     if(inActiveWords.contains(word)) {
       inActiveWords.remove(word);
       setIsActiveMyWords();
-      DataStorage().setStringList(KEY_IN_ACTIVE_WORDS, inActiveWords);
+      LocalStorageService().setStringList(KEY_IN_ACTIVE_WORDS, inActiveWords);
     } else {
       print('이미 활성화된 단어입니다.');
     }
   }
 
   void setLastClickedItem(int i) {
-    DataStorage().setInt(KEY_LAST_CLICKED_ITEM, i);
+    LocalStorageService().setInt(KEY_LAST_CLICKED_ITEM, i);
   }
 
   setStringList(String key, List<String> list) async {

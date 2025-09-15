@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:podo_words/common/divider_text.dart';
-import 'package:podo_words/common/list_mix.dart';
+import 'package:podo_words/learning/widgets/divider_text.dart';
+import 'package:podo_words/learning/list_mix.dart';
 import 'package:podo_words/common/my_colors.dart';
-import 'package:podo_words/common/play_audio.dart';
-import 'package:podo_words/common/play_audio_button.dart';
-import 'package:podo_words/common/word.dart';
-import 'package:podo_words/learning/learning_controller.dart';
-import 'package:podo_words/learning/learning_quiz2.dart';
+import 'package:podo_words/learning/controllers/audio_controller.dart';
+import 'package:podo_words/learning/widgets/audio_button.dart';
+import 'package:podo_words/learning/models/word.dart';
+import 'package:podo_words/learning/controllers/learning_controller.dart';
+import 'package:podo_words/learning/widgets/learning_quiz2.dart';
 
 class LearningQuiz1 extends StatefulWidget {
   @override
@@ -29,16 +29,16 @@ class _LearningQuiz1State extends State<LearningQuiz1> {
     mixedIndex = List<int>.generate(words.length, (index) => index);
     borderColor = List<Color>.generate(words.length, (index) => Colors.white);
     ListMix().getMixedList(mixedIndex);
-    PlayAudio().playWord(words.first.audio);
+    AudioController().playWordAudio(words.first);
   }
 
   void checkAnswer() {
     if (isCorrectAnswer) {
       // 정답
-      PlayAudio().playCorrect();
+      AudioController().playCorrect();
       quizIndex++;
     } else {
-      PlayAudio().playWrong();
+      AudioController().playWrong();
     }
 
     Future.delayed(const Duration(seconds: 1), () {
@@ -49,7 +49,7 @@ class _LearningQuiz1State extends State<LearningQuiz1> {
             borderColor[i] = Colors.white;
           }
           ListMix().getMixedList(mixedIndex);
-          PlayAudio().playWord(words[quizIndex].audio);
+          AudioController().playWordAudio(words[quizIndex]);
         });
       } else {
         controller.content.last = LearningQuiz2();
@@ -64,7 +64,7 @@ class _LearningQuiz1State extends State<LearningQuiz1> {
       color: MyColors().purpleLight,
       child: Column(
         children: [
-          PlayAudioButton(words[quizIndex].audio),
+          AudioButton(words[quizIndex]),
           DividerText().getDivider('select correct word'),
           Expanded(
             child: Padding(

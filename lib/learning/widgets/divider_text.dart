@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'my_colors.dart';
+import '../../common/my_colors.dart';
 
 class DividerText {
 

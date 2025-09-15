@@ -1,42 +1,112 @@
+import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:podo_words/learning/main_word_list.dart';
-import 'package:podo_words/premium/premium.dart';
-import 'package:podo_words/feedback/main_feedback.dart';
-import 'package:podo_words/common/words.dart';
-import 'package:podo_words/user/streak.dart';
-import '../common/data_storage.dart';
-import '../common/my_colors.dart';
-import 'package:podo_words/user/user.dart' as user;
+import 'package:podo_words/database/local_storage_service.dart';
+import 'package:podo_words/learning/models/topic.dart';
+import 'package:podo_words/feedback/feedback_page.dart';
+import 'package:podo_words/learning/pages/word_list_page.dart';
+import 'package:podo_words/premium/premium_page.dart';
+import 'package:podo_words/streak/streak_page.dart';
+import 'package:podo_words/user/user_controller.dart';
+import 'package:podo_words/user/user_model.dart';
+import '../../common/my_colors.dart';
+import '../../database/database_service.dart';
 
-import '../user/user.dart';
+class TopicListPage extends StatefulWidget {
+  const TopicListPage({Key? key}) : super(key: key);
 
-class MainTopicList extends StatelessWidget {
-  const MainTopicList({Key? key}) : super(key: key);
 
-  static const double axisSpacing = 30.0;
+  @override
+  State<TopicListPage> createState() => _TopicListPageState();
+}
+
+class _TopicListPageState extends State<TopicListPage> {
+  final double _axisSpacing = 30.0;
+  final DatabaseService _dbService = DatabaseService();
+  final ScrollController _scrollController = ScrollController();
+
+  // 상태 관리 변수
+  List<Topic> _topics = [];
+  DocumentSnapshot? _lastDocument;
+  bool _isLoading = false;
+  bool _hasMore = true;
+  final userController = Get.find<UserController>();
+
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchTopics(); // 첫 데이터 로드
+
+    // 스크롤 리스너 추가
+    _scrollController.addListener(() {
+      // 스크롤이 맨 끝에 도달했고, 더 불러올 데이터가 있으며, 로딩 중이 아닐 때
+      if (_scrollController.position.pixels >=
+          _scrollController.position.maxScrollExtent - 200 && // 맨 끝에서 200px 전에 미리 로드
+          _hasMore &&
+          !_isLoading) {
+        _fetchTopics();
+      }
+    });
+
+    // 첫 프레임이 렌더링된 후에 딱 한 번만 스크롤 위치 복원
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // controller가 ScrollView에 연결되었고, 저장된 위치가 있을 때만 실행
+      if (_scrollController.hasClients && LocalStorageService().lastClickedItem > 0) {
+        final double itemHeight = getItemHeight(context);
+        _scrollController.animateTo(
+          LocalStorageService().lastClickedItem * itemHeight,
+          duration: const Duration(seconds: 1),
+          curve: Curves.ease,
+        );
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  /// 데이터를 불러오는 핵심 함수
+  Future<void> _fetchTopics() async {
+    if (_isLoading) return; // 이미 로딩 중이면 중복 실행 방지
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    final result = await _dbService.getTopicsPaginated(lastTopicDoc: _lastDocument);
+    final List<Topic> fetchedTopics = result['topics'];
+    final DocumentSnapshot? lastDoc = result['lastDoc'];
+
+    if(mounted) {
+      setState(() {
+        _topics.addAll(fetchedTopics); // 기존 리스트에 새로 불러온 데이터 추가
+        _lastDocument = lastDoc;
+        _isLoading = false;
+        // 새로 불러온 데이터가 페이지당 개수보다 적으면 더 이상 데이터가 없는 것
+        if (fetchedTopics.length < DatabaseService.topicsPerPage) {
+          _hasMore = false;
+        }
+      });
+    }
+  }
 
   double getItemHeight(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double itemHeight = (screenWidth - axisSpacing * 3) / 2 + axisSpacing;
+    double itemHeight = (screenWidth - _axisSpacing * 3) / 2 + _axisSpacing;
     return itemHeight;
   }
 
   @override
   Widget build(BuildContext context) {
-    ScrollController _controller = new ScrollController();
-    List<String> titles = [];
     List<Color> bgColors = [MyColors().navyLight, MyColors().mustardLight, MyColors().greenLight, MyColors().pink];
     List<Color> iconColors = [MyColors().navy, MyColors().mustard, MyColors().greenDark, MyColors().wine];
-    bool isPremiumUser = DataStorage().isPremiumUser;
-
-    titles = Words().getTitles();
-    double itemHeight = getItemHeight(context);
-    if (_controller.hasClients) {
-      _controller.animateTo(DataStorage().lastClickedItem * itemHeight,
-          duration: new Duration(seconds: 1), curve: Curves.ease);
-    }
+    bool isPremiumUser = LocalStorageService().isPremiumUser;
 
     return SafeArea(
         child: Scaffold(
@@ -44,7 +114,7 @@ class MainTopicList extends StatelessWidget {
         visible: !isPremiumUser,
         child: GestureDetector(
           onTap: () {
-            Get.to(() => Premium());
+            Get.to(() => PremiumPage());
           },
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
@@ -80,12 +150,12 @@ class MainTopicList extends StatelessWidget {
                 ),
                 IconButton(
                     onPressed: () {
-                      Get.to(MainFeedback());
+                      Get.to(FeedbackPage());
                     },
                     icon: Icon(Icons.email_rounded, size: 35, color: MyColors().purple)),
                 GestureDetector(
                   onTap: (){
-                    Get.to(()=>Streak());
+                    Get.to(()=>StreakPage());
                   },
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
@@ -99,10 +169,10 @@ class MainTopicList extends StatelessWidget {
                           'assets/icon/podo.png',
                           width: 25,
                           height: 25,
-                          color: User().hasStudyToday() ? null : Colors.grey,
+                          color: userController.hasStudyToday ? null : Colors.grey,
                         ),
                         Text(
-                          'x ${user.User().currentStreak.toString()}',
+                          'x ${userController.currentStreak.toString()}',
                           style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                         ),
                       ],
@@ -122,23 +192,28 @@ class MainTopicList extends StatelessWidget {
             ),
             Expanded(
               child: GridView.builder(
-                  controller: _controller,
+                  controller: _scrollController,
                   shrinkWrap: true,
-                  itemCount: titles.length,
+                  itemCount: _topics.length + (_hasMore ? 1 : 0),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     childAspectRatio: 1,
-                    crossAxisSpacing: axisSpacing,
-                    mainAxisSpacing: axisSpacing,
+                    crossAxisSpacing: _axisSpacing,
+                    mainAxisSpacing: _axisSpacing,
                   ),
                   itemBuilder: (context, index) {
-                    String imageAsset = 'assets/images/$index.png';
+                    // 리스트의 마지막이고 더 불러올 데이터가 있다면 로딩 인디케이터 표시
+                    if (index == _topics.length) {
+                      // 로딩 인디케이터가 그리드 한 칸을 차지하도록 Container로 감쌈
+                      return Center(child: CircularProgressIndicator());
+                    }
+                    final topic = _topics[index];
 
                     return InkWell(
                       onTap: () {
                         int clickedItem = index ~/ 2;
-                        DataStorage().setLastClickedItem(clickedItem);
-                        Get.to(() => MainWordList(index, bgColors[index % 4], iconColors[index % 4]));
+                        LocalStorageService().setLastClickedItem(clickedItem);
+                        Get.to(() => WordListPage(topic, bgColors[index % 4], iconColors[index % 4]));
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -160,12 +235,12 @@ class MainTopicList extends StatelessWidget {
                                     ),
                                     SizedBox(width: 10.0),
                                     Hero(
-                                      child: Image.asset(
-                                        imageAsset,
+                                      child: Image.memory(
+                                        base64Decode(topic.image),
                                         color: iconColors[index % 4],
                                         width: 50.0,
                                       ),
-                                      tag: 'wordTitleImage$index',
+                                      tag: 'wordTitleImage${topic.id}',
                                     ),
                                   ],
                                 ),
@@ -177,7 +252,7 @@ class MainTopicList extends StatelessWidget {
                                 child: Row(
                                   children: [
                                     Text(
-                                      titles[index],
+                                      topic.title,
                                       style: TextStyle(color: iconColors[index % 4], fontSize: 20),
                                     ),
                                   ],

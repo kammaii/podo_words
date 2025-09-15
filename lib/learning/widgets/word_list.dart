@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:podo_words/learning/main_word_list.dart';
-import 'package:podo_words/review/main_review.dart';
+import 'package:podo_words/learning/pages/word_list_page.dart';
+import 'package:podo_words/review/review_list_page.dart';
 import 'package:podo_words/common/my_colors.dart';
-import 'package:podo_words/common/play_audio.dart';
-import 'package:podo_words/common/word.dart';
+import 'package:podo_words/learning/controllers/audio_controller.dart';
+import 'package:podo_words/learning/models/word.dart';
 import 'package:swipe_to/swipe_to.dart';
-import 'data_storage.dart';
+
+import '../../database/local_storage_service.dart';
 
 
 typedef void StringCallback(String val);
@@ -32,8 +33,8 @@ class _WordListState extends State<WordList> {
 
   @override
   Widget build(BuildContext context) {
-    MainReviewState? mainReviewState = context.findAncestorStateOfType<MainReviewState>();
-    MainWordListState? mainLearningSliverState = context.findAncestorStateOfType<MainWordListState>();
+    ReviewPageState? mainReviewState = context.findAncestorStateOfType<ReviewPageState>();
+    WordListPageState? mainLearningSliverState = context.findAncestorStateOfType<WordListPageState>();
 
     if(widget.isDeleteMode) {
       leftMargin = 50.0;
@@ -50,7 +51,7 @@ class _WordListState extends State<WordList> {
     }
 
     void setChecked(bool b) {
-      DataStorage().myWords[widget.word.wordId!].isChecked = b;
+      LocalStorageService().myWords[widget.word.wordId!].isChecked = b;
       print('id : ${widget.word.wordId!} : $b');
     }
 
@@ -61,22 +62,22 @@ class _WordListState extends State<WordList> {
         onLeftSwipe: (detail) {
           if(widget.isFromMainLearning) {
             mainLearningSliverState!.setState(() {
-              DataStorage().addInActiveWord(widget.word.front);
+              LocalStorageService().addInActiveWord(widget.word.front);
             });
           } else {
             mainReviewState!.setState(() {
-              DataStorage().addInActiveWord(widget.word.front);
+              LocalStorageService().addInActiveWord(widget.word.front);
             });
           }
         },
         onRightSwipe: (detail) {
           if(widget.isFromMainLearning) {
             mainLearningSliverState!.setState(() {
-              DataStorage().removeInActiveWord(widget.word.front);
+              LocalStorageService().removeInActiveWord(widget.word.front);
             });
           } else {
             mainReviewState!.setState(() {
-              DataStorage().removeInActiveWord(widget.word.front);
+              LocalStorageService().removeInActiveWord(widget.word.front);
             });
           }
         },
@@ -131,7 +132,7 @@ class _WordListState extends State<WordList> {
                         setChecked(!widget.word.isChecked);
                       });
                     } else {
-                      PlayAudio().playWord(widget.word.audio);
+                      AudioController().playWordAudio(widget.word);
                     }
                   },
                 ),

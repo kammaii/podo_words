@@ -2,12 +2,13 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:podo_words/common/data_storage.dart';
+import 'package:podo_words/database/local_storage_service.dart';
 import 'package:podo_words/common/my_colors.dart';
-import 'package:podo_words/user/user.dart';
+import 'package:podo_words/user/user_controller.dart';
+import 'package:podo_words/user/user_model.dart';
 
-class Streak extends StatelessWidget {
-  Streak({super.key});
+class StreakPage extends StatelessWidget {
+  StreakPage({super.key});
 
   final List<String> compliments = [
     "Great job keeping up with your studies!",
@@ -34,10 +35,12 @@ class Streak extends StatelessWidget {
     "Let’s keep the streak going strong. You’ve got this!",
   ];
 
+  final userController = Get.find<UserController>();
+
   @override
   Widget build(BuildContext context) {
-    int myWordsLength = DataStorage().myWords.length;
-    bool hasStudyToday = User().hasStudyToday();
+    int myWordsLength = LocalStorageService().myWords.length;
+    bool hasStudyToday = userController.hasStudyToday;
     final random = Random();
     return Scaffold(
       appBar: AppBar(
@@ -80,7 +83,7 @@ class Streak extends StatelessWidget {
                 ),
                 Text('Streak Grapes', style: TextStyle(fontSize: 20, color: Colors.grey)),
                 const SizedBox(height: 20),
-                Text('x ${User().currentStreak.toString()}',
+                Text('x ${userController.currentStreak.toString()}',
                     style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 50),
                 Container(
@@ -93,7 +96,7 @@ class Streak extends StatelessWidget {
                           children: [
                             Text('Best Record', style: TextStyle(color: Colors.grey)),
                             const SizedBox(height: 10),
-                            Text('x ${User().maxStreak.toString()}',
+                            Text('x ${userController.maxStreak.toString()}',
                                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold))
                           ],
                         ),

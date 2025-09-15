@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:podo_words/common/play_audio.dart';
-import 'package:podo_words/common/word.dart';
-import 'package:podo_words/learning/learning_complete.dart';
-import 'package:podo_words/learning/learning_quiz1.dart';
-import 'package:podo_words/learning/word_card.dart';
+import 'package:podo_words/learning/controllers/audio_controller.dart';
+import 'package:podo_words/learning/models/word.dart';
+import 'package:podo_words/learning/pages/learning_complete_page.dart';
+import 'package:podo_words/learning/widgets/learning_quiz1.dart';
+import 'package:podo_words/learning/widgets/word_card.dart';
 
 class LearningController extends GetxController {
   late List<Word> words;
@@ -15,14 +15,17 @@ class LearningController extends GetxController {
   List<Widget> content = [];
   bool isLastWord = false;
 
+
   void initController(List<Word> wordList) {
     words = wordList;
     quizBuffer = [];
     content = [];
     content.add(WordCard());
     isLastWord = false;
-    PlayAudio().playWord(getThisWord().audio);
+    AudioController().cacheAllAudioFiles(words);
+    AudioController().playWordAudio(getThisWord());
   }
+
 
   List<Word> getQuizWords() {
     List<Word> words = [];
@@ -70,14 +73,14 @@ class LearningController extends GetxController {
         content.add(LearningQuiz1());
         update();
       } else {
-        PlayAudio().playWord(getThisWord().audio);
+        AudioController().playWordAudio(getThisWord());
       }
     } else {
       if (isLastWord) {
-        Get.to(LearningComplete());
+        Get.to(LearningCompletePage());
         update();
       } else {
-        PlayAudio().playWord(getThisWord().audio);
+        AudioController().playWordAudio(getThisWord());
       }
     }
   }
@@ -87,7 +90,7 @@ class LearningController extends GetxController {
     if (!isQuizOn.value && content.length >= 2) {
       content.removeLast();
       if (isLastWord) {
-        Get.to(LearningComplete());
+        Get.to(LearningCompletePage());
       }
       update();
     }
@@ -95,7 +98,7 @@ class LearningController extends GetxController {
 
   Word getThisWord() {
     if(isLastWord) {
-      return Word('', '', '', '', 'transparent.png');
+      return Word(id: '', orderId: words.length, front: '', back: '', pronunciation: '', audio:'', image: 'transparent.png');
     } else {
       return words[wordIndex.value];
     }

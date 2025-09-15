@@ -3,21 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:podo_words/common/my_colors.dart';
-import 'package:podo_words/learning/learning_frame.dart';
-import 'package:podo_words/review/review_flashcards.dart';
-import 'package:podo_words/common/show_snack_bar.dart';
-import 'package:podo_words/common/word.dart';
-import 'package:podo_words/common/word_list.dart';
-import '../common/data_storage.dart';
+import 'package:podo_words/learning/pages/learning_page.dart';
+import 'package:podo_words/review/review_flashcard_page.dart';
+import 'package:podo_words/learning/models/word.dart';
+import 'package:podo_words/learning/widgets/word_list.dart';
+import '../database/local_storage_service.dart';
+import '../learning/widgets/show_snack_bar.dart';
 
 
 
-class MainReview extends StatefulWidget {
+class ReviewListPage extends StatefulWidget {
   @override
-  MainReviewState createState() => MainReviewState();
+  ReviewPageState createState() => ReviewPageState();
 }
 
-class MainReviewState extends State<MainReview> {
+class ReviewPageState extends State<ReviewListPage> {
 
   late List<Word> myWords;
   late List<Word> myWordsInList;
@@ -44,7 +44,7 @@ class MainReviewState extends State<MainReview> {
 
   @override
   Widget build(BuildContext context) {
-    myWords = DataStorage().myWords;
+    myWords = LocalStorageService().myWords;
     for(int i=0; i<myWords.length; i++) {
       myWords[i].wordId = i;
       myWords[i].isChecked = false;
@@ -245,7 +245,7 @@ class MainReviewState extends State<MainReview> {
   }
 
   CupertinoActionSheet playBtnClick() {
-    bool shouldShowAds = !DataStorage().isPremiumUser;
+    bool shouldShowAds = !LocalStorageService().isPremiumUser;
     List<Word> activeWords = [];
     for(Word word in myWords) {
       if(word.isActive) {
@@ -261,7 +261,10 @@ class MainReviewState extends State<MainReview> {
           onPressed: () {
             Get.back();
             if(activeWords.length >= 4) {
-              Get.to(() => LearningFrame(activeWords), arguments: shouldShowAds);
+              Get.to(() => LearningPage(), arguments: {
+                'shouldShowAds' : shouldShowAds,
+                'words' : activeWords,
+              });
             } else {
               ShowSnackBar().getSnackBar(context, 'It needs more than 4 words to start learning.');
             }
@@ -271,7 +274,7 @@ class MainReviewState extends State<MainReview> {
           child: Text('flash card'),
           onPressed: (){
             Get.back();
-            Get.to(() => ReviewFlashCards(activeWords), arguments: shouldShowAds);
+            Get.to(() => ReviewFlashCardPage(activeWords), arguments: shouldShowAds);
           },
         )
       ],
@@ -303,7 +306,7 @@ class MainReviewState extends State<MainReview> {
           ),
           onPressed: (){
             setState(() {
-              DataStorage().removeMyWords();
+              LocalStorageService().removeMyWords();
               Get.back();;
             });
           },

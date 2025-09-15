@@ -4,14 +4,14 @@ import 'package:podo_words/common/my_colors.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:http/http.dart' as http;
 
-class MainFeedback extends StatefulWidget {
-  const MainFeedback({super.key});
+class FeedbackPage extends StatefulWidget {
+  const FeedbackPage({super.key});
 
   @override
-  State<MainFeedback> createState() => _MainFeedbackState();
+  State<FeedbackPage> createState() => _FeedbackPageState();
 }
 
-class _MainFeedbackState extends State<MainFeedback> {
+class _FeedbackPageState extends State<FeedbackPage> {
   final feedbackController = TextEditingController();
   final emailController = TextEditingController();
   bool isFormValid = false;

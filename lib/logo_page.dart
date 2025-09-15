@@ -6,16 +6,17 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
-import 'package:podo_words/common/ads_controller.dart';
-import 'package:podo_words/learning/learning_controller.dart';
-import 'common/data_storage.dart';
+import 'package:podo_words/learning/controllers/ads_controller.dart';
+import 'package:podo_words/database/local_storage_service.dart';
+import 'package:podo_words/learning/controllers/learning_controller.dart';
+import 'package:podo_words/user/user_controller.dart';
 import 'main_frame.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
-import 'package:podo_words/user/user.dart';
+import 'package:podo_words/user/user_model.dart';
 
-class Logo extends StatelessWidget {
-  const Logo({Key? key}) : super(key: key);
+class LogoPage extends StatelessWidget {
+  const LogoPage({Key? key}) : super(key: key);
   static const String apiKey = "LRxYKUXrCOWeznKDBOlaqWuLaNJYEZCF";
 
   Future<void> initData() async {
@@ -29,7 +30,9 @@ class Logo extends StatelessWidget {
     }
     await FirebaseAuth.instance.signInAnonymously();
     String userId = FirebaseAuth.instance.currentUser!.uid;
-    await User().initUser(userId);
+    final userController = Get.put(UserController());
+    await userController.initUser(userId);
+    print('유저아이디: $userId');
     await Purchases.configure(configuration..appUserID = userId);
     await FirebaseCrashlytics.instance.setUserIdentifier(userId);
 
@@ -41,7 +44,7 @@ class Logo extends StatelessWidget {
       Get.put(AdsController());
     }
 
-    await DataStorage().initLocalData(isPremiumUser);
+    await LocalStorageService().initLocalData(isPremiumUser);
     Get.put(LearningController());
 
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
