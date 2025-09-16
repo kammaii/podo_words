@@ -24,6 +24,7 @@ class LocalStorageService {
   static const String KEY_IN_ACTIVE_WORDS = 'inActiveWords';
   static const String KEY_MY_WORDS = 'myWords';
   static const String KEY_LAST_CLICKED_ITEM = 'lastClickedItem';
+  static const String KEY_MY_WORDS_MIGRATED = 'myWordsMigrated';
 
 
   LocalStorageService.init() {
@@ -38,19 +39,18 @@ class LocalStorageService {
     List<String> myWordsJson = getStringList(KEY_MY_WORDS);
 
     myWords = [];
-    for(int i=0; i<myWordsJson.length; i++) {
-      Word myWord = Word.fromJson(json.decode(myWordsJson[i]));
-      myWords.add(myWord);
+    if(myWordsJson.isNotEmpty) {
+      for (int i = 0; i < myWordsJson.length; i++) {
+        Word myWord = Word.fromJson(json.decode(myWordsJson[i]));
+        myWords.add(myWord);
+      }
+      setIsActiveMyWords();
     }
-    setIsActiveMyWords();
   }
 
-  bool needMigration() {
-    if(myWords.isEmpty) return false;
-    if(getBool('migrationCompleted')) return false;
-    return true;
+  void setMyWordsMigrated() {
+    setBool(KEY_MY_WORDS_MIGRATED, true);
   }
-
 
   void setIsActiveMyWords() {
     for(Word myWord in myWords) {

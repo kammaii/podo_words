@@ -1,25 +1,38 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart' hide User;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
-import 'package:podo_words/learning/controllers/ads_controller.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:podo_words/database/local_storage_service.dart';
+import 'package:podo_words/learning/controllers/ads_controller.dart';
 import 'package:podo_words/learning/controllers/learning_controller.dart';
 import 'package:podo_words/user/user_controller.dart';
-import 'main_frame.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
-import 'package:podo_words/user/user_model.dart';
 
-class LogoPage extends StatelessWidget {
+import 'main_frame.dart';
+
+class LogoPage extends StatefulWidget {
   const LogoPage({Key? key}) : super(key: key);
-  static const String apiKey = "LRxYKUXrCOWeznKDBOlaqWuLaNJYEZCF";
 
-  Future<void> initData() async {
+  @override
+  State<LogoPage> createState() => _LogoPageState();
+}
+
+class _LogoPageState extends State<LogoPage> {
+  String info = 'Initializing...';
+
+  @override
+  void initState() {
+    super.initState();
+    _initData();
+  }
+
+  Future<void> _initData() async {
     // RevenueCat 초기화
     kReleaseMode ? await Purchases.setLogLevel(LogLevel.info) : await Purchases.setLogLevel(LogLevel.debug);
     PurchasesConfiguration configuration;
@@ -28,25 +41,42 @@ class LogoPage extends StatelessWidget {
     } else {
       configuration = PurchasesConfiguration('appl_QkaeYBpxiJcmfjJICEOXDCoBqlf');
     }
+    setState(() {
+      info = 'Signing in...';
+    });
     await FirebaseAuth.instance.signInAnonymously();
     String userId = FirebaseAuth.instance.currentUser!.uid;
-    final userController = Get.put(UserController());
-    await userController.initUser(userId);
-    print('유저아이디: $userId');
-    await Purchases.configure(configuration..appUserID = userId);
-    await FirebaseCrashlytics.instance.setUserIdentifier(userId);
 
+    setState(() {
+      info = 'Checking subscription...';
+    });
     // Premium 정보 가져 오기
+    await Purchases.configure(configuration..appUserID = userId);
     CustomerInfo customerInfo = await Purchases.getCustomerInfo();
     final isPremiumUser = customerInfo.entitlements.active.isNotEmpty;
 
     if (!isPremiumUser) {
       Get.put(AdsController());
     }
-
+    setState(() {
+      info = 'Loading local data...';
+    });
     await LocalStorageService().initLocalData(isPremiumUser);
+
+    setState(() {
+      info = 'Syncing your data...';
+    });
+    final userController = Get.put(UserController());
+    await userController.initUser(userId);
+    print('유저아이디: $userId');
+
+    await FirebaseCrashlytics.instance.setUserIdentifier(userId);
+
     Get.put(LearningController());
 
+    setState(() {
+      info = 'Getting things ready...';
+    });
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
       Get.off(() => MainFrame());
     });
@@ -54,8 +84,6 @@ class LogoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    initData();
-
     return Scaffold(
         body: SafeArea(
       child: Container(
@@ -85,7 +113,7 @@ class LogoPage extends StatelessWidget {
                     width: 20.0,
                   ),
                   SizedBox(width: 20.0),
-                  Text('Loading...')
+                  Text(info)
                 ],
               ),
             ),

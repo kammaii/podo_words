@@ -84,4 +84,61 @@ class DatabaseService {
 
     return snapshot.count ?? 0;
   }
+
+
+  Future<void> migrateMyWordsToFirestore(String userId, List<Word> oldMyWords) async {
+    if (oldMyWords.isEmpty) {
+      print("마이그레이션할 'My Words' 데이터가 없습니다.");
+      return;
+    }
+
+    print("Firestore에서 전체 단어 목록을 가져와 조회용 맵을 생성합니다...");
+
+    // 1. Firestore의 모든 단어를 한 번에 가져와 조회용 맵 생성 (기존과 동일)
+    final allWordsSnapshot = await _db.collectionGroup('Words').get();
+    final wordLookupMap = <String, String>{}; // Key: 'front|back', Value: wordId
+    for (final doc in allWordsSnapshot.docs) {
+      final word = Word.fromJson(doc.data());
+      final key = '${word.front}|${word.back}';
+      wordLookupMap[key] = word.id;
+    }
+
+    print("조회용 맵 생성 완료. 로컬 데이터와 비교를 시작합니다...");
+
+    // 2. 일괄 쓰기(Batch) 준비
+    final batch = _db.batch();
+    final myWordsCollectionRef = _db.collection('Users').doc(userId).collection('MyWords');
+    int migratedCount = 0;
+
+    // 3. SharedPreferences의 단어 목록을 순회하며 배치 작업 추가
+    for (final oldWord in oldMyWords) {
+      final key = '${oldWord.front}|${oldWord.back}';
+      final wordId = wordLookupMap[key]; // 맵에서 고유 ID 조회
+
+      if (wordId != null) {
+        // 일치하는 ID를 찾았으면, 서브컬렉션에 새로 만들 문서의 참조를 지정
+        final newMyWordRef = myWordsCollectionRef.doc(wordId);
+
+        // 저장할 데이터 정의
+        final newData = {
+          'id': wordId,
+          'lastStudied': FieldValue.serverTimestamp(), // 서버 시간 기준 현재 시각
+          'reviewCount': 0,
+          'level': 1, // 망각 곡선을 위한 초기 레벨
+        };
+
+        // 배치에 'set' 작업 추가
+        batch.set(newMyWordRef, newData);
+        migratedCount++;
+      }
+    }
+
+    // 4. 모든 작업이 담긴 배치를 한 번에 커밋(실행)
+    if (migratedCount > 0) {
+      await batch.commit();
+      print("$migratedCount개의 단어를 MyWords 서브컬렉션으로 성공적으로 마이그레이션했습니다.");
+    } else {
+      print("MyWords 서브컬렉션으로 마이그레이션할 단어가 없습니다.");
+    }
+  }
 }

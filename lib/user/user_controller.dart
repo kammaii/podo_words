@@ -59,6 +59,9 @@ class UserController extends GetxController {
       await _userService.createUser(userId);
     }
 
+    // MyWords 마이그레이션
+    await _userService.runMyWordsMigrationIfNeeded(userId);
+
     // 사용자 데이터의 실시간 스트림 구독 시작
     listenToUser(userId);
   }
