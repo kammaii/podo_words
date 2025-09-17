@@ -1,8 +1,6 @@
 import 'dart:convert';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:podo_words/learning/controllers/ads_controller.dart';
 import 'package:podo_words/database/local_storage_service.dart';
@@ -12,6 +10,7 @@ import 'package:podo_words/learning/models/topic.dart';
 import 'package:podo_words/learning/models/word.dart';
 import 'package:podo_words/learning/pages/learning_page.dart';
 import 'package:podo_words/premium/premium_page.dart';
+import 'package:podo_words/user/user_controller.dart';
 import '../widgets/show_snack_bar.dart';
 import '../widgets/word_list.dart';
 
@@ -36,6 +35,8 @@ class WordListPageState extends State<WordListPage> {
   final DatabaseService _dbService = DatabaseService();
   late final Future<List<Word>> _wordsFuture;
 
+  final userController = Get.find<UserController>();
+
   @override
   void initState() {
     super.initState();
@@ -49,12 +50,11 @@ class WordListPageState extends State<WordListPage> {
     super.dispose();
   }
 
-
   void _runLesson({required List<Word> words, required bool shouldShowAds}) {
     List<Word> activeWords = words.where((word) => word.isActive).toList();
     Get.to(() => LearningPage(), arguments: {
-      'shouldShowAds' : shouldShowAds,
-      'words' : activeWords,
+      'shouldShowAds': shouldShowAds,
+      'words': activeWords,
     });
   }
 
@@ -80,7 +80,7 @@ class WordListPageState extends State<WordListPage> {
                       backgroundColor: MyColors().purple),
                   onPressed: () {
                     Get.back();
-                    AdsController().showRewardAdAndStartLesson((){
+                    AdsController().showRewardAdAndStartLesson(() {
                       _runLesson(words: words, shouldShowAds: true);
                     });
                   },
@@ -110,140 +110,149 @@ class WordListPageState extends State<WordListPage> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Word>>(
-      future: _wordsFuture,
-      builder: (context, snapshot) {
-        // 로딩 중일 때
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Scaffold(
-            backgroundColor: widget.bgColor,
-            body: const Center(child: CircularProgressIndicator()),
-          );
-        }
-        // 에러 발생 시
-        if (snapshot.hasError) {
-          return Scaffold(
-            backgroundColor: widget.bgColor,
-            appBar: AppBar(backgroundColor: Colors.transparent, elevation: 0),
-            body: Center(child: Text('단어를 불러오는 데 실패했습니다: ${snapshot.error}')),
-          );
-        }
-        // 데이터가 없을 때
-        if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return Scaffold(
-            backgroundColor: widget.bgColor,
-            appBar: AppBar(backgroundColor: Colors.transparent, elevation: 0),
-            body: const Center(child: Text('이 주제에는 단어가 없습니다.')),
-          );
-        }
-
-        final List<Word> words = snapshot.data!;
-        final int activeWordCount = words.where((word) => word.isActive).length;
-
-        double topMargin = _sliverAppBarHeight - 30.0;
-        double topMarginPlayBtn = _sliverAppBarHeight - 20.0;
-
-        if (_scrollController.hasClients) {
-          if (_sliverAppBarHeight - _scrollController.offset > _sliverAppBarMinimumHeight) {
-            topMargin -= _scrollController.offset;
-            topMarginPlayBtn -= _scrollController.offset;
-          } else {
-            topMargin = -100.0;
-            topMarginPlayBtn = 5.0;
+        future: _wordsFuture,
+        builder: (context, snapshot) {
+          // 로딩 중일 때
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Scaffold(
+              backgroundColor: widget.bgColor,
+              body: const Center(child: CircularProgressIndicator()),
+            );
           }
-        }
+          // 에러 발생 시
+          if (snapshot.hasError) {
+            return Scaffold(
+              backgroundColor: widget.bgColor,
+              appBar: AppBar(backgroundColor: Colors.transparent, elevation: 0),
+              body: Center(child: Text('단어를 불러오는 데 실패했습니다: ${snapshot.error}')),
+            );
+          }
+          // 데이터가 없을 때
+          if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Scaffold(
+              backgroundColor: widget.bgColor,
+              appBar: AppBar(backgroundColor: Colors.transparent, elevation: 0),
+              body: const Center(child: Text('이 주제에는 단어가 없습니다.')),
+            );
+          }
 
-        return Scaffold(
-          body: SafeArea(
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                CustomScrollView(
-                  physics: BouncingScrollPhysics(),
-                  controller: _scrollController,
-                  slivers: [
-                    _sliverAppBar(),
-                    _sliverList(words),
-                  ],
-                ),
-                Positioned(
-                  width: MediaQuery.of(context).size.width,
-                  top: topMargin,
-                  child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 30.0),
-                    padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
-                    decoration: BoxDecoration(
-                      color: widget.iconColor,
-                      borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                    ),
-                    child: Row(
-                      children: [
-                        Column(
-                          children: [
-                            Text(
-                              'Total',
-                              style: TextStyle(color: Colors.white, fontSize: 17.0),
-                            ),
-                            Text(
-                              words.length.toString(),
-                              style: TextStyle(color: Colors.white, fontSize: 25.0, fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          width: 40.0,
-                        ),
-                        Column(
-                          children: [
-                            Text(
-                              'Active',
-                              style: TextStyle(color: Colors.white, fontSize: 17.0),
-                            ),
-                            Text(
-                              activeWordCount.toString(),
-                              style: TextStyle(color: Colors.white, fontSize: 25.0, fontWeight: FontWeight.bold),
-                            )
-                          ],
-                        ),
+          final List<Word> words = snapshot.data!;
+
+          double topMargin = _sliverAppBarHeight - 30.0;
+          double topMarginPlayBtn = _sliverAppBarHeight - 20.0;
+
+          if (_scrollController.hasClients) {
+            if (_sliverAppBarHeight - _scrollController.offset > _sliverAppBarMinimumHeight) {
+              topMargin -= _scrollController.offset;
+              topMarginPlayBtn -= _scrollController.offset;
+            } else {
+              topMargin = -100.0;
+              topMarginPlayBtn = 5.0;
+            }
+          }
+
+          return Scaffold(
+            body: SafeArea(
+              child: Obx(() {
+                final Set<String> inactiveWordIds = userController.inactiveWordIds;
+                final int activeWordCount = words.where((w) => !inactiveWordIds.contains(w.id)).length;
+
+                return Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    CustomScrollView(
+                      physics: BouncingScrollPhysics(),
+                      controller: _scrollController,
+                      slivers: [
+                        _sliverAppBar(),
+                        _sliverList(words, inactiveWordIds),
                       ],
                     ),
-                  ),
-                ),
-                Positioned(
-                  top: topMarginPlayBtn,
-                  right: 60.0,
-                  child: FloatingActionButton(
-                    elevation: 10,
-                    backgroundColor: Colors.white,
-                    child: Icon(
-                      Icons.play_arrow_rounded,
-                      color: widget.iconColor,
-                      size: 50.0,
+                    Positioned(
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width,
+                      top: topMargin,
+                      child: Container(
+                        margin: EdgeInsets.symmetric(horizontal: 30.0),
+                        padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
+                        decoration: BoxDecoration(
+                          color: widget.iconColor,
+                          borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                        ),
+                        child: Row(
+                          children: [
+                            Column(
+                              children: [
+                                Text(
+                                  'Total',
+                                  style: TextStyle(color: Colors.white, fontSize: 17.0),
+                                ),
+                                Text(
+                                  words.length.toString(),
+                                  style:
+                                  TextStyle(color: Colors.white, fontSize: 25.0, fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              width: 40.0,
+                            ),
+                            Column(
+                              children: [
+                                Text(
+                                  'Active',
+                                  style: TextStyle(color: Colors.white, fontSize: 17.0),
+                                ),
+                                Text(
+                                  activeWordCount.toString(),
+                                  style:
+                                  TextStyle(color: Colors.white, fontSize: 25.0, fontWeight: FontWeight.bold),
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                    onPressed: () {
-                      if (activeWordCount >= 4) {
-                        if (!LocalStorageService().isPremiumUser && LocalStorageService().myWords.isNotEmpty) {
-                          print('무료 유저');
-                          if(kReleaseMode) {
-                            _showDialog(words: words);
+                    Positioned(
+                      top: topMarginPlayBtn,
+                      right: 60.0,
+                      child: FloatingActionButton(
+                        elevation: 10,
+                        backgroundColor: Colors.white,
+                        child: Icon(
+                          Icons.play_arrow_rounded,
+                          color: widget.iconColor,
+                          size: 50.0,
+                        ),
+                        onPressed: () {
+                          if (activeWordCount >= 4) {
+                            if (!LocalStorageService().isPremiumUser && LocalStorageService().myWords.isNotEmpty) {
+                              print('무료 유저');
+                              if (kReleaseMode) {
+                                _showDialog(words: words);
+                              } else {
+                                _runLesson(words: words, shouldShowAds: false);
+                              }
+                            } else {
+                              print('광고 대상 아님');
+                              _runLesson(words: words, shouldShowAds: false);
+                            }
                           } else {
-                            _runLesson(words: words, shouldShowAds: false);
+                            ShowSnackBar().getSnackBar(context, 'It needs more than 4 words to start learning.');
                           }
-                        } else {
-                          print('광고 대상 아님');
-                          _runLesson(words: words, shouldShowAds: false);
-                        }
-                      } else {
-                        ShowSnackBar().getSnackBar(context, 'It needs more than 4 words to start learning.');
-                      }
-                    },
-                  ),
-                )
-              ],
+                        },
+                      ),
+                    )
+                  ],
+                );
+              }
+          )
             ),
-          ),
-        );
-      }
-    );
+          );
+        });
   }
 
   Widget _wordTitle() {
@@ -266,7 +275,6 @@ class WordListPageState extends State<WordListPage> {
       stretchModes: [StretchMode.zoomBackground, StretchMode.fadeTitle, StretchMode.blurBackground],
     );
   }
-
 
   _sliverAppBar() {
     return SliverAppBar(
@@ -297,12 +305,14 @@ class WordListPageState extends State<WordListPage> {
     );
   }
 
-  _sliverList(List<Word> words) {
+  _sliverList(List<Word> words, Set<String> inactiveWordIds) {
     return SliverPadding(
       padding: EdgeInsets.only(top: 60.0),
       sliver: SliverList(
         delegate: SliverChildBuilderDelegate(
           (context, index) {
+            Word word = words[index];
+            bool isActive = !inactiveWordIds.contains(word.id);
             if (index == 0) {
               return Column(
                 children: [
@@ -311,11 +321,11 @@ class WordListPageState extends State<WordListPage> {
                     child: Text('Swipe left/right to pick a word to learn',
                         style: TextStyle(color: widget.iconColor)),
                   ),
-                  WordList(true, words[index], false, widget.iconColor, widget.bgColor),
+                  WordList(word: word, isActive: isActive, isDeleteMode: false, fontColor: widget.iconColor),
                 ],
               );
             } else {
-              return WordList(true, words[index], false, widget.iconColor, widget.bgColor);
+              return WordList(word: word, isActive: isActive, isDeleteMode: false, fontColor: widget.iconColor);
             }
           },
           childCount: words.length,

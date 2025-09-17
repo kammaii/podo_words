@@ -79,13 +79,6 @@ class _LearningQuiz1State extends State<LearningQuiz1> {
                     mainAxisSpacing: 20.0,
                   ),
                   itemBuilder: (context, index) {
-                    Image wordImage = Image.asset(
-                      'assets/images/words/${words[mixedIndex[index]].image}',
-                      errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-                        return Image.asset('assets/images/words/transparent.png');
-                      },
-                    );
-
                     return Padding(
                       padding: const EdgeInsets.all(1.0),
                       child: InkWell(
@@ -114,7 +107,7 @@ class _LearningQuiz1State extends State<LearningQuiz1> {
                               Expanded(
                                   child: Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: wordImage,
+                                child:  controller.getWordImage(words[mixedIndex[index]]),
                               )),
                               Padding(
                                 padding: const EdgeInsets.all(10.0),

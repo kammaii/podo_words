@@ -10,7 +10,7 @@ class UserModel {
   DateTime? lastStudyDate;
   DateTime signInDate;
   String timezone;
-  List<String>? inactiveWords;
+  List<String> inactiveWords;
 
   UserModel({
     required this.id,

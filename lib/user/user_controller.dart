@@ -5,12 +5,14 @@ import 'package:get/get.dart';
 import 'package:podo_words/user/user_model.dart';
 import 'package:podo_words/user/user_service.dart';
 
-// 앱 전역에서 사용자 상태를 관리하고 관련 비즈니스 로직을 처리하는 GetX 컨트롤러
+// 앱 전역에서 사용자 상태를 관리
 class UserController extends GetxController {
   final _userService = UserService();
   StreamSubscription? _userSubscription;
 
   final Rxn<UserModel> user = Rxn<UserModel>();
+
+  // WordListPage 에서 inactiveWordIds의 변경에만 Obx()가 반응하도록 하기 위해 변수를 따로 만듦.
   final RxSet<String> inactiveWordIds = <String>{}.obs;
 
   // 사용자가 로그인했을 때 호출되어 사용자 데이터를 초기화하고 실시간 구독을 시작합니다.
@@ -63,14 +65,16 @@ class UserController extends GetxController {
     await _userService.runMyWordsMigrationIfNeeded(userId);
 
     // 사용자 데이터의 실시간 스트림 구독 시작
-    listenToUser(userId);
+    _listenToUser(userId);
   }
 
-  void listenToUser(String userId) {
+  void _listenToUser(String userId) {
     _userSubscription?.cancel();
     _userSubscription = _userService.streamUser(userId).listen((snapshot) {
       if (snapshot.exists) {
-        user.value = UserModel.fromSnapshot(snapshot);
+        final userModel = UserModel.fromSnapshot(snapshot);
+        user.value = userModel;
+        inactiveWordIds.assignAll(userModel.inactiveWords.toSet());
       }
     });
   }

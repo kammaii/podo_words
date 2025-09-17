@@ -193,7 +193,7 @@ class ReviewPageState extends State<ReviewListPage> {
                   child: ListView.builder (
                     itemCount: myWordsInList.length,
                     itemBuilder: (context, index) {
-                      return WordList(false, myWordsInList[index], !isPlayBtn, MyColors().purple, MyColors().navyLight);
+                      return WordList(word: myWordsInList[index], isActive: true, isDeleteMode: !isPlayBtn, fontColor: MyColors().purple);
                     },
                   ),
                   onLongPress: () {

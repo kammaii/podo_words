@@ -67,8 +67,7 @@ class _LogoPageState extends State<LogoPage> {
       info = 'Syncing your data...';
     });
     final userController = Get.put(UserController());
-    await userController.initUser(userId);
-    print('유저아이디: $userId');
+    await userController.initUser(userId);  // 유저 데이터 스트림 구독 시작
 
     await FirebaseCrashlytics.instance.setUserIdentifier(userId);
 

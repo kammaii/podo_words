@@ -20,12 +20,6 @@ class _WordCardState extends State<WordCard> {
   @override
   Widget build(BuildContext context) {
     Word word = controller.getThisWord();
-    Image wordImage = word.image == null
-        ? Image.asset('assets/images/words/transparent.png', fit: BoxFit.fitWidth)
-        : Image.memory(
-            base64Decode(word.image!),
-            fit: BoxFit.fitWidth,
-          );
 
     return Column(
       children: [
@@ -43,7 +37,7 @@ class _WordCardState extends State<WordCard> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 50.0),
-                        child: wordImage,
+                        child: controller.getWordImage(word),
                       ),
                       SizedBox(height: 20.0),
                       Column(

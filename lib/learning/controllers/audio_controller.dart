@@ -91,19 +91,16 @@ class AudioController {
 
   void playCorrect() async {
     await audioPlayer.setAsset('assets/audio/correct.mp3');
-    await audioPlayer.setVolume(0.1);
     audioPlayer.play();
   }
 
   void playWrong() async {
     await audioPlayer.setAsset('assets/audio/wrong.mp3');
-    await audioPlayer.setVolume(0.1);
     audioPlayer.play();
   }
 
   void playYay() async {
     await audioPlayer.setAsset('assets/audio/yay.mp3');
-    await audioPlayer.setVolume(0.1);
     audioPlayer.play();
   }
 }

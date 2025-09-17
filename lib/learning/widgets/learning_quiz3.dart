@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:podo_words/learning/widgets/audio_button.dart';
 import 'package:podo_words/learning/widgets/divider_text.dart';
-import 'package:podo_words/learning/hangul_service.dart'; // [추가]
+import 'package:podo_words/learning/hangul_service.dart';
 import 'package:podo_words/learning/pages/learning_complete_page.dart';
 import 'package:podo_words/learning/controllers/audio_controller.dart';
 import 'package:podo_words/learning/models/word.dart';
@@ -94,33 +94,42 @@ class _LearningQuiz3State extends State<LearningQuiz3> {
   /// 정답 문자열을 조립하고 업데이트하는 함수
   void _updateAnswer() {
     String newAnswer = '';
-    int decimalIndex = 0;
 
-    for (int i = 0; i <= _currentJamoIndex; i++) {
-      final jamo = _correctJamoSequence[i];
-      if (jamo == ' ' || jamo == '/' || jamo == '=') {
-        newAnswer += jamo;
+    // 현재까지 맞춘 자모의 개수만큼을 기반으로 문자열을 재조립합니다.
+    int tempJamoIndex = 0; // _correctJamoSequence를 순회할 인덱스
+    int tempDecimalIndex = 0; // _correctDecimalSequence를 순회할 인덱스
+
+    while (tempJamoIndex <= _currentJamoIndex && tempJamoIndex < _correctJamoSequence.length) {
+      // 1. 초성 처리
+      if (_correctJamoSequence[tempJamoIndex] == ' ' || _correctJamoSequence[tempJamoIndex] == '/' || _correctJamoSequence[tempJamoIndex] == '=') {
+        newAnswer += _correctJamoSequence[tempJamoIndex];
+        tempJamoIndex++;
         continue;
       }
-      if (jamo == '') continue; // 빈 받침은 건너뛰기
+      final cho = _correctDecimalSequence[tempDecimalIndex];
+      newAnswer += HangulService.choList[cho];
+      tempJamoIndex++;
+      if (tempJamoIndex > _currentJamoIndex) break;
 
-      final cho = _correctDecimalSequence[decimalIndex];
-      final jung = _correctDecimalSequence[decimalIndex + 1];
-      final jong = (i + 1 < _correctJamoSequence.length && _correctJamoSequence[i+1] != '')
-          ? _correctDecimalSequence[decimalIndex + 2] : 0;
+      // 2. 중성 처리
+      final jung = _correctDecimalSequence[tempDecimalIndex + 1];
+      newAnswer = newAnswer.substring(0, newAnswer.length - 1);
+      newAnswer += _hangulService.assemble(cho: cho, jung: jung);
+      tempJamoIndex++;
+      if (tempJamoIndex > _currentJamoIndex) break;
 
-      // 글자 조립 (아직 중성, 종성이 안 들어온 경우 고려)
-      if (i % 3 == 0) { // 초성 차례
-        newAnswer += HangulService.choList[cho];
-      } else if (i % 3 == 1) { // 중성 차례
-        newAnswer = newAnswer.substring(0, newAnswer.length - 1);
-        newAnswer += _hangulService.assemble(cho: cho, jung: jung);
-      } else { // 종성 차례
+      // 3. 종성 처리
+      if (_correctJamoSequence[tempJamoIndex] != '') {
+        final jong = _correctDecimalSequence[tempDecimalIndex + 2];
         newAnswer = newAnswer.substring(0, newAnswer.length - 1);
         newAnswer += _hangulService.assemble(cho: cho, jung: jung, jong: jong);
-        decimalIndex += 3;
       }
+      tempJamoIndex++;
+
+      // 한 음절(초/중/종) 처리가 끝나면 십진수 인덱스를 3 증가시킵니다.
+      tempDecimalIndex += 3;
     }
+
     _currentAnswer = newAnswer;
   }
 
@@ -192,7 +201,7 @@ class _LearningQuiz3State extends State<LearningQuiz3> {
               shrinkWrap: true,
               itemCount: _shuffledJamoOptions.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 5, // UI 개선을 위해 5열로 변경
+                crossAxisCount: 5,
                 childAspectRatio: 1.2,
                 crossAxisSpacing: 10.0,
                 mainAxisSpacing: 10.0,
