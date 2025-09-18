@@ -5,7 +5,7 @@ import 'package:podo_words/learning/models/word.dart';
 class DatabaseService {
 
   final FirebaseFirestore _db = FirebaseFirestore.instance;
-  static const int topicsPerPage = 20;
+  static const int topicsPerPage = 10;
 
   // 사용자의 문서 변경을 실시간으로 감지하는 Stream을 반환합니다.
   Stream<DocumentSnapshot<Map<String, dynamic>>> streamUser(String userId) {

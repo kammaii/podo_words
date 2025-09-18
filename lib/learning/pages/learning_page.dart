@@ -25,7 +25,6 @@ class _LearningFrameState extends State<LearningPage> {
     super.initState();
     shouldShowAds = arguments['shouldShowAds'];
     words = arguments['words'];
-    controller.initController(words);
   }
 
   @override
@@ -46,102 +45,112 @@ class _LearningFrameState extends State<LearningPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Container(
-          color: MyColors().purpleLight,
-          child: Column(
-            children: [
-              Obx(
-                () => Row(
-                  children: [
-                    Expanded(
-                      child: LinearPercentIndicator(
-                        animateFromLastPercent: true,
-                        animation: true,
-                        leading: IconButton(
-                          icon: Icon(Icons.arrow_back),
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text('Would you like to end the lesson?'),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () => Navigator.of(context).pop(), // 다이얼로그 닫기
-                                      child: Text('No', style: TextStyle(fontSize: 18)),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop(); // 다이얼로그 먼저 닫기
-                                        Get.back(); // 화면 나가기
-                                      },
-                                      child: Text('Yes', style: TextStyle(fontSize: 18)),
-                                    ),
-                                  ],
+      body: FutureBuilder(
+        future: controller.initController(words),
+        builder: (context, snapshot) {
+          if(snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return SafeArea(
+            child: Container(
+              color: MyColors().purpleLight,
+              child: Column(
+                children: [
+                  Obx(
+                    () => Row(
+                      children: [
+                        Expanded(
+                          child: LinearPercentIndicator(
+                            animateFromLastPercent: true,
+                            animation: true,
+                            leading: IconButton(
+                              icon: Icon(Icons.arrow_back),
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text('Would you like to end the lesson?'),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () => Navigator.of(context).pop(), // 다이얼로그 닫기
+                                          child: Text('No', style: TextStyle(fontSize: 18)),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop(); // 다이얼로그 먼저 닫기
+                                            Get.back(); // 화면 나가기
+                                          },
+                                          child: Text('Yes', style: TextStyle(fontSize: 18)),
+                                        ),
+                                      ],
+                                    );
+                                  },
                                 );
                               },
-                            );
+                            ),
+                            lineHeight: 8.0,
+                            percent: controller.wordIndex.value / controller.words.length,
+                            backgroundColor: MyColors().navyLight,
+                            progressColor: MyColors().purple,
+                            barRadius: Radius.circular(15),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                          child: Text('(${controller.wordIndex.value} / ${controller.words.length})'),
+                        )
+                      ],
+                    ),
+                  ),
+                  Obx(
+                    () => Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text('Quiz'),
+                        const SizedBox(width: 10),
+                        Switch(
+                          value: controller.isQuizOn.value,
+                          activeTrackColor: MyColors().navyLight,
+                          activeColor: MyColors().purple,
+                          onChanged: (value) {
+                            controller.setQuizToggle();
                           },
                         ),
-                        lineHeight: 8.0,
-                        percent: controller.wordIndex.value / controller.words.length,
-                        backgroundColor: MyColors().navyLight,
-                        progressColor: MyColors().purple,
-                        barRadius: Radius.circular(15),
-                      ),
+                        const SizedBox(width: 10),
+                      ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                      child: Text('(${controller.wordIndex.value} / ${controller.words.length})'),
-                    )
-                  ],
-                ),
+                  ),
+                  GetBuilder<LearningController>(
+                    builder: (_) {
+                      return Expanded(
+                        child: Stack(
+                          children: controller.content,
+                        ),
+                      );
+                    }
+                  ),
+                  shouldShowAds
+                      ? GetBuilder<AdsController>(builder: (controller) {
+                          if (controller.bannerAd != null && controller.isBannerAdLoaded) {
+                            return Container(
+                              color: Theme.of(context).scaffoldBackgroundColor,
+                              width: controller.bannerAd!.size.width.toDouble(),
+                              height: controller.bannerAd!.size.height.toDouble(),
+                              child: AdWidget(ad: controller.bannerAd!),
+                            );
+                          } else {
+                            return const SizedBox.shrink();
+                          }
+                        })
+                      : const SizedBox.shrink(),
+                ],
               ),
-              Obx(
-                () => Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text('Quiz'),
-                    const SizedBox(width: 10),
-                    Switch(
-                      value: controller.isQuizOn.value,
-                      activeTrackColor: MyColors().navyLight,
-                      activeColor: MyColors().purple,
-                      onChanged: (value) {
-                        controller.setQuizToggle();
-                      },
-                    ),
-                    const SizedBox(width: 10),
-                  ],
-                ),
-              ),
-              GetBuilder<LearningController>(
-                builder: (_) {
-                  return Expanded(
-                    child: Stack(
-                      children: controller.content,
-                    ),
-                  );
-                }
-              ),
-              shouldShowAds
-                  ? GetBuilder<AdsController>(builder: (controller) {
-                      if (controller.bannerAd != null && controller.isBannerAdLoaded) {
-                        return Container(
-                          color: Theme.of(context).scaffoldBackgroundColor,
-                          width: controller.bannerAd!.size.width.toDouble(),
-                          height: controller.bannerAd!.size.height.toDouble(),
-                          child: AdWidget(ad: controller.bannerAd!),
-                        );
-                      } else {
-                        return const SizedBox.shrink();
-                      }
-                    })
-                  : const SizedBox.shrink(),
-            ],
-          ),
-        ),
+            ),
+          );
+        }
       ),
     );
   }

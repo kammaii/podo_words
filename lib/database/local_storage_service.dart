@@ -39,13 +39,13 @@ class LocalStorageService {
     List<String> myWordsJson = getStringList(KEY_MY_WORDS);
 
     myWords = [];
-    if(myWordsJson.isNotEmpty) {
-      for (int i = 0; i < myWordsJson.length; i++) {
-        Word myWord = Word.fromJson(json.decode(myWordsJson[i]));
-        myWords.add(myWord);
-      }
-      setIsActiveMyWords();
-    }
+    // if(myWordsJson.isNotEmpty) {
+    //   for (int i = 0; i < myWordsJson.length; i++) {
+    //     Word myWord = Word.fromJson(json.decode(myWordsJson[i]));
+    //     myWords.add(myWord);
+    //   }
+    //   setIsActiveMyWords();
+    // }
   }
 
   void setMyWordsMigrated() {

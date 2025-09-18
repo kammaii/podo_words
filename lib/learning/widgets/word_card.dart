@@ -3,9 +3,11 @@ import 'dart:convert';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:podo_words/learning/controllers/image_controller.dart';
 import 'package:podo_words/learning/widgets/audio_button.dart';
 import 'package:podo_words/learning/models/word.dart';
 import 'package:podo_words/learning/controllers/learning_controller.dart';
+import 'package:unicode/unicode.dart';
 
 class WordCard extends StatefulWidget {
   WordCard({super.key});
@@ -37,7 +39,7 @@ class _WordCardState extends State<WordCard> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 50.0),
-                        child: controller.getWordImage(word),
+                        child: controller.imageService.getCachedImage(word.id),
                       ),
                       SizedBox(height: 20.0),
                       Column(

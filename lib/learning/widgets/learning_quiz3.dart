@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:podo_words/learning/controllers/learning_controller.dart';
+import 'package:podo_words/learning/hangul_service.dart';
+import 'package:podo_words/learning/models/word.dart';
+import 'package:podo_words/learning/pages/learning_complete_page.dart';
 import 'package:podo_words/learning/widgets/audio_button.dart';
 import 'package:podo_words/learning/widgets/divider_text.dart';
-import 'package:podo_words/learning/hangul_service.dart';
-import 'package:podo_words/learning/pages/learning_complete_page.dart';
-import 'package:podo_words/learning/controllers/audio_controller.dart';
-import 'package:podo_words/learning/models/word.dart';
-import 'package:podo_words/learning/controllers/learning_controller.dart';
-import '../list_mix.dart';
+
 import '../../common/my_colors.dart';
+import '../list_mix.dart';
 
 class LearningQuiz3 extends StatefulWidget {
   const LearningQuiz3({super.key});
@@ -46,7 +46,7 @@ class _LearningQuiz3State extends State<LearningQuiz3> {
       _currentQuizIndex = quizIndex;
       _currentWord = _quizWords[quizIndex];
 
-      AudioController().playWordAudio(_currentWord);
+      controller.audioController.playWordAudio(_currentWord);
 
       // 한글 서비스를 사용하여 자모 분해
       final decomposed = _hangulService.decompose(_currentWord.front);
@@ -87,7 +87,7 @@ class _LearningQuiz3State extends State<LearningQuiz3> {
       }
     } else {
       // 오답일 경우
-      AudioController().playWrong();
+      controller.audioController.playWrong();
     }
   }
 
@@ -148,7 +148,7 @@ class _LearningQuiz3State extends State<LearningQuiz3> {
 
   /// 한 단어를 모두 맞췄을 때 처리
   void _handleQuizCompletion() {
-    AudioController().playCorrect();
+    controller.audioController.playCorrect();
     Future.delayed(const Duration(seconds: 1), _moveToNextQuizOrFinish);
   }
 
@@ -162,7 +162,7 @@ class _LearningQuiz3State extends State<LearningQuiz3> {
         Get.to(() => LearningCompletePage());
       } else {
         controller.content.removeLast();
-        AudioController().playWordAudio(controller.getThisWord());
+        controller.audioController.playWordAudio(controller.getThisWord());
         controller.update();
       }
     }

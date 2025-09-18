@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:podo_words/learning/controllers/audio_controller.dart';
-import 'package:podo_words/learning/controllers/image_service.dart';
+import 'package:podo_words/learning/controllers/image_controller.dart';
 import 'package:podo_words/learning/models/word.dart';
 import 'package:podo_words/learning/pages/learning_complete_page.dart';
 import 'package:podo_words/learning/widgets/learning_quiz1.dart';
@@ -19,16 +19,21 @@ class LearningController extends GetxController {
   bool isRightSwipe = false;
   List<Widget> content = [];
   bool isLastWord = false;
+  final ImageController imageService = ImageController();
+  final AudioController audioController = AudioController();
 
 
-  void initController(List<Word> wordList) {
+  Future<void> initController(List<Word> wordList) async {
     words = wordList;
     quizBuffer = [];
     content = [];
     content.add(WordCard());
     isLastWord = false;
-    AudioController().cacheAllAudioFiles(words);
-    AudioController().playWordAudio(getThisWord());
+    await Future.wait([
+      audioController.cacheAllAudioFiles(words),
+      imageService.cacheImageFiles(words),
+    ]);
+    audioController.playWordAudio(getThisWord());
   }
 
 
@@ -79,14 +84,14 @@ class LearningController extends GetxController {
         content.add(LearningQuiz1());
         update();
       } else {
-        AudioController().playWordAudio(getThisWord());
+        audioController.playWordAudio(getThisWord());
       }
     } else {
       if (isLastWord) {
         Get.to(LearningCompletePage());
         update();
       } else {
-        AudioController().playWordAudio(getThisWord());
+        audioController.playWordAudio(getThisWord());
       }
     }
   }
@@ -102,15 +107,6 @@ class LearningController extends GetxController {
     }
   }
 
-  Image getWordImage(Word word) {
-    Image wordImage = word.image == null
-        ? Image.asset('assets/images/words/transparent.png', fit: BoxFit.fitWidth)
-        : Image.memory(
-      base64Decode(word.image!),
-      fit: BoxFit.fitWidth,
-    );
-    return wordImage;
-  }
 
   Word getThisWord() {
     if(isLastWord) {

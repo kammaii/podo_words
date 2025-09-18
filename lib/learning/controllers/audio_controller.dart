@@ -5,6 +5,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:podo_words/learning/models/word.dart';
 import 'package:http/http.dart' as http;
+import 'package:path/path.dart' as path;
 
 
 class AudioController {
@@ -22,16 +23,21 @@ class AudioController {
   Future<void> cacheAllAudioFiles(List<Word> words) async {
     // 1. 앱의 임시 저장 공간 경로를 가져옵니다.
     final tempDir = await getTemporaryDirectory();
+    // 디렉토리의 경로를 생성합니다. (예: /.../temp/audios/)
+    final p = path.join(tempDir.path, 'audios');
+    final dir = Directory(p);
+    if(!await dir.exists()) {
+      await dir.create(recursive: true);
+    }
 
     // 2. 다운로드할 파일들의 Future 리스트를 만듭니다.
-    final List<Future<void>> downloadFutures = [];
+    final List<Future<void>> cachingFutures = [];
 
     for (final word in words) {
       // 다운로드 작업을 Future로 정의합니다.
-      final downloadTask = () async {
+      final cachingTask = () async {
         try {
-          // 로컬에 저장할 파일 경로를 정의합니다. (예: /.../temp/word_id.m4a)
-          final localPath = 'audios/${tempDir.path}/${word.id}.m4a';
+          final localPath = path.join(p, '${word.id}.m4a');
           final file = File(localPath);
 
           // 이미 파일이 존재하지 않으면 다운로드합니다.
@@ -48,11 +54,11 @@ class AudioController {
           debugPrint('오디오 캐싱 실패 (Word ID: ${word.id}): $e');
         }
       };
-      downloadFutures.add(downloadTask());
+      cachingFutures.add(cachingTask());
     }
 
     // 3. 모든 다운로드 작업이 끝날 때까지 병렬로 실행하고 기다립니다.
-    await Future.wait(downloadFutures);
+    await Future.wait(cachingFutures);
   }
 
   /// [추가] 캐싱된 로컬 오디오 파일을 재생하는 함수
@@ -90,7 +96,7 @@ class AudioController {
   }
 
   void playCorrect() async {
-    await audioPlayer.setAsset('assets/audio/correct.mp3');
+    final audio = await audioPlayer.setAsset('assets/audio/correct.mp3');
     audioPlayer.play();
   }
 

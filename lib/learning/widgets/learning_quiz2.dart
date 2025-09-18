@@ -80,7 +80,7 @@ class _LearningQuiz2State extends State<LearningQuiz2> {
     // 정답일 경우
     if (originalFrontIndex == originalBackIndex) {
       final correctWord = _quizWords[originalFrontIndex];
-      AudioController().playWordAudio(correctWord);
+      controller.audioController.playWordAudio(correctWord);
 
       setState(() {
         _correctlyMatchedOriginalIndices.add(originalFrontIndex);
@@ -95,7 +95,7 @@ class _LearningQuiz2State extends State<LearningQuiz2> {
     }
     // 오답일 경우
     else {
-      AudioController().playWrong();
+      controller.audioController.playWrong();
       setState(() {
         _selectedFrontIndex = null;
         _selectedBackIndex = null;
@@ -105,7 +105,7 @@ class _LearningQuiz2State extends State<LearningQuiz2> {
 
   /// 모든 문제를 맞췄을 때 다음 화면으로 넘어가는 함수
   void _onQuizCompleted() {
-    _subscription = AudioController().audioPlayer.playerStateStream.listen((event) {
+    _subscription = controller.audioController.audioPlayer.playerStateStream.listen((event) {
       if (event.processingState == ProcessingState.completed) {
         _subscription?.cancel();
         controller.content.last = LearningQuiz3();

@@ -4,6 +4,7 @@ import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:podo_words/database/local_storage_service.dart';
+import 'package:podo_words/learning/controllers/image_controller.dart';
 import 'package:podo_words/learning/models/topic.dart';
 import 'package:podo_words/feedback/feedback_page.dart';
 import 'package:podo_words/learning/pages/word_list_page.dart';
@@ -33,6 +34,7 @@ class _TopicListPageState extends State<TopicListPage> {
   bool _isLoading = false;
   bool _hasMore = true;
   final userController = Get.find<UserController>();
+  final ImageController imageService = ImageController();
 
 
   @override
@@ -80,16 +82,18 @@ class _TopicListPageState extends State<TopicListPage> {
     });
 
     final result = await _dbService.getTopicsPaginated(lastTopicDoc: _lastDocument);
-    final List<Topic> fetchedTopics = result['topics'];
+    final List<Topic> topics = result['topics'];
     final DocumentSnapshot? lastDoc = result['lastDoc'];
+
+    await imageService.cacheImageFiles(topics);
 
     if(mounted) {
       setState(() {
-        _topics.addAll(fetchedTopics); // 기존 리스트에 새로 불러온 데이터 추가
+        _topics.addAll(topics); // 기존 리스트에 새로 불러온 데이터 추가
         _lastDocument = lastDoc;
         _isLoading = false;
         // 새로 불러온 데이터가 페이지당 개수보다 적으면 더 이상 데이터가 없는 것
-        if (fetchedTopics.length < DatabaseService.topicsPerPage) {
+        if (topics.length < DatabaseService.topicsPerPage) {
           _hasMore = false;
         }
       });
@@ -235,11 +239,7 @@ class _TopicListPageState extends State<TopicListPage> {
                                     ),
                                     SizedBox(width: 10.0),
                                     Hero(
-                                      child: Image.memory(
-                                        base64Decode(topic.image),
-                                        color: iconColors[index % 4],
-                                        width: 50.0,
-                                      ),
+                                      child: imageService.getCachedImage(topic.id, color: iconColors[index % 4]),
                                       tag: 'wordTitleImage${topic.id}',
                                     ),
                                   ],

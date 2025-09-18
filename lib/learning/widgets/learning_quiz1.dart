@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:podo_words/learning/controllers/image_controller.dart';
 import 'package:podo_words/learning/widgets/divider_text.dart';
 import 'package:podo_words/learning/list_mix.dart';
 import 'package:podo_words/common/my_colors.dart';
@@ -29,16 +30,16 @@ class _LearningQuiz1State extends State<LearningQuiz1> {
     mixedIndex = List<int>.generate(words.length, (index) => index);
     borderColor = List<Color>.generate(words.length, (index) => Colors.white);
     ListMix().getMixedList(mixedIndex);
-    AudioController().playWordAudio(words.first);
+    controller.audioController.playWordAudio(words.first);
   }
 
   void checkAnswer() {
     if (isCorrectAnswer) {
       // 정답
-      AudioController().playCorrect();
+      controller.audioController.playCorrect();
       quizIndex++;
     } else {
-      AudioController().playWrong();
+      controller.audioController.playWrong();
     }
 
     Future.delayed(const Duration(seconds: 1), () {
@@ -49,7 +50,7 @@ class _LearningQuiz1State extends State<LearningQuiz1> {
             borderColor[i] = Colors.white;
           }
           ListMix().getMixedList(mixedIndex);
-          AudioController().playWordAudio(words[quizIndex]);
+          controller.audioController.playWordAudio(words[quizIndex]);
         });
       } else {
         controller.content.last = LearningQuiz2();
@@ -107,7 +108,7 @@ class _LearningQuiz1State extends State<LearningQuiz1> {
                               Expanded(
                                   child: Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child:  controller.getWordImage(words[mixedIndex[index]]),
+                                child: controller.imageService.getCachedImage(words[mixedIndex[index]].id),
                               )),
                               Padding(
                                 padding: const EdgeInsets.all(10.0),
