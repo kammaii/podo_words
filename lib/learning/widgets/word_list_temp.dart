@@ -4,7 +4,7 @@ import 'package:podo_words/common/my_colors.dart';
 import 'package:swipe_to/swipe_to.dart';
 import '../../user/user_service.dart';
 import '../controllers/audio_controller.dart';
-import '../models/word.dart';
+import '../models/word_model.dart';
 
 class WordList extends StatelessWidget {
   final Word word;

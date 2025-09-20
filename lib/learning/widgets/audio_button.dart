@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:podo_words/common/my_colors.dart';
 import 'package:podo_words/learning/controllers/audio_controller.dart';
-import 'package:podo_words/learning/models/word.dart';
+import 'package:podo_words/learning/models/word_model.dart';
 
 class AudioButton extends StatefulWidget {
 

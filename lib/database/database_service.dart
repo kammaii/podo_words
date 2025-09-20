@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:podo_words/learning/models/topic.dart';
-import 'package:podo_words/learning/models/word.dart';
+import 'package:podo_words/learning/models/topic_model.dart';
+import 'package:podo_words/learning/models/word_model.dart';
 
 class DatabaseService {
 

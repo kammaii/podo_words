@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:podo_words/database/local_storage_service.dart';
 import 'package:podo_words/logo_page.dart';
 import 'package:podo_words/common/my_colors.dart';
+import 'package:podo_words/user/user_controller.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -23,6 +24,7 @@ class _PremiumPageState extends State<PremiumPage> {
   int selectedPlan = 0;
   late Future<Offerings> offerings;
   late List<Package> packages;
+  final userController = Get.find<UserController>();
 
   @override
   void initState() {
@@ -44,7 +46,7 @@ class _PremiumPageState extends State<PremiumPage> {
   }
 
   setPremiumUser() {
-    LocalStorageService().isPremiumUser = true;
+    userController.user.value?.isPremium = true;
     ShowSnackBar().getSnackBar(context, 'Thank you for purchasing.');
     Get.offAll(() => LogoPage());
   }

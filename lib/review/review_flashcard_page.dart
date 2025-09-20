@@ -4,11 +4,12 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:podo_words/learning/controllers/ads_controller.dart';
 import 'package:podo_words/learning/controllers/audio_controller.dart';
 import 'package:podo_words/learning/widgets/audio_button.dart';
-import 'package:podo_words/learning/models/word.dart';
+import 'package:podo_words/learning/models/word_model.dart';
 import '../common/my_colors.dart';
+import '../learning/models/myword_model.dart';
 
 class ReviewFlashCardPage extends StatefulWidget {
-  final List<Word> words;
+  final List<MyWord> words;
 
   const ReviewFlashCardPage(this.words, {super.key});
 
@@ -17,8 +18,8 @@ class ReviewFlashCardPage extends StatefulWidget {
 }
 
 class _ReviewFlashCardPageState extends State<ReviewFlashCardPage> {
-  late final List<Word> _shuffledWords;
-  late Word _currentWord;
+  late final List<MyWord> _shuffledWords;
+  late MyWord _currentWord;
   int _cardIndex = 0;
   bool _isReversed = false;
   bool _isAnswerVisible = false;
@@ -135,7 +136,16 @@ class _ReviewFlashCardPageState extends State<ReviewFlashCardPage> {
                   ),
                 ),
                 // --- 컨트롤 버튼 ---
-                Center(child: AudioButton(_currentWord)),
+                Center(child: ClipOval(
+                  child: Material(
+                    child: InkWell(
+                        child: Icon(Icons.play_circle_outline_rounded, color: MyColors().purple, size: 100.0),
+                        onTap: () {
+                          AudioController().playWordAudio(_currentWord);
+                        }
+                    ),
+                  ),
+                )),
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: ElevatedButton(

@@ -6,8 +6,8 @@ import 'package:podo_words/learning/controllers/ads_controller.dart';
 import 'package:podo_words/database/local_storage_service.dart';
 import 'package:podo_words/database/database_service.dart';
 import 'package:podo_words/common/my_colors.dart';
-import 'package:podo_words/learning/models/topic.dart';
-import 'package:podo_words/learning/models/word.dart';
+import 'package:podo_words/learning/models/topic_model.dart';
+import 'package:podo_words/learning/models/word_model.dart';
 import 'package:podo_words/learning/pages/learning_page.dart';
 import 'package:podo_words/premium/premium_page.dart';
 import 'package:podo_words/user/user_controller.dart';
@@ -31,7 +31,6 @@ class WordListPageState extends State<WordListPage> {
   double _sliverAppBarMinimumHeight = 60.0;
   double sliverAppBarStretchOffset = 100.0;
 
-  int activeWordCount = 0;
   final DatabaseService _dbService = DatabaseService();
   late final Future<List<Word>> _wordsFuture;
 
@@ -50,15 +49,14 @@ class WordListPageState extends State<WordListPage> {
     super.dispose();
   }
 
-  void _runLesson({required List<Word> words, required bool shouldShowAds}) {
-    List<Word> activeWords = words.where((word) => word.isActive).toList();
+  void _runLesson({required List<Word> activeWords, required bool shouldShowAds}) {
     Get.to(() => LearningPage(), arguments: {
       'shouldShowAds': shouldShowAds,
       'words': activeWords,
     });
   }
 
-  void _showDialog({required List<Word> words}) {
+  void _showDialog({required List<Word> activeWords}) {
     Get.dialog(
       AlertDialog(
         backgroundColor: Colors.white,
@@ -81,7 +79,7 @@ class WordListPageState extends State<WordListPage> {
                   onPressed: () {
                     Get.back();
                     AdsController().showRewardAdAndStartLesson(() {
-                      _runLesson(words: words, shouldShowAds: true);
+                      _runLesson(activeWords: activeWords, shouldShowAds: true);
                     });
                   },
                   child: Padding(
@@ -155,7 +153,7 @@ class WordListPageState extends State<WordListPage> {
             body: SafeArea(
               child: Obx(() {
                 final Set<String> inactiveWordIds = userController.inactiveWordIds;
-                final int activeWordCount = words.where((w) => !inactiveWordIds.contains(w.id)).length;
+                final List<Word> activeWords = words.where((w) => !inactiveWordIds.contains(w.id)).toList();
 
                 return Stack(
                   alignment: Alignment.center,
@@ -206,7 +204,7 @@ class WordListPageState extends State<WordListPage> {
                                   style: TextStyle(color: Colors.white, fontSize: 17.0),
                                 ),
                                 Text(
-                                  activeWordCount.toString(),
+                                  activeWords.length.toString(),
                                   style:
                                   TextStyle(color: Colors.white, fontSize: 25.0, fontWeight: FontWeight.bold),
                                 )
@@ -228,17 +226,17 @@ class WordListPageState extends State<WordListPage> {
                           size: 50.0,
                         ),
                         onPressed: () {
-                          if (activeWordCount >= 4) {
-                            if (!LocalStorageService().isPremiumUser && LocalStorageService().myWords.isNotEmpty) {
+                          if (activeWords.length >= 4) {
+                            if (!userController.isPremium && !userController.isNewUser) {
                               print('무료 유저');
                               if (kReleaseMode) {
-                                _showDialog(words: words);
+                                _showDialog(activeWords: activeWords);
                               } else {
-                                _runLesson(words: words, shouldShowAds: false);
+                                _runLesson(activeWords: activeWords, shouldShowAds: false);
                               }
                             } else {
                               print('광고 대상 아님');
-                              _runLesson(words: words, shouldShowAds: false);
+                              _runLesson(activeWords: activeWords, shouldShowAds: false);
                             }
                           } else {
                             ShowSnackBar().getSnackBar(context, 'It needs more than 4 words to start learning.');

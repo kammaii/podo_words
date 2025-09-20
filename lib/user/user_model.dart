@@ -11,6 +11,7 @@ class UserModel {
   DateTime signInDate;
   String timezone;
   List<String> inactiveWords;
+  bool isPremium = false;
 
   UserModel({
     required this.id,
@@ -23,6 +24,7 @@ class UserModel {
     required this.signInDate,
     required this.timezone,
     required this.inactiveWords,
+    required this.isPremium,
   });
 
   static const String USERS = 'Users';
@@ -36,6 +38,7 @@ class UserModel {
   static const String FCM_TOKEN = 'fcmToken';
   static const String FCM_PERMISSION = 'fcmPermission';
   static const String INACTIVE_WORDS = 'inactiveWords';
+  static const String IS_PREMIUM = 'isPremium';
 
   // --- Firestore 데이터 변환을 위한 팩토리 생성자 ---
   factory UserModel.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> doc) {
@@ -51,6 +54,7 @@ class UserModel {
       signInDate: (data[SIGN_IN_DATE] as Timestamp).toDate(),
       timezone: data[TIMEZONE],
       inactiveWords: List<String>.from(data[INACTIVE_WORDS] ?? []),
+      isPremium: data[IS_PREMIUM] ?? false,
     );
   }
 }

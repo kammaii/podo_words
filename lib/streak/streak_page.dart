@@ -39,7 +39,7 @@ class StreakPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int myWordsLength = LocalStorageService().myWords.length;
+    int myWordsLength = userController.myWords.length;
     bool hasStudyToday = userController.hasStudyToday;
     final random = Random();
     return Scaffold(

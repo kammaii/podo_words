@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:podo_words/learning/models/word.dart';
+import 'package:podo_words/learning/models/word_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as path;
 
@@ -62,7 +62,7 @@ class AudioController {
   }
 
   /// [추가] 캐싱된 로컬 오디오 파일을 재생하는 함수
-  Future<void> playWordAudio(Word word) async {
+  Future<void> playWordAudio(dynamic word) async {
     // 마지막 카드일 경우
     if(word.audio.isEmpty) {
       return;

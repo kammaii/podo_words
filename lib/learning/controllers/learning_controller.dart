@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:podo_words/learning/controllers/audio_controller.dart';
 import 'package:podo_words/learning/controllers/image_controller.dart';
-import 'package:podo_words/learning/models/word.dart';
+import 'package:podo_words/learning/models/word_model.dart';
 import 'package:podo_words/learning/pages/learning_complete_page.dart';
 import 'package:podo_words/learning/widgets/learning_quiz1.dart';
 import 'package:podo_words/learning/widgets/word_card.dart';

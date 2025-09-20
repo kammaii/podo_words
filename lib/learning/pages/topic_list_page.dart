@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:podo_words/database/local_storage_service.dart';
 import 'package:podo_words/learning/controllers/image_controller.dart';
-import 'package:podo_words/learning/models/topic.dart';
+import 'package:podo_words/learning/models/topic_model.dart';
 import 'package:podo_words/feedback/feedback_page.dart';
 import 'package:podo_words/learning/pages/word_list_page.dart';
 import 'package:podo_words/premium/premium_page.dart';
@@ -110,12 +110,11 @@ class _TopicListPageState extends State<TopicListPage> {
   Widget build(BuildContext context) {
     List<Color> bgColors = [MyColors().navyLight, MyColors().mustardLight, MyColors().greenLight, MyColors().pink];
     List<Color> iconColors = [MyColors().navy, MyColors().mustard, MyColors().greenDark, MyColors().wine];
-    bool isPremiumUser = LocalStorageService().isPremiumUser;
 
     return SafeArea(
         child: Scaffold(
       floatingActionButton: Visibility(
-        visible: !isPremiumUser,
+        visible: !userController.isPremium,
         child: GestureDetector(
           onTap: () {
             Get.to(() => PremiumPage());

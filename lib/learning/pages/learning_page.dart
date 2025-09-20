@@ -4,7 +4,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:podo_words/learning/controllers/ads_controller.dart';
 import 'package:podo_words/common/my_colors.dart';
-import 'package:podo_words/learning/models/word.dart';
+import 'package:podo_words/learning/models/word_model.dart';
 import 'package:podo_words/learning/controllers/learning_controller.dart';
 
 class LearningPage extends StatefulWidget {

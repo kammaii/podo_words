@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:podo_words/learning/controllers/image_controller.dart';
 import 'package:podo_words/learning/widgets/audio_button.dart';
-import 'package:podo_words/learning/models/word.dart';
+import 'package:podo_words/learning/models/word_model.dart';
 import 'package:podo_words/learning/controllers/learning_controller.dart';
 import 'package:unicode/unicode.dart';
 

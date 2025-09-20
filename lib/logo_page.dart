@@ -61,13 +61,13 @@ class _LogoPageState extends State<LogoPage> {
     setState(() {
       info = 'Loading local data...';
     });
-    await LocalStorageService().initLocalData(isPremiumUser);
+    await LocalStorageService().initLocalData();
 
     setState(() {
       info = 'Syncing your data...';
     });
     final userController = Get.put(UserController());
-    await userController.initUser(userId);  // 유저 데이터 스트림 구독 시작
+    await userController.initUser(userId, isPremiumUser);  // 유저 데이터 스트림 구독 시작
 
     await FirebaseCrashlytics.instance.setUserIdentifier(userId);
 
