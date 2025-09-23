@@ -5,8 +5,12 @@ import 'package:podo_words/learning/main_word_list.dart';
 import 'package:podo_words/premium/premium.dart';
 import 'package:podo_words/feedback/main_feedback.dart';
 import 'package:podo_words/common/words.dart';
+import 'package:podo_words/user/streak.dart';
 import '../common/data_storage.dart';
 import '../common/my_colors.dart';
+import 'package:podo_words/user/user.dart' as user;
+
+import '../user/user.dart';
 
 class MainTopicList extends StatelessWidget {
   const MainTopicList({Key? key}) : super(key: key);
@@ -78,7 +82,33 @@ class MainTopicList extends StatelessWidget {
                     onPressed: () {
                       Get.to(MainFeedback());
                     },
-                    icon: Icon(Icons.email, size: 35, color: MyColors().purple)),
+                    icon: Icon(Icons.email_rounded, size: 35, color: MyColors().purple)),
+                GestureDetector(
+                  onTap: (){
+                    Get.to(()=>Streak());
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: MyColors().mustardLight,
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          'assets/icon/podo.png',
+                          width: 25,
+                          height: 25,
+                          color: User().hasStudyToday() ? null : Colors.grey,
+                        ),
+                        Text(
+                          'x ${user.User().currentStreak.toString()}',
+                          style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
             Padding(
