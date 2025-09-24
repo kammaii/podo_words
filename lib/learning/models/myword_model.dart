@@ -34,7 +34,6 @@ class MyWord {
   /// Users/../MyWords 서브컬렉션 문서로부터 '학습 진행 정보'만 파싱
   factory MyWord.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> doc) {
     final data = doc.data() ?? {};
-    print('아이디: ${doc.id}');
     return MyWord(
       id: doc.id,
       lastStudied: (data[LAST_STUDIED] as Timestamp?)?.toDate(),

@@ -1,18 +1,22 @@
 import 'dart:convert';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:podo_words/learning/controllers/ads_controller.dart';
-import 'package:podo_words/database/local_storage_service.dart';
-import 'package:podo_words/database/database_service.dart';
 import 'package:podo_words/common/my_colors.dart';
+import 'package:podo_words/database/database_service.dart';
+import 'package:podo_words/learning/controllers/ads_controller.dart';
 import 'package:podo_words/learning/models/topic_model.dart';
 import 'package:podo_words/learning/models/word_model.dart';
 import 'package:podo_words/learning/pages/learning_page.dart';
 import 'package:podo_words/premium/premium_page.dart';
 import 'package:podo_words/user/user_controller.dart';
+import 'package:swipe_to/swipe_to.dart';
+
+import '../../user/user_service.dart';
+import '../controllers/audio_controller.dart';
 import '../widgets/show_snack_bar.dart';
-import '../widgets/word_list.dart';
 
 class WordListPage extends StatefulWidget {
   final Topic topic;
@@ -39,7 +43,6 @@ class WordListPageState extends State<WordListPage> {
   @override
   void initState() {
     super.initState();
-    _scrollController.addListener(() => setState(() {}));
     _wordsFuture = _dbService.getWordsForTopic(widget.topic.id);
   }
 
@@ -136,119 +139,120 @@ class WordListPageState extends State<WordListPage> {
 
           final List<Word> words = snapshot.data!;
 
-          double topMargin = _sliverAppBarHeight - 30.0;
-          double topMarginPlayBtn = _sliverAppBarHeight - 20.0;
-
-          if (_scrollController.hasClients) {
-            if (_sliverAppBarHeight - _scrollController.offset > _sliverAppBarMinimumHeight) {
-              topMargin -= _scrollController.offset;
-              topMarginPlayBtn -= _scrollController.offset;
-            } else {
-              topMargin = -100.0;
-              topMarginPlayBtn = 5.0;
-            }
-          }
-
           return Scaffold(
             body: SafeArea(
-              child: Obx(() {
-                final Set<String> inactiveWordIds = userController.inactiveWordIds;
-                final List<Word> activeWords = words.where((w) => !inactiveWordIds.contains(w.id)).toList();
+                child: AnimatedBuilder(
+                    animation: _scrollController,
+                    builder: (context, child) {
+                      double topMargin = _sliverAppBarHeight - 30.0;
+                      double topMarginPlayBtn = _sliverAppBarHeight - 20.0;
 
-                return Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    CustomScrollView(
-                      physics: BouncingScrollPhysics(),
-                      controller: _scrollController,
-                      slivers: [
-                        _sliverAppBar(),
-                        _sliverList(words, inactiveWordIds),
-                      ],
-                    ),
-                    Positioned(
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width,
-                      top: topMargin,
-                      child: Container(
-                        margin: EdgeInsets.symmetric(horizontal: 30.0),
-                        padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
-                        decoration: BoxDecoration(
-                          color: widget.iconColor,
-                          borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                        ),
-                        child: Row(
+                      if (_scrollController.hasClients) {
+                        if (_sliverAppBarHeight - _scrollController.offset > _sliverAppBarMinimumHeight) {
+                          topMargin -= _scrollController.offset;
+                          topMarginPlayBtn -= _scrollController.offset;
+                        } else {
+                          topMargin = -100.0;
+                          topMarginPlayBtn = 5.0;
+                        }
+                      }
+
+                      return Obx(() {
+                        final Set<String> inactiveWordIds = userController.inactiveWordIds;
+                        final List<Word> activeWords =
+                            words.where((w) => !inactiveWordIds.contains(w.id)).toList();
+
+                        return Stack(
+                          alignment: Alignment.center,
                           children: [
-                            Column(
-                              children: [
-                                Text(
-                                  'Total',
-                                  style: TextStyle(color: Colors.white, fontSize: 17.0),
-                                ),
-                                Text(
-                                  words.length.toString(),
-                                  style:
-                                  TextStyle(color: Colors.white, fontSize: 25.0, fontWeight: FontWeight.bold),
-                                ),
+                            CustomScrollView(
+                              physics: BouncingScrollPhysics(),
+                              controller: _scrollController,
+                              slivers: [
+                                _sliverAppBar(),
+                                _sliverList(words, inactiveWordIds),
                               ],
                             ),
-                            SizedBox(
-                              width: 40.0,
-                            ),
-                            Column(
-                              children: [
-                                Text(
-                                  'Active',
-                                  style: TextStyle(color: Colors.white, fontSize: 17.0),
+                            Positioned(
+                              width: MediaQuery.of(context).size.width,
+                              top: topMargin,
+                              child: Container(
+                                margin: EdgeInsets.symmetric(horizontal: 30.0),
+                                padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
+                                decoration: BoxDecoration(
+                                  color: widget.iconColor,
+                                  borderRadius: BorderRadius.all(Radius.circular(15.0)),
                                 ),
-                                Text(
-                                  activeWords.length.toString(),
-                                  style:
-                                  TextStyle(color: Colors.white, fontSize: 25.0, fontWeight: FontWeight.bold),
-                                )
-                              ],
+                                child: Row(
+                                  children: [
+                                    Column(
+                                      children: [
+                                        Text(
+                                          'Total',
+                                          style: TextStyle(color: Colors.white, fontSize: 17.0),
+                                        ),
+                                        Text(
+                                          words.length.toString(),
+                                          style: TextStyle(
+                                              color: Colors.white, fontSize: 25.0, fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      width: 40.0,
+                                    ),
+                                    Column(
+                                      children: [
+                                        Text(
+                                          'Active',
+                                          style: TextStyle(color: Colors.white, fontSize: 17.0),
+                                        ),
+                                        Text(
+                                          activeWords.length.toString(),
+                                          style: TextStyle(
+                                              color: Colors.white, fontSize: 25.0, fontWeight: FontWeight.bold),
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
+                            Positioned(
+                              top: topMarginPlayBtn,
+                              right: 60.0,
+                              child: FloatingActionButton(
+                                elevation: 10,
+                                backgroundColor: Colors.white,
+                                child: Icon(
+                                  Icons.play_arrow_rounded,
+                                  color: widget.iconColor,
+                                  size: 50.0,
+                                ),
+                                onPressed: () {
+                                  if (activeWords.length >= 4) {
+                                    if (!userController.isPremium && !userController.isNewUser) {
+                                      print('무료 유저');
+                                      if (kReleaseMode) {
+                                        _showDialog(activeWords: activeWords);
+                                      } else {
+                                        _runLesson(activeWords: activeWords, shouldShowAds: false);
+                                      }
+                                    } else {
+                                      print('광고 대상 아님');
+                                      _runLesson(activeWords: activeWords, shouldShowAds: false);
+                                    }
+                                  } else {
+                                    ShowSnackBar()
+                                        .getSnackBar(context, 'It needs more than 4 words to start learning.');
+                                  }
+                                },
+                              ),
+                            )
                           ],
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      top: topMarginPlayBtn,
-                      right: 60.0,
-                      child: FloatingActionButton(
-                        elevation: 10,
-                        backgroundColor: Colors.white,
-                        child: Icon(
-                          Icons.play_arrow_rounded,
-                          color: widget.iconColor,
-                          size: 50.0,
-                        ),
-                        onPressed: () {
-                          if (activeWords.length >= 4) {
-                            if (!userController.isPremium && !userController.isNewUser) {
-                              print('무료 유저');
-                              if (kReleaseMode) {
-                                _showDialog(activeWords: activeWords);
-                              } else {
-                                _runLesson(activeWords: activeWords, shouldShowAds: false);
-                              }
-                            } else {
-                              print('광고 대상 아님');
-                              _runLesson(activeWords: activeWords, shouldShowAds: false);
-                            }
-                          } else {
-                            ShowSnackBar().getSnackBar(context, 'It needs more than 4 words to start learning.');
-                          }
-                        },
-                      ),
-                    )
-                  ],
-                );
-              }
-          )
-            ),
+                        );
+                      });
+                    })),
           );
         });
   }
@@ -319,14 +323,117 @@ class WordListPageState extends State<WordListPage> {
                     child: Text('Swipe left/right to pick a word to learn',
                         style: TextStyle(color: widget.iconColor)),
                   ),
-                  WordList(word: word, isActive: isActive, isDeleteMode: false, fontColor: widget.iconColor),
+                  WordTile(
+                    key: ValueKey('${word.id}_$isActive'),
+                    word: word,
+                    isActive: isActive,
+                    fontColor: widget.iconColor,
+                  ),
                 ],
               );
             } else {
-              return WordList(word: word, isActive: isActive, isDeleteMode: false, fontColor: widget.iconColor);
+              return WordTile(
+                key: ValueKey('${word.id}_$isActive'),
+                word: word,
+                isActive: isActive,
+                fontColor: widget.iconColor,
+              );
             }
           },
           childCount: words.length,
+        ),
+      ),
+    );
+  }
+}
+
+class WordTile extends StatelessWidget {
+  final Word word;
+  final bool isActive;
+  final Color fontColor;
+
+  const WordTile({
+    super.key,
+    required this.word,
+    required this.isActive,
+    required this.fontColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final Color textColor = isActive ? fontColor : Colors.grey;
+    final Color backColor = isActive ? Colors.white : Colors.white30;
+
+    final userService = UserService();
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    final Widget swipeBackground;
+
+    if (isActive) {
+      swipeBackground =
+          Padding(padding: EdgeInsets.only(left: 20), child: Icon(Icons.visibility_off, color: Colors.red));
+    } else {
+      swipeBackground =
+          Padding(padding: EdgeInsets.only(left: 20), child: Icon(Icons.visibility, color: Colors.green));
+    }
+
+    void onSwipeCallback() {
+      if (userId == null) return;
+      // 현재 상태에 따라 반대되는 작업을 수행
+      if (isActive) {
+        userService.addInactiveWord(userId, word.id);
+      } else {
+        userService.removeInactiveWord(userId, word.id);
+      }
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      height: 80.0,
+      child: SwipeTo(
+        onLeftSwipe: (detail) => onSwipeCallback(),
+        onRightSwipe: (detail) => onSwipeCallback(),
+        rightSwipeWidget: swipeBackground,
+        leftSwipeWidget: swipeBackground,
+        child: Stack(
+          alignment: Alignment.centerLeft,
+          children: [
+            Card(
+              color: backColor,
+              child: InkWell(
+                onTap: () {
+                  AudioController().playWordAudio(word);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          word.front,
+                          style: TextStyle(color: textColor, fontSize: 20.0),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: VerticalDivider(
+                          color: MyColors().greenLight,
+                          thickness: 1.0,
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          word.back,
+                          style: TextStyle(color: textColor, fontSize: 20.0),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -1,21 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:podo_words/common/my_colors.dart';
 import 'package:podo_words/learning/pages/learning_page.dart';
 import 'package:podo_words/review/review_calculator.dart';
 import 'package:podo_words/review/review_flashcard_page.dart';
-import 'package:podo_words/learning/models/word_model.dart';
-import 'package:podo_words/learning/widgets/word_list.dart';
 import 'package:podo_words/review/review_word_tile.dart';
 import 'package:podo_words/user/user_controller.dart';
-import '../database/local_storage_service.dart';
+
 import '../learning/models/myword_model.dart';
 import '../learning/widgets/show_snack_bar.dart';
 import '../user/user_service.dart';
 
-
+// 필터 탭을 위한 열거형
+enum ReviewFilter { Priority, All, Inactive }
 
 class ReviewListPage extends StatefulWidget {
   @override
@@ -29,10 +27,8 @@ class ReviewPageState extends State<ReviewListPage> {
   final userService = UserService();
 
   // 로컬 UI 상태를 관리하는 변수들
-  final List<bool> _toggleSelections = [true, false, false];
+  ReviewFilter _currentFilter = ReviewFilter.Priority;
   String _searchInput = "";
-  bool _isDeleteMode = false;
-  final Set<String> _wordsToDelete = {}; // 삭제할 단어들의 ID를 저장
 
   final _textFieldController = TextEditingController();
   final _focusNode = FocusNode();
@@ -68,67 +64,121 @@ class ReviewPageState extends State<ReviewListPage> {
           final List<MyWord> allMyWords = userController.myWords.toList();
           final Set<String> inactiveWordIds = userController.inactiveWordIds;
 
-          // 2. 검색 및 필터링 로직 적용
-          final List<MyWord> myWordsInList;
-          if (_searchInput.isNotEmpty) {
-            myWordsInList = allMyWords.where((myWord) =>
-            myWord.front.toLowerCase().contains(_searchInput.toLowerCase()) ||
-                myWord.back.toLowerCase().contains(_searchInput.toLowerCase())).toList();
-          } else if (_toggleSelections[1]) { // Active 필터
-            myWordsInList = allMyWords.where((myWord) => !inactiveWordIds.contains(myWord.id)).toList();
-          } else if (_toggleSelections[2]) { // Inactive 필터
-            myWordsInList = allMyWords.where((myWord) => inactiveWordIds.contains(myWord.id)).toList();
-          } else { // 'All' 필터 (기본)
-            myWordsInList = allMyWords;
+          // --- 필터링 및 정렬 로직 ---
+          List<MyWord> filteredWords;
+          // 1. 활성/비활성 필터링
+          switch (_currentFilter) {
+            case ReviewFilter.Priority:
+              filteredWords = allMyWords.where((w) => !inactiveWordIds.contains(w.id)).toList();
+              break;
+            case ReviewFilter.Inactive:
+              filteredWords = allMyWords.where((w) => inactiveWordIds.contains(w.id)).toList();
+              break;
+            case ReviewFilter.All:
+              filteredWords = allMyWords;
+              break;
           }
+
+          // 2. 'Priority' 탭일 경우 우선순위로 정렬
+          if (_currentFilter == ReviewFilter.Priority) {
+            filteredWords.sort((a, b) {
+              final priorityA = _reviewCalculator.getPriority(a).index;
+              final priorityB = _reviewCalculator.getPriority(b).index;
+              return priorityA.compareTo(priorityB); // Urgent(0)가 맨 위로 오도록 정렬
+            });
+          }
+
+          // 3. 검색어 필터링
+          final List<MyWord> myWordsInList = _searchInput.isNotEmpty
+              ? filteredWords.where((w) =>
+          w.front.toLowerCase().contains(_searchInput.toLowerCase()) ||
+              w.back.toLowerCase().contains(_searchInput.toLowerCase())).toList()
+              : filteredWords;
+
 
           return Scaffold(
             body: Column(
               children: [
                 // --- 검색창 및 필터 버튼 UI ---
                 Container(
+                  padding: const EdgeInsets.all(8.0), // 전체적인 내부 여백
                   decoration: BoxDecoration(
                     color: MyColors().navyLight,
-                    borderRadius: const BorderRadius.all(Radius.circular(20.0)),
+                    borderRadius: const BorderRadius.all(Radius.circular(15.0)),
                   ),
                   child: Column(
                     children: [
-                      TextField(
-                        focusNode: _focusNode,
-                        controller: _textFieldController,
-                        decoration: const InputDecoration(
-                            prefixIcon: Icon(Icons.search),
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                                borderSide: BorderSide.none),
-                            enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                                borderSide: BorderSide.none),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15.0),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withAlpha(20),
+                              spreadRadius: 2,
+                              blurRadius: 5,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: TextField(
+                          focusNode: _focusNode,
+                          controller: _textFieldController,
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(Icons.search, color: MyColors().purple),
+                            border: InputBorder.none,
                             hintText: 'Search your words',
-                            filled: true,
-                            fillColor: Colors.white
+                            contentPadding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 20.0),
+                          ),
                         ),
                       ),
-                      Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Row(
-                              children: [
-                                _buildToggleButton(Icons.all_inclusive, 0),
-                                _buildToggleButton(Icons.check, 1),
-                                _buildToggleButton(Icons.close, 2),
-                              ]
-                          )
+                      const SizedBox(height: 16),
+                      SizedBox(
+                        width: double.infinity,
+                        child: SegmentedButton<ReviewFilter>(
+                          segments: const <ButtonSegment<ReviewFilter>>[
+                            ButtonSegment<ReviewFilter>(
+                                value: ReviewFilter.Priority,
+                                label: Text('Priority'),
+                                icon: Icon(Icons.local_fire_department)),
+                            ButtonSegment<ReviewFilter>(
+                                value: ReviewFilter.All,
+                                label: Text('All'),
+                                icon: Icon(Icons.all_inclusive)),
+                            ButtonSegment<ReviewFilter>(
+                                value: ReviewFilter.Inactive,
+                                label: Text('Inactive'),
+                                icon: Icon(Icons.visibility_off)),
+                          ],
+                          selected: {_currentFilter},
+                          onSelectionChanged: (Set<ReviewFilter> newSelection) {
+                            setState(() {
+                              _currentFilter = newSelection.first;
+                              _textFieldController.clear();
+                              _focusNode.unfocus();
+                            });
+                          },
+                          style: SegmentedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            foregroundColor: MyColors().purple,
+                            selectedBackgroundColor: MyColors().purple,
+                            selectedForegroundColor: Colors.white,
+                            minimumSize: const Size(0, 50),
+                            side: BorderSide.none,
+                          ),
+                        ),
                       ),
                     ],
                   ),
                 ),
+
                 // --- 단어 개수 및 안내 문구 ---
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
                     children: [
                       Expanded(child: Text(
-                          !_isDeleteMode ? '- Swipe to activate/deactivate.' : '- Select words to delete.',
+                          '- Swipe to activate/deactivate.',
                           style: TextStyle(color: MyColors().purple, fontSize: 15)
                       )),
                       Icon(Icons.assistant_photo_outlined, color: MyColors().purple),
@@ -141,25 +191,18 @@ class ReviewPageState extends State<ReviewListPage> {
                 // --- 단어 목록 ---
                 Expanded(
                   child: GestureDetector(
-                    onLongPress: () {
-                      _focusNode.unfocus();
-                      setState(() {
-                        _isDeleteMode = !_isDeleteMode;
-                        if (!_isDeleteMode) _wordsToDelete.clear(); // 삭제 모드 해제 시 선택 초기화
-                      });
-                    },
                     child: ListView.builder(
                       itemCount: myWordsInList.length,
                       itemBuilder: (context, index) {
                         final myWord = myWordsInList[index];
-
-                        // 1. 각 단어의 복습 우선순위를 계산합니다.
                         final priority = _reviewCalculator.getPriority(myWord);
+                        final isActive = !inactiveWordIds.contains(myWord.id);
 
-                        // 2. 새로운 ReviewWordTile 위젯을 반환합니다.
                         return ReviewWordTile(
+                          key: ValueKey(myWord.id),
                           myWord: myWord,
                           priority: priority,
+                          isActive: isActive,
                         );
                       },
                     ),
@@ -170,9 +213,9 @@ class ReviewPageState extends State<ReviewListPage> {
             floatingActionButton: FloatingActionButton(
               backgroundColor: Colors.white,
               child: Icon(
-                _isDeleteMode ? Icons.delete_forever : Icons.play_arrow_rounded,
-                color: _isDeleteMode ? MyColors().red : MyColors().green,
-                size: _isDeleteMode ? 40.0 : 50.0,
+                Icons.play_arrow_rounded,
+                color: MyColors().green,
+                size: 50.0,
               ),
               onPressed: () {
                 _focusNode.unfocus();
@@ -180,7 +223,7 @@ class ReviewPageState extends State<ReviewListPage> {
                 if (myWordsInList.isNotEmpty) {
                   showCupertinoModalPopup(
                     context: context,
-                    builder: (_) => _isDeleteMode ? _deleteBtnClick() : _playBtnClick(myWordsInList),
+                    builder: (_) => _playBtnClick(myWordsInList),
                   );
                 } else {
                   ShowSnackBar().getSnackBar(context, 'You have no words to review.');
@@ -193,31 +236,6 @@ class ReviewPageState extends State<ReviewListPage> {
     );
   }
 
-  Widget _buildToggleButton(IconData icon, int toggleIndex) {
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.all(1.0),
-        child: OutlinedButton(
-          style: OutlinedButton.styleFrom(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-            backgroundColor: _toggleSelections[toggleIndex] ? MyColors().purple : Colors.white,
-            foregroundColor: _toggleSelections[toggleIndex] ? Colors.white : MyColors().navyLight,
-            side: BorderSide.none,
-          ),
-          child: Icon(icon),
-          onPressed: () {
-            setState(() {
-              _textFieldController.clear();
-              _focusNode.unfocus();
-              for (int i = 0; i < _toggleSelections.length; i++) {
-                _toggleSelections[i] = (i == toggleIndex);
-              }
-            });
-          },
-        ),
-      ),
-    );
-  }
 
   CupertinoActionSheet _playBtnClick(List<MyWord> myWordsInList) {
 
@@ -249,33 +267,6 @@ class ReviewPageState extends State<ReviewListPage> {
         )
       ],
       cancelButton: CupertinoActionSheetAction(child: const Text('Cancel'), onPressed: () => Get.back()),
-    );
-  }
-
-  CupertinoAlertDialog _deleteBtnClick() {
-    return CupertinoAlertDialog(
-      title: Icon(Icons.delete_forever, size: 50.0, color: MyColors().red),
-      content: Text('${_wordsToDelete.length} words will be deleted.\nAre you sure?',
-          style: TextStyle(color: MyColors().wine, fontSize: 20.0)),
-      actions: [
-        CupertinoDialogAction(child: const Text('Cancel'), onPressed: () => Get.back()),
-        CupertinoDialogAction(
-          isDestructiveAction: true,
-          child: const Text('Delete'),
-          onPressed: () {
-            final userId = userController.user.value?.id;
-            if (userId != null && _wordsToDelete.isNotEmpty) {
-              // UserService를 통해 Firestore 데이터 삭제
-              userService.removeMyWords(userId, _wordsToDelete.toList());
-            }
-            setState(() {
-              _isDeleteMode = false;
-              _wordsToDelete.clear();
-            });
-            Get.back();
-          },
-        )
-      ],
     );
   }
 }
