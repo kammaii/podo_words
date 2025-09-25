@@ -5,7 +5,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:podo_words/database/local_storage_service.dart';
 import 'package:podo_words/user/user_model.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../learning/models/myword_model.dart';
 import '../learning/models/word_model.dart';
@@ -18,6 +17,36 @@ class UserService {
   final String KEY_IN_ACTIVE_WORDS = 'inActiveWords';
   final String KEY_MY_WORDS = 'myWords';
 
+
+  /// 사용자의 단어 학습 진행 상태를 업데이트합니다.
+  /// 단, 오늘 이미 학습한 단어는 업데이트하지 않습니다.
+  Future<void> updateMyWordReviewProgress(String userId, MyWord myWord) async {
+    // 오늘 날짜와 마지막 학습 날짜를 시간 없이 비교
+    if (myWord.lastStudied != null && _isToday(myWord.lastStudied!)) {
+      print("'${myWord.front}' 단어는 오늘 이미 복습했습니다. Firestore 업데이트를 건너뜁니다.");
+      return; // 오늘 이미 복습했으면 아무것도 하지 않고 종료
+    }
+
+    // 업데이트할 문서의 참조
+    final myWordRef = _db
+        .collection('Users')
+        .doc(userId)
+        .collection('MyWords')
+        .doc(myWord.id);
+    print("'${myWord.front}' 단어의 복습 기록을 업데이트합니다.");
+
+    // FieldValue.increment를 사용하여 안전하게 카운터 값을 1 증가
+    return myWordRef.update({
+      MyWord.LAST_STUDIED: FieldValue.serverTimestamp(),
+      MyWord.REVIEW_COUNT: FieldValue.increment(1),
+    });
+  }
+
+  ///  주어진 날짜가 오늘인지 확인하는 헬퍼 함수
+  bool _isToday(DateTime date) {
+    final now = DateTime.now();
+    return date.year == now.year && date.month == now.month && date.day == now.day;
+  }
 
   /// 이미 추가된 단어는 제외하고, 새로 추가된 단어의 개수를 반환합니다.
   Future<int> addNewlyLearnedWords(String userId, List<Word> newWords) async {
@@ -113,7 +142,7 @@ class UserService {
       UserModel.FCM_TOKEN: await FirebaseMessaging.instance.getToken(),
       UserModel.CURRENT_STREAK: 0,
       UserModel.MAX_STREAK: 0,
-      UserModel.SIGN_IN_DATE: DateTime.now(),
+      UserModel.SIGN_IN_DATE: FieldValue.serverTimestamp(),
       UserModel.TIMEZONE: await FlutterTimezone.getLocalTimezone(),
     };
     await _db.collection(_collection).doc(userId).set(newUser);
@@ -219,7 +248,7 @@ class UserService {
         // 저장할 데이터 정의
         final newData = {
           'id': wordId,
-          'lastStudied': DateTime.now(),
+          'lastStudied': FieldValue.serverTimestamp(),
           'reviewCount': 0,
         };
 

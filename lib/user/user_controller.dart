@@ -22,6 +22,14 @@ class UserController extends GetxController {
   final RxList<MyWord> myWords = <MyWord>[].obs;
 
 
+  // 특정 단어의 복습 기록을 업데이트하도록 서비스에 요청합니다.
+  void updateReviewProgress(MyWord myWord) {
+    // 현재 사용자 정보가 있을 때만 실행
+    if (user.value != null) {
+      _userService.updateMyWordReviewProgress(user.value!.id, myWord);
+    }
+  }
+
   // 사용자가 로그인했을 때 호출되어 사용자 데이터를 초기화하고 실시간 구독을 시작합니다.
   Future<void> initUser(String userId, bool isPremium) async {
     // 기존 구독이 있다면 취소

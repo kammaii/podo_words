@@ -61,7 +61,7 @@ class AudioController {
     await Future.wait(cachingFutures);
   }
 
-  /// [추가] 캐싱된 로컬 오디오 파일을 재생하는 함수
+  /// 캐싱된 로컬 오디오 파일을 재생하는 함수
   Future<void> playWordAudio(dynamic word) async {
     // 마지막 카드일 경우
     if(word.audio.isEmpty) {

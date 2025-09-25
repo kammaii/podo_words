@@ -7,7 +7,7 @@ import 'package:podo_words/learning/models/word_model.dart';
 
 class AudioButton extends StatefulWidget {
 
-  Word word;
+  dynamic word;
   AudioButton(this.word);
 
   @override

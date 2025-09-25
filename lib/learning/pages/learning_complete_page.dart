@@ -10,7 +10,6 @@ import 'package:podo_words/main_frame.dart';
 import '../../database/database_service.dart';
 import '../widgets/show_snack_bar.dart';
 
-// [수정] StatelessWidget -> StatefulWidget
 class LearningCompletePage extends StatefulWidget {
   const LearningCompletePage({super.key});
 
@@ -22,7 +21,7 @@ class _LearningCompletePageState extends State<LearningCompletePage> {
   final learningController = Get.find<LearningController>();
   final userController = Get.find<UserController>();
 
-  // [추가] 비동기 작업들을 한 번만 실행하기 위한 Future
+  // 비동기 작업들을 한 번만 실행하기 위한 Future
   late final Future<Map<String, int>> _completionFuture;
 
   @override
@@ -33,7 +32,7 @@ class _LearningCompletePageState extends State<LearningCompletePage> {
     AudioController().playYay();
   }
 
-  /// [추가] 학습 완료에 필요한 모든 비동기 작업을 처리하는 함수
+  /// 학습 완료에 필요한 모든 비동기 작업을 처리하는 함수
   Future<Map<String, int>> _processLessonCompletion() async {
     try {
       // 두 비동기 작업을 병렬로 실행
@@ -63,7 +62,7 @@ class _LearningCompletePageState extends State<LearningCompletePage> {
           child: Container(
             color: MyColors().purpleLight,
             child: Center(
-              // [수정] FutureBuilder가 _completionFuture의 상태를 감시
+              // FutureBuilder가 _completionFuture의 상태를 감시
               child: FutureBuilder<Map<String, int>>(
                 future: _completionFuture,
                 builder: (context, snapshot) {
