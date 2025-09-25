@@ -41,8 +41,8 @@ class AudioController {
           final file = File(localPath);
 
           // 이미 파일이 존재하지 않으면 다운로드합니다.
-          if (!await file.exists()) {
-            final response = await http.get(Uri.parse(word.audio));
+          if (!await file.exists() && word.audio != null) {
+            final response = await http.get(Uri.parse(word.audio!));
             if (response.statusCode == 200) {
               await file.writeAsBytes(response.bodyBytes);
             }

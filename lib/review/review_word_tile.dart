@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 import 'package:podo_words/common/my_colors.dart';
 import 'package:podo_words/review/review_calculator.dart';
-import 'package:percent_indicator/percent_indicator.dart';
 import 'package:podo_words/user/user_service.dart';
 import 'package:swipe_to/swipe_to.dart';
 
 import '../learning/controllers/audio_controller.dart';
-import '../learning/models/myword_model.dart';
+import '../learning/models/word_model.dart';
 import '../user/user_controller.dart';
 
 class ReviewWordTile extends StatelessWidget {
-  final MyWord myWord;
+  final Word myWord;
   final ReviewPriority priority;
   final bool isActive;
 

@@ -1,4 +1,4 @@
-import '../learning/models/myword_model.dart';
+import '../learning/models/word_model.dart';
 
 // 복습 우선순위를 나타내는 열거형(enum)
 enum ReviewPriority { Urgent, Recommended, Good }
@@ -15,13 +15,14 @@ class ReviewCalculator {
   };
 
   /// MyWord 객체를 받아 복습 우선순위를 계산하여 반환합니다.
-  ReviewPriority getPriority(MyWord myWord) {
+  ReviewPriority getPriority(Word myWord) {
     final now = DateTime.now();
 
     // reviewCount에 맞는 복습 간격을 가져옵니다. 5회 이상이면 60일로 고정 (예시)
     final reviewInterval = _reviewIntervals[myWord.reviewCount] ?? const Duration(days: 60);
 
     // 마지막 학습일로부터 얼마나 지났는지 계산
+    print(myWord.front);
     final timeSinceLastStudy = now.difference(myWord.lastStudied!);
 
     // 복습 시점이 지났는지 여부로 우선순위 결정

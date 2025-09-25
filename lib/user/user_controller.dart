@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:podo_words/user/user_model.dart';
 import 'package:podo_words/user/user_service.dart';
 
-import '../learning/models/myword_model.dart';
 import '../learning/models/word_model.dart';
 
 // 앱 전역에서 사용자 상태를 관리
@@ -19,11 +18,11 @@ class UserController extends GetxController {
 
   // WordListPage 에서 inactiveWordIds의 변경에만 Obx()가 반응하도록 하기 위해 변수를 따로 만듦.
   final RxSet<String> inactiveWordIds = <String>{}.obs;
-  final RxList<MyWord> myWords = <MyWord>[].obs;
+  final RxList<Word> myWords = <Word>[].obs;
 
 
   // 특정 단어의 복습 기록을 업데이트하도록 서비스에 요청합니다.
-  void updateReviewProgress(MyWord myWord) {
+  void updateReviewProgress(Word myWord) {
     // 현재 사용자 정보가 있을 때만 실행
     if (user.value != null) {
       _userService.updateMyWordReviewProgress(user.value!.id, myWord);
@@ -106,40 +105,41 @@ class UserController extends GetxController {
 
     // MyWords(학습 진행 정보) 서브컬렉션 구독
     _myWordProgressSubscription?.cancel();
-    _myWordProgressSubscription = _userService.streamMyWords(userId).listen((myWordProgress) {
+    _myWordProgressSubscription = _userService.streamMyWords(userId).listen((myWordList) {
       // MyWords 목록이 변경되면, 해당 ID로 단어 상세 정보 스트림을 다시 구독
-      final myWordIds = myWordProgress.map((p) => p.id).toList();
-      _listenToWordDetails(myWordProgress, myWordIds);
+      final myWordIds = myWordList.map((w) => w.id).toList();
+      _listenToWordDetails(myWordList, myWordIds);
     });
   }
 
   ///  학습 진행 정보와 단어 원본 정보를 조합하는 함수
-  void _listenToWordDetails(List<MyWord> myWordProgress, List<String> myWordIds) {
+  void _listenToWordDetails(List<Word> myWordList, List<String> myWordIds) {
     _myWordDetailsSubscription?.cancel();
-    _myWordDetailsSubscription = _userService.streamWordsByIds(myWordIds).listen((myWordDetails) {
+    _myWordDetailsSubscription = _userService.streamWordsByIds(myWordIds).listen((wordDetails) {
 
       // 단어 원본 정보를 빠르게 찾기 위한 맵
-      final Map<String, Word> myWordDetailsMap = {for (var w in myWordDetails) w.id: w};
+      final Map<String, Word> wordMap = {for (var w in wordDetails) w.id: w};
 
-      final List<MyWord> combinedMyWords = [];
-      for (var progressData in myWordProgress) { // progressData는 lastStudied, level 등만 있음
+      final List<Word> combinedWords = [];
+      for (var myWord in myWordList) {
         // 해당 ID의 단어 원본 정보가 있는지 확인
-        if (myWordDetailsMap.containsKey(progressData.id)) {
-          final detailData = myWordDetailsMap[progressData.id]!;
+        if (wordMap.containsKey(myWord.id)) {
+          final wordData = wordMap[myWord.id]!;
 
-          // [핵심] copyWith 메소드를 사용하여 두 정보를 합친 완전한 MyWord 객체 생성
-          combinedMyWords.add(progressData.copyWith(
-            front: detailData.front,
-            back: detailData.back,
-            pronunciation: detailData.pronunciation,
-            audio: detailData.audio,
-            image: detailData.image,
+          // copyWith 메소드를 사용하여 두 정보를 합친 완전한 Word 객체 생성
+          combinedWords.add(myWord.copyWith(
+            orderId: wordData.orderId,
+            front: wordData.front,
+            back: wordData.back,
+            pronunciation: wordData.pronunciation,
+            audio: wordData.audio,
+            image: wordData.image,
           ));
         }
       }
 
-      myWords.assignAll(combinedMyWords);
-      print('최종 학습 단어 목록이 업데이트되었습니다. 총 ${combinedMyWords.length}개');
+      myWords.assignAll(combinedWords);
+      print('단어 리스트가 업데이트 되었습니다. 총 ${combinedWords.length}개');
     });
   }
 

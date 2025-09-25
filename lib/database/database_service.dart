@@ -70,7 +70,7 @@ class DatabaseService {
         .get();
 
     return snapshot.docs
-        .map((doc) => Word.fromJson(doc.data()))
+        .map((doc) => Word.fromTopicSnapshot(doc))
         .toList();
   }
 
@@ -94,11 +94,11 @@ class DatabaseService {
 
     print("Firestore에서 전체 단어 목록을 가져와 조회용 맵을 생성합니다...");
 
-    // 1. Firestore의 모든 단어를 한 번에 가져와 조회용 맵 생성 (기존과 동일)
+    // 1. Firestore의 모든 단어를 한 번에 가져와 조회용 맵 생성
     final allWordsSnapshot = await _db.collectionGroup('Words').get();
     final wordLookupMap = <String, String>{}; // Key: 'front|back', Value: wordId
     for (final doc in allWordsSnapshot.docs) {
-      final word = Word.fromJson(doc.data());
+      final word = Word.fromTopicSnapshot(doc);
       final key = '${word.front}|${word.back}';
       wordLookupMap[key] = word.id;
     }

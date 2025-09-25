@@ -6,7 +6,6 @@ import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:podo_words/database/local_storage_service.dart';
 import 'package:podo_words/user/user_model.dart';
 
-import '../learning/models/myword_model.dart';
 import '../learning/models/word_model.dart';
 
 class UserService {
@@ -17,10 +16,9 @@ class UserService {
   final String KEY_IN_ACTIVE_WORDS = 'inActiveWords';
   final String KEY_MY_WORDS = 'myWords';
 
-
   /// 사용자의 단어 학습 진행 상태를 업데이트합니다.
   /// 단, 오늘 이미 학습한 단어는 업데이트하지 않습니다.
-  Future<void> updateMyWordReviewProgress(String userId, MyWord myWord) async {
+  Future<void> updateMyWordReviewProgress(String userId, Word myWord) async {
     // 오늘 날짜와 마지막 학습 날짜를 시간 없이 비교
     if (myWord.lastStudied != null && _isToday(myWord.lastStudied!)) {
       print("'${myWord.front}' 단어는 오늘 이미 복습했습니다. Firestore 업데이트를 건너뜁니다.");
@@ -28,17 +26,13 @@ class UserService {
     }
 
     // 업데이트할 문서의 참조
-    final myWordRef = _db
-        .collection('Users')
-        .doc(userId)
-        .collection('MyWords')
-        .doc(myWord.id);
+    final myWordRef = _db.collection('Users').doc(userId).collection('MyWords').doc(myWord.id);
     print("'${myWord.front}' 단어의 복습 기록을 업데이트합니다.");
 
     // FieldValue.increment를 사용하여 안전하게 카운터 값을 1 증가
     return myWordRef.update({
-      MyWord.LAST_STUDIED: FieldValue.serverTimestamp(),
-      MyWord.REVIEW_COUNT: FieldValue.increment(1),
+      Word.LAST_STUDIED: FieldValue.serverTimestamp(),
+      Word.REVIEW_COUNT: FieldValue.increment(1),
     });
   }
 
@@ -109,19 +103,16 @@ class UserService {
         .collectionGroup('Words')
         .where('id', whereIn: wordIds)
         .snapshots()
-        .map((snapshot) =>
-        snapshot.docs.map((doc) => Word.fromJson(doc.data())).toList());
+        .map((snapshot) => snapshot.docs.map((doc) => Word.fromTopicSnapshot(doc)).toList());
   }
 
-  Stream<List<MyWord>> streamMyWords(String userId) {
+  Stream<List<Word>> streamMyWords(String userId) {
     return _db
         .collection(_collection)
         .doc(userId)
         .collection('MyWords') // MyWords 서브컬렉션 경로
         .snapshots()
-        .map((snapshot) => snapshot.docs
-        .map((doc) => MyWord.fromSnapshot(doc))
-        .toList());
+        .map((snapshot) => snapshot.docs.map((doc) => Word.fromMyWordSnapshot(doc)).toList());
   }
 
   // 사용자 정보 스트림 (UserController에서 사용)
@@ -206,11 +197,13 @@ class UserService {
     final List<String> inactiveFronts = LocalStorageService().getStringList(KEY_IN_ACTIVE_WORDS);
 
     // MyWords 데이터 변환
-    final List<Word> oldMyWords = [];
-    if(myWordsJson.isNotEmpty) {
+    final List<String> oldMyWordKeys = [];
+    if (myWordsJson.isNotEmpty) {
       for (int i = 0; i < myWordsJson.length; i++) {
-        Word myWord = Word.fromJson(json.decode(myWordsJson[i]));
-        oldMyWords.add(myWord);
+        final myWordJson = json.decode(myWordsJson[i]);
+        final front = myWordJson['front'] as String;
+        final back = myWordJson['back'] as String;
+        oldMyWordKeys.add('$front|$back');
       }
     } else {
       print("마이그레이션할 데이터가 없습니다.");
@@ -223,7 +216,7 @@ class UserService {
     final allWordsSnapshot = await _db.collectionGroup('Words').get();
     final wordLookupMap = <String, String>{}; // Key: 'front|back', Value: wordId
     for (final doc in allWordsSnapshot.docs) {
-      final word = Word.fromJson(doc.data());
+      final word = Word.fromTopicSnapshot(doc);
       final key = '${word.front}|${word.back}';
       wordLookupMap[key] = word.id;
     }
@@ -232,13 +225,13 @@ class UserService {
 
     // 2. 일괄 쓰기(Batch) 준비
     final batch = _db.batch();
-    final userDocRef = _db.collection('Users').doc(userId);;
+    final userDocRef = _db.collection('Users').doc(userId);
+    ;
     int migratedCount = 0;
 
     // 3-1. MyWords 마이그레이션 작업 추가
     final myWordsCollectionRef = userDocRef.collection('MyWords');
-    for (final oldWord in oldMyWords) {
-      final key = '${oldWord.front}|${oldWord.back}';
+    for (final key in oldMyWordKeys) {
       final wordId = wordLookupMap[key]; // 맵에서 고유 ID 조회
 
       if (wordId != null) {

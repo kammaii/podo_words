@@ -8,7 +8,7 @@ import 'package:podo_words/review/review_flashcard_page.dart';
 import 'package:podo_words/review/review_word_tile.dart';
 import 'package:podo_words/user/user_controller.dart';
 
-import '../learning/models/myword_model.dart';
+import '../learning/models/word_model.dart';
 import '../learning/widgets/show_snack_bar.dart';
 import '../user/user_service.dart';
 
@@ -61,21 +61,21 @@ class ReviewPageState extends State<ReviewListPage> {
         padding: const EdgeInsets.all(8.0),
         child: Obx(() {
           // 1. 실시간 데이터 소스 가져오기
-          final List<MyWord> allMyWords = userController.myWords.toList();
+          final List<Word> myWords = userController.myWords.toList();
           final Set<String> inactiveWordIds = userController.inactiveWordIds;
 
           // --- 필터링 및 정렬 로직 ---
-          List<MyWord> filteredWords;
+          List<Word> filteredWords;
           // 1. 활성/비활성 필터링
           switch (_currentFilter) {
             case ReviewFilter.Priority:
-              filteredWords = allMyWords.where((w) => !inactiveWordIds.contains(w.id)).toList();
+              filteredWords = myWords.where((w) => !inactiveWordIds.contains(w.id)).toList();
               break;
             case ReviewFilter.Inactive:
-              filteredWords = allMyWords.where((w) => inactiveWordIds.contains(w.id)).toList();
+              filteredWords = myWords.where((w) => inactiveWordIds.contains(w.id)).toList();
               break;
             case ReviewFilter.All:
-              filteredWords = allMyWords;
+              filteredWords = myWords;
               break;
           }
 
@@ -89,7 +89,7 @@ class ReviewPageState extends State<ReviewListPage> {
           }
 
           // 3. 검색어 필터링
-          final List<MyWord> myWordsInList = _searchInput.isNotEmpty
+          final List<Word> myWordsInList = _searchInput.isNotEmpty
               ? filteredWords.where((w) =>
           w.front.toLowerCase().contains(_searchInput.toLowerCase()) ||
               w.back.toLowerCase().contains(_searchInput.toLowerCase())).toList()
@@ -237,7 +237,7 @@ class ReviewPageState extends State<ReviewListPage> {
   }
 
 
-  CupertinoActionSheet _playBtnClick(List<MyWord> myWordsInList) {
+  CupertinoActionSheet _playBtnClick(List<Word> myWordsInList) {
 
     final shouldShowAds = !userController.user.value!.isPremium;
 

@@ -5,12 +5,12 @@ import 'package:podo_words/common/my_colors.dart';
 
 import '../learning/controllers/ads_controller.dart';
 import '../learning/controllers/audio_controller.dart';
-import '../learning/models/myword_model.dart';
+import '../learning/models/word_model.dart';
 import '../learning/widgets/audio_button.dart';
 import '../user/user_controller.dart';
 
 class ReviewFlashCardPage extends StatefulWidget {
-  final List<MyWord> words;
+  final List<Word> words;
 
   const ReviewFlashCardPage(this.words, {super.key});
 
@@ -19,8 +19,8 @@ class ReviewFlashCardPage extends StatefulWidget {
 }
 
 class _ReviewFlashCardPageState extends State<ReviewFlashCardPage> {
-  late final List<MyWord> _words;
-  late MyWord _currentWord;
+  late final List<Word> _words;
+  late Word _currentWord;
   int _cardIndex = 0;
   bool _isReversed = false;
   bool _isAnswerVisible = false;
