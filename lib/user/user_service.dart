@@ -11,29 +11,40 @@ import '../learning/models/word_model.dart';
 class UserService {
   final _db = FirebaseFirestore.instance;
   final _messaging = FirebaseMessaging.instance;
-  final String _collection = 'Users';
 
   final String KEY_IN_ACTIVE_WORDS = 'inActiveWords';
   final String KEY_MY_WORDS = 'myWords';
+  final String USERS = 'Users';
+  final String MY_WORDS = 'MyWords';
 
-  /// 사용자의 단어 학습 진행 상태를 업데이트합니다.
+  /// 여러 단어의 복습 기록(lastStudied, reviewCount)을 일괄 업데이트합니다.
   /// 단, 오늘 이미 학습한 단어는 업데이트하지 않습니다.
-  Future<void> updateMyWordReviewProgress(String userId, Word myWord) async {
-    // 오늘 날짜와 마지막 학습 날짜를 시간 없이 비교
-    if (myWord.lastStudied != null && _isToday(myWord.lastStudied!)) {
-      print("'${myWord.front}' 단어는 오늘 이미 복습했습니다. Firestore 업데이트를 건너뜁니다.");
-      return; // 오늘 이미 복습했으면 아무것도 하지 않고 종료
+  Future<void> updateMyWordsProgress(String userId, List<Word> reviewedWords) async {
+    if (reviewedWords.isEmpty) return;
+
+    final batch = _db.batch();
+    final myWordsRef = _db.collection(USERS).doc(userId).collection(MY_WORDS);
+    int updateCount = 0;
+
+    for (final word in reviewedWords) {
+      if (word.lastStudied != null && _isToday(word.lastStudied!)) {
+        continue;
+      }
+
+      final docRef = myWordsRef.doc(word.id);
+      batch.update(docRef, {
+        Word.LAST_STUDIED: FieldValue.serverTimestamp(),
+        Word.REVIEW_COUNT: FieldValue.increment(1),
+      });
+      updateCount++;
     }
 
-    // 업데이트할 문서의 참조
-    final myWordRef = _db.collection('Users').doc(userId).collection('MyWords').doc(myWord.id);
-    print("'${myWord.front}' 단어의 복습 기록을 업데이트합니다.");
-
-    // FieldValue.increment를 사용하여 안전하게 카운터 값을 1 증가
-    return myWordRef.update({
-      Word.LAST_STUDIED: FieldValue.serverTimestamp(),
-      Word.REVIEW_COUNT: FieldValue.increment(1),
-    });
+    if(updateCount > 0) {
+      await batch.commit();
+      print("${reviewedWords.length}개 단어의 복습 기록이 업데이트되었습니다.");
+    } else {
+      print("업데이트할 복습이 없습니다.");
+    }
   }
 
   ///  주어진 날짜가 오늘인지 확인하는 헬퍼 함수
@@ -46,7 +57,7 @@ class UserService {
   Future<int> addNewlyLearnedWords(String userId, List<Word> newWords) async {
     if (newWords.isEmpty) return 0;
 
-    final myWordsRef = _db.collection('Users').doc(userId).collection('MyWords');
+    final myWordsRef = _db.collection(USERS).doc(userId).collection(MY_WORDS);
 
     // 1. 기존에 학습한 단어 ID들을 먼저 가져옵니다.
     final existingWordsSnapshot = await myWordsRef.get();
@@ -61,9 +72,9 @@ class UserService {
       if (!existingWordIds.contains(word.id)) {
         final newMyWordRef = myWordsRef.doc(word.id);
         final newData = {
-          'id': word.id,
-          'lastStudied': FieldValue.serverTimestamp(),
-          'reviewCount': 0,
+          Word.ID: word.id,
+          Word.LAST_STUDIED: FieldValue.serverTimestamp(),
+          Word.REVIEW_COUNT: 0,
         };
         batch.set(newMyWordRef, newData);
         newlyAddedCount++;
@@ -83,7 +94,7 @@ class UserService {
     if (wordIdsToDelete.isEmpty) return Future.value();
 
     final batch = _db.batch();
-    final myWordsRef = _db.collection('Users').doc(userId).collection('MyWords');
+    final myWordsRef = _db.collection(USERS).doc(userId).collection(MY_WORDS);
 
     for (final wordId in wordIdsToDelete) {
       batch.delete(myWordsRef.doc(wordId));
@@ -108,21 +119,21 @@ class UserService {
 
   Stream<List<Word>> streamMyWords(String userId) {
     return _db
-        .collection(_collection)
+        .collection(USERS)
         .doc(userId)
-        .collection('MyWords') // MyWords 서브컬렉션 경로
+        .collection(MY_WORDS) // MyWords 서브컬렉션 경로
         .snapshots()
         .map((snapshot) => snapshot.docs.map((doc) => Word.fromMyWordSnapshot(doc)).toList());
   }
 
   // 사용자 정보 스트림 (UserController에서 사용)
   Stream<DocumentSnapshot<Map<String, dynamic>>> streamUser(String userId) {
-    return _db.collection(_collection).doc(userId).snapshots();
+    return _db.collection(USERS).doc(userId).snapshots();
   }
 
   // 사용자 정보 가져오기 (초기화 시 사용)
   Future<DocumentSnapshot<Map<String, dynamic>>> getUser(String userId) {
-    return _db.collection(_collection).doc(userId).get();
+    return _db.collection(USERS).doc(userId).get();
   }
 
   // 새로운 사용자 생성
@@ -136,12 +147,12 @@ class UserService {
       UserModel.SIGN_IN_DATE: FieldValue.serverTimestamp(),
       UserModel.TIMEZONE: await FlutterTimezone.getLocalTimezone(),
     };
-    await _db.collection(_collection).doc(userId).set(newUser);
+    await _db.collection(USERS).doc(userId).set(newUser);
   }
 
   // 사용자 정보 업데이트
   Future<void> updateUser(String userId, Map<String, dynamic> data) {
-    return _db.collection(_collection).doc(userId).update(data);
+    return _db.collection(USERS).doc(userId).update(data);
   }
 
   Future<bool> fcmRequest() async {
@@ -166,13 +177,13 @@ class UserService {
   }
 
   Future<void> addInactiveWord(String userId, String wordId) {
-    return _db.collection(_collection).doc(userId).update({
+    return _db.collection(USERS).doc(userId).update({
       UserModel.INACTIVE_WORDS: FieldValue.arrayUnion([wordId]),
     });
   }
 
   Future<void> removeInactiveWord(String userId, String wordId) {
-    return _db.collection(_collection).doc(userId).update({
+    return _db.collection(USERS).doc(userId).update({
       UserModel.INACTIVE_WORDS: FieldValue.arrayRemove([wordId]),
     });
   }
@@ -201,8 +212,8 @@ class UserService {
     if (myWordsJson.isNotEmpty) {
       for (int i = 0; i < myWordsJson.length; i++) {
         final myWordJson = json.decode(myWordsJson[i]);
-        final front = myWordJson['front'] as String;
-        final back = myWordJson['back'] as String;
+        final front = myWordJson[Word.FRONT] as String;
+        final back = myWordJson[Word.BACK] as String;
         oldMyWordKeys.add('$front|$back');
       }
     } else {
@@ -225,12 +236,12 @@ class UserService {
 
     // 2. 일괄 쓰기(Batch) 준비
     final batch = _db.batch();
-    final userDocRef = _db.collection('Users').doc(userId);
+    final userDocRef = _db.collection(USERS).doc(userId);
     ;
     int migratedCount = 0;
 
     // 3-1. MyWords 마이그레이션 작업 추가
-    final myWordsCollectionRef = userDocRef.collection('MyWords');
+    final myWordsCollectionRef = userDocRef.collection(MY_WORDS);
     for (final key in oldMyWordKeys) {
       final wordId = wordLookupMap[key]; // 맵에서 고유 ID 조회
 
@@ -240,9 +251,9 @@ class UserService {
 
         // 저장할 데이터 정의
         final newData = {
-          'id': wordId,
-          'lastStudied': FieldValue.serverTimestamp(),
-          'reviewCount': 0,
+          Word.ID: wordId,
+          Word.LAST_STUDIED: FieldValue.serverTimestamp(),
+          Word.REVIEW_COUNT: 0,
         };
 
         // 배치에 'set' 작업 추가

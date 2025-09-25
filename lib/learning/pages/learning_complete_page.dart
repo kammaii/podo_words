@@ -30,6 +30,10 @@ class _LearningCompletePageState extends State<LearningCompletePage> {
     // initState에서 학습 완료 처리 및 데이터 로딩을 시작
     _completionFuture = _processLessonCompletion();
     AudioController().playYay();
+    if(learningController.learningMode == LearningMode.review) {
+      print("복습 모드 완료 처리 시작...");
+      userController.updateReviewProgress(learningController.words);
+    }
   }
 
   /// 학습 완료에 필요한 모든 비동기 작업을 처리하는 함수

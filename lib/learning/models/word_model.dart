@@ -16,6 +16,7 @@ class Word {
 
   bool? shouldQuiz;
 
+  static const String ID = 'id';
   static const String ORDER_ID = 'orderId';
   static const String FRONT = 'front';
   static const String BACK = 'back';

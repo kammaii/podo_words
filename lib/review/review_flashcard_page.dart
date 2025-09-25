@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:podo_words/common/my_colors.dart';
+import 'package:podo_words/learning/controllers/learning_controller.dart';
 
 import '../learning/controllers/ads_controller.dart';
 import '../learning/controllers/audio_controller.dart';
 import '../learning/models/word_model.dart';
+import '../learning/pages/learning_complete_page.dart';
 import '../learning/widgets/audio_button.dart';
 import '../user/user_controller.dart';
 
@@ -26,6 +28,7 @@ class _ReviewFlashCardPageState extends State<ReviewFlashCardPage> {
   bool _isAnswerVisible = false;
   late final bool _shouldShowAds;
   final userController = Get.find<UserController>();
+  final learningController = Get.find<LearningController>();
 
   @override
   void initState() {
@@ -64,12 +67,22 @@ class _ReviewFlashCardPageState extends State<ReviewFlashCardPage> {
   }
 
   void _nextCard() {
-    userController.updateReviewProgress(_currentWord);
-    setState(() {
-      final nextIndex = (_cardIndex + 1) % _words.length;
-      _isAnswerVisible = false;
-      _updateCurrentCard(nextIndex);
-    });
+    final nextIndex = _cardIndex + 1;
+
+    if(nextIndex < _words.length) {
+      setState(() {
+        _isAnswerVisible = false;
+        _updateCurrentCard(nextIndex);
+      });
+    } else {
+      // 복습 완료 처리
+      print('플래시카드 복습 완료!');
+      userController.updateReviewProgress(_words);
+      learningController.words = _words;
+      Get.to(() => const LearningCompletePage());
+    }
+
+
   }
 
   @override

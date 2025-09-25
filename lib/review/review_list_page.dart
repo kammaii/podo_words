@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:podo_words/common/my_colors.dart';
+import 'package:podo_words/learning/controllers/learning_controller.dart';
 import 'package:podo_words/learning/pages/learning_page.dart';
 import 'package:podo_words/review/review_calculator.dart';
 import 'package:podo_words/review/review_flashcard_page.dart';
@@ -24,6 +25,7 @@ class ReviewPageState extends State<ReviewListPage> {
 
 // GetX 컨트롤러 및 서비스 인스턴스 가져오기
   final userController = Get.find<UserController>();
+  final learningController = Get.find<LearningController>();
   final userService = UserService();
 
   // 로컬 UI 상태를 관리하는 변수들
@@ -249,6 +251,7 @@ class ReviewPageState extends State<ReviewListPage> {
           onPressed: () {
             Get.back();
             if (myWordsInList.length >= 4) {
+              learningController.learningMode = LearningMode.review;
               Get.to(() => LearningPage(), arguments: {
                 'shouldShowAds': shouldShowAds,
                 'words': myWordsInList,

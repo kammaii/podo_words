@@ -22,7 +22,6 @@ class ReviewCalculator {
     final reviewInterval = _reviewIntervals[myWord.reviewCount] ?? const Duration(days: 60);
 
     // 마지막 학습일로부터 얼마나 지났는지 계산
-    print(myWord.front);
     final timeSinceLastStudy = now.difference(myWord.lastStudied!);
 
     // 복습 시점이 지났는지 여부로 우선순위 결정

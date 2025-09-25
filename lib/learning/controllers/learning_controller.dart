@@ -11,6 +11,8 @@ import 'package:podo_words/learning/pages/learning_complete_page.dart';
 import 'package:podo_words/learning/widgets/learning_quiz1.dart';
 import 'package:podo_words/learning/widgets/word_card.dart';
 
+enum LearningMode { learnNew, review }
+
 class LearningController extends GetxController {
   late List<Word> words;
   List<Word> quizBuffer = [];
@@ -21,6 +23,7 @@ class LearningController extends GetxController {
   bool isLastWord = false;
   final ImageController imageService = ImageController();
   final AudioController audioController = AudioController();
+  LearningMode learningMode = LearningMode.learnNew;
 
 
   Future<void> initController(List<Word> wordList) async {
@@ -29,6 +32,7 @@ class LearningController extends GetxController {
     content = [];
     content.add(WordCard());
     isLastWord = false;
+    learningMode = LearningMode.learnNew;
     await Future.wait([
       audioController.cacheAllAudioFiles(words),
       imageService.cacheImageFiles(words),

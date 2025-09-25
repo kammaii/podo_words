@@ -22,10 +22,10 @@ class UserController extends GetxController {
 
 
   // 특정 단어의 복습 기록을 업데이트하도록 서비스에 요청합니다.
-  void updateReviewProgress(Word myWord) {
+  void updateReviewProgress(List<Word> myWords) {
     // 현재 사용자 정보가 있을 때만 실행
     if (user.value != null) {
-      _userService.updateMyWordReviewProgress(user.value!.id, myWord);
+      _userService.updateMyWordsProgress(user.value!.id, myWords);
     }
   }
 

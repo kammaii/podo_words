@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:podo_words/common/my_colors.dart';
 import 'package:podo_words/database/database_service.dart';
 import 'package:podo_words/learning/controllers/ads_controller.dart';
+import 'package:podo_words/learning/controllers/learning_controller.dart';
 import 'package:podo_words/learning/models/topic_model.dart';
 import 'package:podo_words/learning/models/word_model.dart';
 import 'package:podo_words/learning/pages/learning_page.dart';
@@ -39,6 +40,7 @@ class WordListPageState extends State<WordListPage> {
   late final Future<List<Word>> _wordsFuture;
 
   final userController = Get.find<UserController>();
+  final learningController = Get.find<LearningController>();
 
   @override
   void initState() {
@@ -53,6 +55,7 @@ class WordListPageState extends State<WordListPage> {
   }
 
   void _runLesson({required List<Word> activeWords, required bool shouldShowAds}) {
+    learningController.learningMode = LearningMode.learnNew;
     Get.to(() => LearningPage(), arguments: {
       'shouldShowAds': shouldShowAds,
       'words': activeWords,
