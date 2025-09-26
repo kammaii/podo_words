@@ -162,7 +162,7 @@ class _LearningQuiz3State extends State<LearningQuiz3> {
         Get.to(() => LearningCompletePage());
       } else {
         controller.content.removeLast();
-        controller.audioController.playWordAudio(controller.getThisWord());
+        controller.audioController.playWordAudio(controller.currentWord);
         controller.update();
       }
     }

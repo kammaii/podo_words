@@ -37,7 +37,7 @@ class LearningController extends GetxController {
       audioController.cacheAllAudioFiles(words),
       imageService.cacheImageFiles(words),
     ]);
-    audioController.playWordAudio(getThisWord());
+    audioController.playWordAudio(currentWord);
   }
 
 
@@ -60,11 +60,13 @@ class LearningController extends GetxController {
 
   void swipeWordCard({required bool isNext}) {
     if (isNext) {
-      Word word = getThisWord();
-      if (!quizBuffer.contains(word)) {
-        print('${word.front} is add to quizButter');
-        word.shouldQuiz = true;
-        quizBuffer.add(word);
+      if (wordIndex.value < words.length) {
+        Word word = currentWord;
+        if (!quizBuffer.contains(word)) {
+          print('${word.front} is add to quizButter');
+          word.shouldQuiz = true;
+          quizBuffer.add(word);
+        }
       }
       wordIndex++;
       isRightSwipe = true;
@@ -83,19 +85,20 @@ class LearningController extends GetxController {
     }
     final shouldRunQuiz = shouldQuizWords != 0 && shouldQuizWords % 4 == 0;
 
-    if (isQuizOn.value) {
-      if (shouldRunQuiz || isLastWord) {
+    if (isLastWord) {
+      if (isQuizOn.value && shouldQuizWords > 0) {
         content.add(LearningQuiz1());
         update();
       } else {
-        audioController.playWordAudio(getThisWord());
+        Get.to(() => const LearningCompletePage());
+        update();
       }
-    } else {
-      if (isLastWord) {
-        Get.to(LearningCompletePage());
+    } else { // 아직 마지막 단어가 아닐 때
+      if (isQuizOn.value && shouldRunQuiz) {
+        content.add(LearningQuiz1());
         update();
       } else {
-        audioController.playWordAudio(getThisWord());
+        audioController.playWordAudio(currentWord);
       }
     }
   }
@@ -111,12 +114,8 @@ class LearningController extends GetxController {
     }
   }
 
-
-  Word getThisWord() {
-    if(isLastWord) {
-      return Word(id: '', orderId: words.length, front: '', back: '', pronunciation: '', audio:'', image: 'transparent.png');
-    } else {
-      return words[wordIndex.value];
-    }
+  Word get currentWord {
+    print('월드인덱스: ${wordIndex.value}');
+    return words[wordIndex.value];
   }
 }
