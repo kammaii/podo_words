@@ -190,13 +190,11 @@ class UserService {
 
   // 사용자가 MyWords 마이그레이션 대상인지 확인하는 함수
   bool _needsMyWordsMigration() {
-    print('1. 마이그레이션 키: ${LocalStorageService().getBool(LocalStorageService.KEY_MY_WORDS_MIGRATED)}');
     // 1단계: 완료 플래그 확인
     if (LocalStorageService().getBool(LocalStorageService.KEY_MY_WORDS_MIGRATED)) return false;
 
-    print('2. 로컬마이월드: ${LocalStorageService().getStringList(KEY_IN_ACTIVE_WORDS).isEmpty}');
     // 2단계: 로컬 데이터 확인
-    if (LocalStorageService().getStringList(KEY_IN_ACTIVE_WORDS).isEmpty) return false;
+    if (LocalStorageService().getStringList(KEY_MY_WORDS).isEmpty) return false;
 
     // 모든 조건을 통과하면 마이그레이션 대상으로 확정
     return true;
@@ -204,45 +202,57 @@ class UserService {
 
   // 마이그레이션 실행 함수
   Future<void> _migrateMyWordsToFirestore(String userId) async {
+    // 1. SharedPreferences에서 기존 데이터 로드
     final List<String> myWordsJson = LocalStorageService().getStringList(KEY_MY_WORDS);
     final List<String> inactiveFronts = LocalStorageService().getStringList(KEY_IN_ACTIVE_WORDS);
 
-    // MyWords 데이터 변환
-    final List<String> oldMyWordKeys = [];
-    if (myWordsJson.isNotEmpty) {
-      for (int i = 0; i < myWordsJson.length; i++) {
-        final myWordJson = json.decode(myWordsJson[i]);
-        final front = myWordJson[Word.FRONT] as String;
-        final back = myWordJson[Word.BACK] as String;
-        oldMyWordKeys.add('$front|$back');
-      }
-    } else {
-      print("마이그레이션할 데이터가 없습니다.");
-      return;
+    // 2. 조회할 'front' 값들의 Set을 만듭니다.
+    final frontSet = <String>{};
+
+    for (final j in myWordsJson) {
+      final myWordJson = json.decode(j);
+      final front = myWordJson[Word.FRONT] as String;
+      frontSet.add(front);
     }
 
-    print("Firestore에서 전체 단어 목록을 가져와 조회용 맵을 생성합니다...");
+    for(final f in inactiveFronts) {
+      frontSet.add(f);
+    }
+    final frontList = frontSet.toList();
+    print('프론트 리스트: $frontList');
 
-    // 1. Firestore의 모든 단어를 한 번에 가져와 조회용 맵 생성
-    final allWordsSnapshot = await _db.collectionGroup('Words').get();
-    final wordLookupMap = <String, String>{}; // Key: 'front|back', Value: wordId
-    for (final doc in allWordsSnapshot.docs) {
-      final word = Word.fromTopicSnapshot(doc);
-      final key = '${word.front}|${word.back}';
+    print("Firestore에서 단어를 조회합니다...");
+
+    // 3. 'front' 값들을 30개씩 나누어 'whereIn' 쿼리 실행
+    final List<Word> wordsFromDb = [];
+    for (var i = 0; i < frontList.length; i += 30) {
+      final subList = frontList.sublist(i, i + 30 > frontList.length ? frontList.length : i + 30);
+      if (subList.isNotEmpty) {
+        final snapshot = await _db.collectionGroup('Words').where('front', whereIn: subList).get();
+        for (final doc in snapshot.docs) {
+          wordsFromDb.add(Word.fromTopicSnapshot(doc));
+        }
+      }
+    }
+
+    // 4. 조회된 결과를 바탕으로 조회용 맵 생성
+    final wordLookupMap = <String, String>{}; // Key: 'front', Value: wordId
+    for (final word in wordsFromDb) {
+      final key = '${word.front}';
       wordLookupMap[key] = word.id;
     }
 
     print("조회용 맵 생성 완료. 로컬 데이터와 비교를 시작합니다...");
 
-    // 2. 일괄 쓰기(Batch) 준비
+    // 5. WriteBatch로 마이그레이션 작업
     final batch = _db.batch();
     final userDocRef = _db.collection(USERS).doc(userId);
-    ;
     int migratedCount = 0;
 
-    // 3-1. MyWords 마이그레이션 작업 추가
+    // 5-1. MyWords 마이그레이션 작업 추가
     final myWordsCollectionRef = userDocRef.collection(MY_WORDS);
-    for (final key in oldMyWordKeys) {
+    for (final j in myWordsJson) {
+      final key = json.decode(j)[Word.FRONT];
       final wordId = wordLookupMap[key]; // 맵에서 고유 ID 조회
 
       if (wordId != null) {
@@ -262,14 +272,12 @@ class UserService {
       }
     }
 
-    // 3-2. inactiveWords 마이그레이션 작업 추가
+    // 5-2. inactiveWords 마이그레이션 작업 추가
     final List<String> inactiveWordIds = [];
     for (final front in inactiveFronts) {
-      // inactiveWords는 front만 있으므로, 맵의 키와 부분 일치하는 것을 찾아야 함
-      // (주의: 동음이의어가 있을 경우 첫 번째로 찾아지는 단어의 id를 사용하게 됨)
-      final matchingKey = wordLookupMap.keys.firstWhere((k) => k.startsWith('$front|'), orElse: () => '');
-      if (matchingKey.isNotEmpty) {
-        inactiveWordIds.add(wordLookupMap[matchingKey]!);
+      final matchingKey = wordLookupMap.keys.contains(front);
+      if (matchingKey) {
+        inactiveWordIds.add(wordLookupMap[front]!);
       }
     }
 
@@ -279,7 +287,7 @@ class UserService {
       print("${inactiveWordIds.length}개의 inactiveWords를 마이그레이션 준비 완료.");
     }
 
-    // 4. 모든 작업이 담긴 배치를 한 번에 커밋(실행)
+    // 6. 모든 작업이 담긴 배치를 한 번에 커밋(실행)
     await batch.commit();
     print("Firestore 배치 작업이 완료되었습니다.");
     if (migratedCount > 0) {
@@ -289,8 +297,8 @@ class UserService {
 
   // [통합 실행] 마이그레이션 필요 여부를 확인하고, 필요 시 실행하는 함수
   Future<void> runMyWordsMigrationIfNeeded(String userId) async {
-    // todo: final bool needsMigration = _needsMyWordsMigration();
-    if (false) {
+    final bool needsMigration = _needsMyWordsMigration();
+    if (needsMigration) {
       print("MyWords 마이그레이션을 시작합니다...");
 
       try {
@@ -301,8 +309,6 @@ class UserService {
         print("MyWords 마이그레이션이 성공적으로 완료되었습니다.");
       } catch (e) {
         print("MyWords 마이그레이션 중 오류 발생: $e");
-      } finally {
-        // TODO: 로딩 UI 숨기기
       }
     } else {
       print("MyWords 마이그레이션이 필요하지 않습니다.");

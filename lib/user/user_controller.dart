@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:get/get.dart';
+import 'package:podo_words/database/local_storage_service.dart';
 import 'package:podo_words/user/user_model.dart';
 import 'package:podo_words/user/user_service.dart';
 
@@ -76,10 +78,73 @@ class UserController extends GetxController {
     }
 
     // MyWords 마이그레이션
-    await _userService.runMyWordsMigrationIfNeeded(userId);
+    // await migrationTest();
+    await _userService.runMyWordsMigrationIfNeeded('ENcXUNuI67YoWuYSKd52gUB8LiI2');
 
     // 사용자 데이터의 실시간 스트림 구독 시작
     _listenToUser(userId);
+  }
+
+  Future<void> migrationTest() async {
+    final shouldResetDB = false;
+
+    if(shouldResetDB) {
+      final myWordsRef = FirebaseFirestore.instance.collection('Users/ENcXUNuI67YoWuYSKd52gUB8LiI2/MyWords');
+      try {
+        while (true) {
+          final querySnapshot = await myWordsRef.get();
+          if (querySnapshot.size == 0) {
+            break;
+          }
+          final batch = FirebaseFirestore.instance.batch();
+          for (final doc in querySnapshot.docs) {
+            batch.delete(doc.reference);
+            print('단어 삭제: ${doc.reference}');
+          }
+          await batch.commit();
+        }
+      } catch (e) {
+        print('에러 : $e');
+      }
+
+      final userRef = FirebaseFirestore.instance.collection('Users').doc('ENcXUNuI67YoWuYSKd52gUB8LiI2');
+
+      try {
+        await userRef.update({
+          'inactiveWords': FieldValue.delete(),
+        });
+        print('비활성 단어 삭제 성공');
+      } catch (e) {
+        print('비활성 단어 삭제 에러: $e');
+      }
+    }
+
+    List<String> sampleMyWordsJson = [];
+    Map<String,dynamic> sample1 = {
+      'front': '밥',
+      'back': 'rice/meal',
+      'pronunciation':'',
+      'audio':'audio1',
+      'image':'image1'
+    };
+    Map<String,dynamic> sample2 = {
+      'front': '반찬',
+      'back': 'side dish',
+      'pronunciation':'',
+      'audio':'audio2',
+      'image':'image2'
+    };
+    sampleMyWordsJson.add(json.encode(sample1));
+    sampleMyWordsJson.add(json.encode(sample2));
+
+    LocalStorageService().setStringList('myWords', sampleMyWordsJson);
+
+    List<String> sampleInactives = ['고기', '김치', '만두'];
+    LocalStorageService().setStringList('inActiveWords', sampleInactives);
+
+    LocalStorageService().setBool(LocalStorageService.KEY_MY_WORDS_MIGRATED, false);
+
+    await _userService.runMyWordsMigrationIfNeeded('ENcXUNuI67YoWuYSKd52gUB8LiI2');
   }
 
   /// 학습 완료 시 호출되는 통합 함수
