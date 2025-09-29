@@ -73,9 +73,12 @@ class MainTopicList extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  child: Text(
-                    'Select Topic',
-                    style: TextStyle(fontSize: 20.0, color: MyColors().purple, fontWeight: FontWeight.bold),
+                  child: GestureDetector(
+                    onLongPress: DataStorage().exportMyDataForMigration,
+                    child: Text(
+                      'Select Topic',
+                      style: TextStyle(fontSize: 20.0, color: MyColors().purple, fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
                 IconButton(
