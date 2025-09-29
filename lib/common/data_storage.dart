@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:podo_words/common/word.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -45,6 +47,21 @@ class DataStorage {
     setIsActiveMyWords();
   }
 
+  void exportMyDataForMigration() {
+    final myWordsJson = getStringList(KEY_MY_WORDS);
+    final inactiveWords = getStringList(KEY_IN_ACTIVE_WORDS);
+
+    final backupData = {
+      'myWords': myWordsJson,
+      'inactiveWords': inactiveWords,
+    };
+
+    final backupJsonString = json.encode(backupData);
+
+    Clipboard.setData(ClipboardData(text: backupJsonString));
+
+    Get.snackbar('Backup complete','The data has been saved to the clipboard.');
+  }
 
   void setIsActiveMyWords() {
     for(Word myWord in myWords) {
