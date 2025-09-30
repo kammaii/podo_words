@@ -79,7 +79,7 @@ class UserController extends GetxController {
 
     // MyWords 마이그레이션
     // await migrationTest();
-    await _userService.runMyWordsMigrationIfNeeded('ENcXUNuI67YoWuYSKd52gUB8LiI2');
+    await _userService.runMyWordsMigrationIfNeeded(userId);
 
     // 사용자 데이터의 실시간 스트림 구독 시작
     _listenToUser(userId);
@@ -247,11 +247,11 @@ class UserController extends GetxController {
   }
 
   int get currentStreak {
-    return user.value!.currentStreak;
+    return user.value?.currentStreak ?? 0;
   }
 
   int get maxStreak {
-    return user.value!.maxStreak;
+    return user.value?.maxStreak ?? 0;
   }
 
   // 특정 단어를 비활성 목록에 추가합니다.

@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 import 'package:podo_words/learning/models/word_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -24,6 +26,25 @@ class LocalStorageService {
   Future<void> initLocalData() async {
     sp ??= await SharedPreferences.getInstance();
     lastClickedItem = getInt(KEY_LAST_CLICKED_ITEM);
+  }
+
+  Future<bool> importDataForMigration(String jsonString) async {
+    if (sp == null) await initLocalData(); // SharedPreferences 인스턴스 보장
+
+    try {
+      final backupJson = json.decode(jsonString);
+      final List<String> myWordsJson = List<String>.from(backupJson['myWords'] ?? []);
+      final List<String> inactiveWords = List<String>.from(backupJson['inactiveWords'] ?? []);
+
+      // SharedPreferences에 이전 데이터 복원
+      await sp!.setStringList('myWords', myWordsJson);
+      await sp!.setStringList('inActiveWords', inactiveWords);
+
+      return true;
+    } catch (e) {
+      debugPrint("Import Error: $e");
+      return false;
+    }
   }
 
   void setMyWordsMigrated() {

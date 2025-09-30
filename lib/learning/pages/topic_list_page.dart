@@ -18,7 +18,6 @@ import '../../database/database_service.dart';
 class TopicListPage extends StatefulWidget {
   const TopicListPage({Key? key}) : super(key: key);
 
-
   @override
   State<TopicListPage> createState() => _TopicListPageState();
 }
@@ -36,7 +35,6 @@ class _TopicListPageState extends State<TopicListPage> {
   final userController = Get.find<UserController>();
   final ImageController imageService = ImageController();
 
-
   @override
   void initState() {
     super.initState();
@@ -46,7 +44,7 @@ class _TopicListPageState extends State<TopicListPage> {
     _scrollController.addListener(() {
       // 스크롤이 맨 끝에 도달했고, 더 불러올 데이터가 있으며, 로딩 중이 아닐 때
       if (_scrollController.position.pixels >=
-          _scrollController.position.maxScrollExtent - 200 && // 맨 끝에서 200px 전에 미리 로드
+              _scrollController.position.maxScrollExtent - 200 && // 맨 끝에서 200px 전에 미리 로드
           _hasMore &&
           !_isLoading) {
         _fetchTopics();
@@ -87,7 +85,7 @@ class _TopicListPageState extends State<TopicListPage> {
 
     await imageService.cacheImageFiles(topics);
 
-    if(mounted) {
+    if (mounted) {
       setState(() {
         _topics.addAll(topics); // 기존 리스트에 새로 불러온 데이터 추가
         _lastDocument = lastDoc;
@@ -157,8 +155,8 @@ class _TopicListPageState extends State<TopicListPage> {
                     },
                     icon: Icon(Icons.email_rounded, size: 35, color: MyColors().purple)),
                 GestureDetector(
-                  onTap: (){
-                    Get.to(()=>StreakPage());
+                  onTap: () {
+                    Get.to(() => StreakPage());
                   },
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
@@ -166,20 +164,25 @@ class _TopicListPageState extends State<TopicListPage> {
                       color: MyColors().mustardLight,
                       borderRadius: BorderRadius.circular(30),
                     ),
-                    child: Row(
-                      children: [
-                        Image.asset(
-                          'assets/icon/podo.png',
-                          width: 25,
-                          height: 25,
-                          color: userController.hasStudyToday ? null : Colors.grey,
-                        ),
-                        Text(
-                          'x ${userController.currentStreak.toString()}',
-                          style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
+                    child: Obx(() {
+                      if (userController.user.value == null) {
+                        return CircularProgressIndicator();
+                      }
+                      return Row(
+                        children: [
+                          Image.asset(
+                            'assets/icon/podo.png',
+                            width: 25,
+                            height: 25,
+                            color: userController.hasStudyToday ? null : Colors.grey,
+                          ),
+                          Text(
+                            'x ${userController.currentStreak.toString()}',
+                            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      );
+                    }),
                   ),
                 ),
               ],

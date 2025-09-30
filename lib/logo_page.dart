@@ -33,6 +33,7 @@ class _LogoPageState extends State<LogoPage> {
   }
 
   Future<void> _initData() async {
+
     // RevenueCat 초기화
     kReleaseMode ? await Purchases.setLogLevel(LogLevel.info) : await Purchases.setLogLevel(LogLevel.debug);
     PurchasesConfiguration configuration;
@@ -62,6 +63,9 @@ class _LogoPageState extends State<LogoPage> {
       info = 'Loading local data...';
     });
     await LocalStorageService().initLocalData();
+    if(!kReleaseMode) {
+      await _showImportDialog();
+    }
 
     setState(() {
       info = 'Syncing your data...';
@@ -79,6 +83,45 @@ class _LogoPageState extends State<LogoPage> {
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
       Get.off(() => MainFrame());
     });
+  }
+
+  /// 데이터 가져오기 다이얼로그를 표시하는 함수
+  Future<void> _showImportDialog() {
+    final textController = TextEditingController();
+    // Get.dialog는 Future를 반환하므로, async/await로 닫힐 때까지 기다릴 수 있음
+    return Get.dialog(
+      AlertDialog(
+        title: const Text('Data Import (For Testing)'),
+        content: TextField(
+          controller: textController,
+          maxLines: 8,
+          decoration: const InputDecoration(
+            hintText: 'Paste your backed-up data here.',
+            border: OutlineInputBorder(),
+          ),
+        ),
+        actions: [
+          TextButton(
+            child: const Text('Skip'),
+            onPressed: () => Get.back(),
+          ),
+          ElevatedButton(
+            child: const Text('Import'),
+            onPressed: () async {
+              final success = await LocalStorageService().importDataForMigration(textController.text);
+              // 성공적으로 가져왔을 때만 다이얼로그를 닫음
+              if (success) {
+                Get.back();
+                Get.snackbar('Restoration complete', 'Previous data has been successfully restored.');
+              } else {
+                Get.snackbar('Failed to import', 'The data format is incorrect.');
+              }
+            },
+          ),
+        ],
+      ),
+      barrierDismissible: false,
+    );
   }
 
   @override
