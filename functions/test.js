@@ -731,7 +731,7 @@ async function updateAudioUrls() {
 
 async function checkLoraDatabase() {
 // 1. 'MyWords' 컬렉션에서 모든 문서 ID를 가져옵니다.
-    const myWordsCollectionPath = 'Users/FXgPnE6r6xPLu70zCSmZ7F5vWDK2/MyWords';
+    const myWordsCollectionPath = 'Users/sNpdMfF8LuUfUmnKxwcCE0WDdGt1/MyWords';
     console.log(`1. '${myWordsCollectionPath}'에서 문서 ID를 가져오는 중...`);
 
     const myWordsSnapshot = await db.collection(myWordsCollectionPath).get();
@@ -811,4 +811,4 @@ async function getAudioPath() {
 
 }
 
-getAudioPath();
+checkLoraDatabase();
