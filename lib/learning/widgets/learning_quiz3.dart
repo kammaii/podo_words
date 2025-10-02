@@ -188,7 +188,7 @@ class _LearningQuiz3State extends State<LearningQuiz3> {
           Container(
             margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
             padding: const EdgeInsets.all(15.0),
-            height: 60.0,
+            height: 70.0,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(10.0),

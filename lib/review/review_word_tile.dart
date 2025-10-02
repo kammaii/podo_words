@@ -24,7 +24,6 @@ class ReviewWordTile extends StatelessWidget {
 
   final userController = Get.find<UserController>();
 
-
   @override
   Widget build(BuildContext context) {
     final userService = UserService();
@@ -43,8 +42,9 @@ class ReviewWordTile extends StatelessWidget {
       }
     }
 
-    if(isActive) {
-      swipeBackground = Padding(padding: EdgeInsets.only(left: 20), child: Icon(Icons.visibility_off, color: Colors.red));
+    if (isActive) {
+      swipeBackground =
+          Padding(padding: EdgeInsets.only(left: 20), child: Icon(Icons.visibility_off, color: Colors.red));
       switch (priority) {
         case ReviewPriority.Urgent:
           priorityColor = MyColors().red;
@@ -60,11 +60,11 @@ class ReviewWordTile extends StatelessWidget {
           break;
       }
     } else {
-      swipeBackground = Padding(padding: EdgeInsets.only(left: 20), child: Icon(Icons.visibility, color: Colors.green));
+      swipeBackground =
+          Padding(padding: EdgeInsets.only(left: 20), child: Icon(Icons.visibility, color: Colors.green));
       priorityColor = Colors.grey.shade400;
       percent = 0;
     }
-
 
     return SwipeTo(
       onLeftSwipe: (details) => onSwipeCallback(),
@@ -97,14 +97,20 @@ class ReviewWordTile extends StatelessWidget {
                   percent: percent,
                   center: !isActive
                       ? Icon(Icons.visibility_off, color: priorityColor, size: 20)
-                      : Text(
-                    '${(percent * 100).toInt()}%',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12,
-                      color: priorityColor,
-                    ),
-                  ),
+                      : FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 3),
+                            child: Text(
+                              '${(percent * 100).toInt()}%',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12,
+                                color: priorityColor,
+                              ),
+                            ),
+                          ),
+                        ),
                   progressColor: priorityColor,
                   backgroundColor: priorityColor.withAlpha(50),
                   circularStrokeCap: CircularStrokeCap.round,

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:podo_words/common/my_colors.dart';
+import 'package:podo_words/user/user_controller.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:http/http.dart' as http;
 
@@ -14,6 +16,7 @@ class FeedbackPage extends StatefulWidget {
 class _FeedbackPageState extends State<FeedbackPage> {
   final feedbackController = TextEditingController();
   final emailController = TextEditingController();
+  final userController = Get.find<UserController>();
   bool isFormValid = false;
   bool isSending = false;
 
@@ -129,7 +132,12 @@ class _FeedbackPageState extends State<FeedbackPage> {
                     ),
                   ),
                 ),
-              )
+              ),
+              const SizedBox(height: 16),
+              GestureDetector(onTap: (){
+                Clipboard.setData(ClipboardData(text: userController.userId));
+                Get.snackbar('', 'Your user ID has been copied to the clipboard.');
+              }, child: Text(userController.userId, style: TextStyle(color: Colors.grey))),
             ],
           ),
         ),
