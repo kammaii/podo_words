@@ -84,9 +84,9 @@ class ReviewPageState extends State<ReviewListPage> {
           // 2. 'Priority' 탭일 경우 우선순위로 정렬
           if (_currentFilter == ReviewFilter.Priority) {
             filteredWords.sort((a, b) {
-              final priorityA = _reviewCalculator.getPriority(a).index;
-              final priorityB = _reviewCalculator.getPriority(b).index;
-              return priorityA.compareTo(priorityB); // Urgent(0)가 맨 위로 오도록 정렬
+              final statusA = _reviewCalculator.getStatus(a);
+              final statusB = _reviewCalculator.getStatus(b);
+              return statusA.memoryPercent.compareTo(statusB.memoryPercent); // Urgent(0)가 맨 위로 오도록 정렬
             });
           }
 
@@ -197,13 +197,13 @@ class ReviewPageState extends State<ReviewListPage> {
                       itemCount: myWordsInList.length,
                       itemBuilder: (context, index) {
                         final myWord = myWordsInList[index];
-                        final priority = _reviewCalculator.getPriority(myWord);
+                        final status = _reviewCalculator.getStatus(myWord);
                         final isActive = !inactiveWordIds.contains(myWord.id);
 
                         return ReviewWordTile(
-                          key: ValueKey(myWord.id),
+                          key: ValueKey('${myWord.id}_$isActive'),
                           myWord: myWord,
-                          priority: priority,
+                          status: status,
                           isActive: isActive,
                         );
                       },

@@ -12,13 +12,13 @@ import '../user/user_controller.dart';
 
 class ReviewWordTile extends StatelessWidget {
   final Word myWord;
-  final ReviewPriority priority;
+  final ReviewStatus status;
   final bool isActive;
 
   ReviewWordTile({
     super.key,
     required this.myWord,
-    required this.priority,
+    required this.status,
     required this.isActive,
   });
 
@@ -28,15 +28,38 @@ class ReviewWordTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final userService = UserService();
     final userId = userController.user.value?.id;
-    final Color priorityColor;
-    final double percent;
+    final priority = status.priority;
+    final percent = status.memoryPercent;
     final Widget swipeBackground;
+    final Color priorityColor;
 
     void onSwipeCallback() {
       if (userId == null) return;
+      if (Get.isSnackbarOpen) {
+        Get.back();
+      }
+
       // 현재 상태에 따라 반대되는 작업을 수행
       if (isActive) {
-        userService.addInactiveWord(userId, myWord.id);
+        userController.addInactiveWord(myWord.id);
+        Get.snackbar(
+          "'${myWord.front}' is deactivated.", // 제목
+          "Click 'undo' to reactivate.", // 내용
+          mainButton: TextButton(
+            onPressed: () {
+              // '실행 취소' 버튼을 누르면 컨트롤러의 undo 함수 호출
+              userController.undoDeactivateWord();
+              if (Get.isSnackbarOpen) {
+                Get.back();
+              }
+            },
+            child: const Text('Undo', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+          ),
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.black.withAlpha(200),
+          colorText: Colors.white,
+          duration: const Duration(seconds: 5),
+        );
       } else {
         userService.removeInactiveWord(userId, myWord.id);
       }
@@ -48,22 +71,18 @@ class ReviewWordTile extends StatelessWidget {
       switch (priority) {
         case ReviewPriority.Urgent:
           priorityColor = MyColors().red;
-          percent = 0.1; // 완전히 비어 보이지 않도록 약간의 값을 줌
           break;
         case ReviewPriority.Recommended:
           priorityColor = MyColors().mustard;
-          percent = 0.5;
           break;
         case ReviewPriority.Good:
           priorityColor = MyColors().green;
-          percent = 1.0;
           break;
       }
     } else {
       swipeBackground =
           Padding(padding: EdgeInsets.only(left: 20), child: Icon(Icons.visibility, color: Colors.green));
       priorityColor = Colors.grey.shade400;
-      percent = 0;
     }
 
     return SwipeTo(
@@ -92,9 +111,9 @@ class ReviewWordTile extends StatelessWidget {
             child: Row(
               children: [
                 CircularPercentIndicator(
-                  radius: 22.0,
+                  radius: 24.0,
                   lineWidth: 5.0,
-                  percent: percent,
+                  percent: isActive ? percent : 0.0,
                   center: !isActive
                       ? Icon(Icons.visibility_off, color: priorityColor, size: 20)
                       : FittedBox(

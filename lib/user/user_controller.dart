@@ -22,6 +22,8 @@ class UserController extends GetxController {
   final RxSet<String> inactiveWordIds = <String>{}.obs;
   final RxList<Word> myWords = <Word>[].obs;
 
+  String? _lastInactivatedWordId;
+
 
   // 특정 단어의 복습 기록을 업데이트하도록 서비스에 요청합니다.
   void updateReviewProgress(List<Word> myWords) {
@@ -200,6 +202,7 @@ class UserController extends GetxController {
   // 특정 단어를 비활성 목록에 추가합니다.
   void addInactiveWord(String wordId) {
     if (user.value == null) return;
+    _lastInactivatedWordId = wordId;
     _userService.addInactiveWord(user.value!.id, wordId);
   }
 
@@ -207,6 +210,14 @@ class UserController extends GetxController {
   void removeInactiveWord(String wordId) {
     if (user.value == null) return;
     _userService.removeInactiveWord(user.value!.id, wordId);
+  }
+
+  // 마지막 비활성화 작업을 취소하는 함수
+  void undoDeactivateWord() {
+    if (_lastInactivatedWordId != null) {
+      removeInactiveWord(_lastInactivatedWordId!);
+      _lastInactivatedWordId = null;
+    }
   }
 
   // 로그아웃 또는 컨트롤러 종료 시 스트림 구독을 취소합니다.

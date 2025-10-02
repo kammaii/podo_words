@@ -793,4 +793,22 @@ async function checkLoraDatabase() {
 
 }
 
-checkLoraDatabase();
+async function getAudioPath() {
+    const filePath = 'audios/8a086dd0-1598-41cd-8950-8694ed9f62d0/8fb90472-940b-42ff-bdc3-97ce0c39d3d8';
+    // 기본 스토리지 버킷을 가져옵니다.
+      const bucket = admin.storage().bucket();
+      const file = bucket.file(filePath);
+
+      const [exists] = await file.exists();
+
+        // 7. 파일이 있으면 공개 URL을 가져와서 배치에 업데이트 작업 추가
+        const [url] = await file.getSignedUrl({
+          action: 'read',
+          expires: '03-09-2491', // 사실상 영구적인 URL
+        });
+        console.log(url);
+
+
+}
+
+getAudioPath();
