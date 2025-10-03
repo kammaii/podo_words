@@ -1,0 +1,91 @@
+import 'package:card_swiper/card_swiper.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:podo_words/learning/controllers/learning_controller.dart';
+import 'package:podo_words/learning/models/word_model.dart';
+import 'package:podo_words/learning/widgets/audio_button.dart';
+
+class WordCard extends StatefulWidget {
+  WordCard({super.key});
+
+  @override
+  State<WordCard> createState() => _WordCardState();
+}
+
+class _WordCardState extends State<WordCard> {
+  final controller = Get.find<LearningController>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Expanded(
+          child: Swiper(
+            itemBuilder: (context, index) {
+              if (index >= controller.words.length) {
+                return SizedBox.shrink();
+              } else {
+                Word word = controller.words[index];
+                return Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Card(
+                    color: Colors.white,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 50.0),
+                          child: controller.imageService.getCachedImage(word.id),
+                        ),
+                        SizedBox(height: 20.0),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              word.front,
+                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                            ),
+                            SizedBox(height: 5.0),
+                            Text(
+                              word.pronunciation,
+                              style: TextStyle(
+                                fontSize: 20,
+                              ),
+                            ),
+                            SizedBox(height: 30.0),
+                            Text(
+                              word.back,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 20),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }
+            },
+            loop: false,
+            itemCount: controller.words.length + 1,
+            viewportFraction: 0.7,
+            scale: 0.7,
+            onIndexChanged: (index) {
+              setState(() {
+                if (index > controller.wordIndex.value) {
+                  controller.swipeWordCard(isNext: true);
+                } else {
+                  controller.swipeWordCard(isNext: false);
+                }
+              });
+            },
+          ),
+        ),
+        controller.wordIndex.value < controller.words.length
+            ? Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20.0), child: AudioButton(controller.currentWord))
+            : const SizedBox.shrink(),
+      ],
+    );
+  }
+}

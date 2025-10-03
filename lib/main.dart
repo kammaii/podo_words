@@ -3,7 +3,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:podo_words/logo.dart';
+import 'package:podo_words/logo_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
       title: 'podo_words',
       theme: ThemeData(
       ),
-      home: new Logo(),
+      home: new LogoPage(),
     );
   }
 }

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:podo_words/common/my_colors.dart';
-import 'package:podo_words/learning/main_topic_list.dart';
-import 'package:podo_words/review/main_review.dart';
+import 'package:podo_words/learning/pages/topic_list_page.dart';
+import 'package:podo_words/review/review_list_page.dart';
 
 class MainFrame extends StatefulWidget {
 
@@ -13,7 +13,7 @@ class MainFrame extends StatefulWidget {
 }
 
 class _MainFrameState extends State<MainFrame> {
-  List<Widget> pageList = [MainTopicList(), MainReview()];
+  List<Widget> pageList = [TopicListPage(), ReviewListPage()];
   int pageIndex = 0;
   bool shouldShowReview = Get.arguments ?? false;
 
