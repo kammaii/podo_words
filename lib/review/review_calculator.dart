@@ -26,6 +26,13 @@ class ReviewCalculator {
   ReviewStatus getStatus(Word myWord) {
     final now = DateTime.now();
     final reviewInterval = _reviewIntervals[myWord.reviewCount] ?? const Duration(days: 60);
+
+    /// lastStudied 값을 업데이트 할 경우 일시적으로 FieldValue.serverTimestamp() 값이 null이 되는 문제가 발생
+    /// 이를 방지하기 위해 아래 코드를 추가
+    if (myWord.lastStudied == null) {
+      return ReviewStatus(priority: ReviewPriority.Good, memoryPercent: 1.0);
+    }
+
     final timeSinceLastStudy = now.difference(myWord.lastStudied!);
 
     // --- 기억 강도(%) 계산 ---

@@ -32,7 +32,6 @@ class LearningController extends GetxController {
     content = [];
     content.add(WordCard());
     isLastWord = false;
-    learningMode = LearningMode.learnNew;
     await Future.wait([
       audioController.cacheAllAudioFiles(words),
       imageService.cacheImageFiles(words),

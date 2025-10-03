@@ -176,17 +176,46 @@ class ReviewPageState extends State<ReviewListPage> {
 
                 // --- 단어 개수 및 안내 문구 ---
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(5),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Expanded(child: Text(
-                          '- Swipe to activate/deactivate.',
-                          style: TextStyle(color: MyColors().purple, fontSize: 15)
-                      )),
-                      Icon(Icons.assistant_photo_outlined, color: MyColors().purple),
-                      Text(myWordsInList.length.toString(), style: TextStyle(fontSize: 20.0,
-                          fontWeight: FontWeight.bold,
-                          color: MyColors().purple)),
+                      IconButton(
+                        icon: Icon(Icons.info_outline_rounded, color: MyColors().purple),
+                        onPressed: () {
+                          Get.dialog(
+                            AlertDialog(
+                              title: Row(
+                                children: [
+                                  Icon(Icons.info_outline_rounded),
+                                  SizedBox(width: 10),
+                                  Text('Quick Guide'),
+                                ],
+                              ),
+                              content: const Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('💡 \nSwipe any word to toggle it active/inactive.', style: TextStyle(fontSize: 16)),
+                                  SizedBox(height: 15),
+                                  Text('💡 \nThe percentage (%) indicates your memory strength. Review words with a lower percentage first!', style: TextStyle(fontSize: 16)),
+                                ],
+                              ),
+                              actions: [
+                                TextButton(onPressed: () => Get.back(), child: const Text('OK')),
+                              ],
+                            )
+                          );
+                        },
+                      ),
+                      Row(
+                        children: [
+                          Icon(Icons.assistant_photo_outlined, color: MyColors().purple),
+                          Text(myWordsInList.length.toString(), style: TextStyle(fontSize: 20.0,
+                              fontWeight: FontWeight.bold,
+                              color: MyColors().purple)),
+                        ],
+                      )
                     ],
                   ),
                 ),
