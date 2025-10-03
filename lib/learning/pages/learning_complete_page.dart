@@ -8,6 +8,7 @@ import 'package:podo_words/learning/models/word_model.dart';
 import 'package:podo_words/learning/controllers/learning_controller.dart';
 import 'package:podo_words/main_frame.dart';
 import '../../database/database_service.dart';
+import '../controllers/ads_controller.dart';
 import '../widgets/show_snack_bar.dart';
 
 class LearningCompletePage extends StatefulWidget {
@@ -20,6 +21,7 @@ class LearningCompletePage extends StatefulWidget {
 class _LearningCompletePageState extends State<LearningCompletePage> {
   final learningController = Get.find<LearningController>();
   final userController = Get.find<UserController>();
+  final AdsController adsController = Get.find<AdsController>();
 
   // 비동기 작업들을 한 번만 실행하기 위한 Future
   late final Future<Map<String, int>> _completionFuture;
@@ -129,8 +131,17 @@ class _LearningCompletePageState extends State<LearningCompletePage> {
                             if(countNewWords > 0) {
                               ShowSnackBar().getSnackBar(context, '$countNewWords new words are added to your review list');
                             }
-                            // isFirstLesson 로직은 필요 시 userController에서 관리 가능
-                            Get.offAll(() => MainFrame());
+
+                            // MainFrame으로 이동하는 로직을 함수로 정의
+                            final navigateToMain = () => Get.offAll(() => MainFrame());
+
+                            if(learningController.learningMode == LearningMode.review && !userController.isPremium && !userController.isNewUser) {
+                              adsController.showInterstitialAd(onAdClosed: navigateToMain);
+                            } else {
+                              // isFirstLesson 로직은 필요 시 userController에서 관리 가능
+                              navigateToMain();
+                            }
+
                           },
                           child: Material(
                             color: MyColors().purple,

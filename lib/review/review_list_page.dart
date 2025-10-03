@@ -270,7 +270,7 @@ class ReviewPageState extends State<ReviewListPage> {
 
   CupertinoActionSheet _playBtnClick(List<Word> myWordsInList) {
 
-    final shouldShowAds = !userController.user.value!.isPremium;
+    final shouldShowAds = !userController.isPremium;
 
     return CupertinoActionSheet(
       message: const Text('Select review mode', style: TextStyle(fontSize: 20)),
