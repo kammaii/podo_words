@@ -119,7 +119,8 @@ class _LearningQuiz2State extends State<LearningQuiz2> {
 
     return GridView.builder(
       shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(), // Expanded 위젯 내부이므로 스크롤 방지
+      physics: const NeverScrollableScrollPhysics(),
+      // Expanded 위젯 내부이므로 스크롤 방지
       itemCount: _quizWords.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
@@ -161,14 +162,16 @@ class _LearningQuiz2State extends State<LearningQuiz2> {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.withOpacity(0.2),
+                    color: Colors.grey.withAlpha(50),
                     spreadRadius: 1,
                     blurRadius: 3,
                   )
                 ],
               ),
               child: Center(
-                child: Text(text, textAlign: TextAlign.center, style: const TextStyle(fontSize: 20)),
+                child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(text, textAlign: TextAlign.center, style: const TextStyle(fontSize: 20))),
               ),
             ),
           );
@@ -185,17 +188,11 @@ class _LearningQuiz2State extends State<LearningQuiz2> {
       child: Column(
         children: [
           Expanded(
-            child: Container(
-                alignment: Alignment.center,
-                child: _buildWordsGrid(isFront: true)
-            ),
+            child: Container(alignment: Alignment.center, child: _buildWordsGrid(isFront: true)),
           ),
           DividerText().getDivider('match correct words'),
           Expanded(
-            child: Container(
-                alignment: Alignment.center,
-                child: _buildWordsGrid(isFront: false)
-            ),
+            child: Container(alignment: Alignment.center, child: _buildWordsGrid(isFront: false)),
           ),
         ],
       ),

@@ -171,10 +171,9 @@ class _TopicListPageState extends State<TopicListPage> {
                       return Row(
                         children: [
                           Image.asset(
-                            'assets/icon/podo.png',
+                            userController.hasStudyToday ? 'assets/icon/podo.png' : 'assets/icon/podo_grey.png',
                             width: 25,
                             height: 25,
-                            color: userController.hasStudyToday ? null : Colors.grey,
                           ),
                           Text(
                             'x ${userController.currentStreak.toString()}',

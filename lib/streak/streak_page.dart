@@ -75,10 +75,9 @@ class StreakPage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 50),
                   child: Image.asset(
-                    'assets/icon/podo.png',
+                    hasStudyToday ? 'assets/icon/podo.png' : 'assets/icon/podo_grey.png',
                     width: 130,
                     height: 130,
-                    color: hasStudyToday ? null : Colors.grey,
                   ),
                 ),
                 Text('Streak Grapes', style: TextStyle(fontSize: 20, color: Colors.grey)),

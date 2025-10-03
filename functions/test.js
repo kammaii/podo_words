@@ -729,4 +729,86 @@ async function updateAudioUrls() {
   }
 }
 
-updateAudioUrls();
+async function checkLoraDatabase() {
+// 1. 'MyWords' 컬렉션에서 모든 문서 ID를 가져옵니다.
+    const myWordsCollectionPath = 'Users/sNpdMfF8LuUfUmnKxwcCE0WDdGt1/MyWords';
+    console.log(`1. '${myWordsCollectionPath}'에서 문서 ID를 가져오는 중...`);
+
+    const myWordsSnapshot = await db.collection(myWordsCollectionPath).get();
+
+    // 문서 ID만 추출하여 배열에 저장합니다. (문서 자체가 아니라 ID만 필요)
+    const myWordIds = myWordsSnapshot.docs.map(doc => doc.id);
+
+    if (myWordIds.length === 0) {
+        console.log("👉 MyWords 컬렉션에 문서가 없습니다. 작업을 종료합니다.");
+        return;
+    }
+    console.log(`✅ 가져온 MyWords ID (${myWordIds.length}개):`, myWordIds);
+    console.log("-----------------------------------------");
+
+    // 2. 'Words' 컬렉션 그룹에서 일치하는 문서를 찾습니다.
+    console.log("2. Topics 컬렉션 그룹에서 일치하는 'Words' 문서를 검색하는 중...");
+
+    // **컬렉션 그룹 쿼리 사용**: 데이터베이스의 모든 'Words' 컬렉션에 접근합니다.
+    const wordsCollectionGroupRef = db.collectionGroup('Words');
+
+    // Firestore `in` 쿼리는 최대 10개의 요소만 지원합니다.
+    // myWordIds가 10개를 초과할 수 있으므로, 배열을 10개 단위로 분할하여 처리해야 합니다.
+    const batchSize = 10;
+    const batches = [];
+    for (let i = 0; i < myWordIds.length; i += batchSize) {
+        batches.push(myWordIds.slice(i, i + batchSize));
+    }
+
+    let totalMatches = 0;
+
+    for (const batch of batches) {
+        // Words 문서의 ID는 Topic 문서의 ID와는 다를 수 있습니다.
+        // 따라서 MyWords의 ID가 Words 문서의 ID와 일치하는지 확인하기 위해
+        // Words 문서의 ID를 기준으로 쿼리를 실행합니다.
+
+        // **중요:** where(admin.firestore.FieldPath.documentId(), 'in', batch)를 사용합니다.
+        const query = wordsCollectionGroupRef.where('id', 'in', batch);
+
+        const matchingWordsSnapshot = await query.get();
+
+        console.log(`\n** 검색 결과 (배치 ${batches.indexOf(batch) + 1}/${batches.length}) **`);
+
+        if (matchingWordsSnapshot.empty) {
+            console.log("  ➡️ 일치하는 Words 문서를 찾지 못했습니다.");
+            continue;
+        }
+
+        matchingWordsSnapshot.forEach(doc => {
+            const wordData = doc.data();
+            const front = wordData.front;
+
+            console.log(`  🔍 ID: ${doc.id} | front: "${front}"`);
+            totalMatches++;
+        });
+    }
+
+    console.log("-----------------------------------------");
+    console.log(`🎉 모든 검색 완료. 총 ${totalMatches}개의 일치하는 단어의 'front' 필드를 출력했습니다.`);
+
+}
+
+async function getAudioPath() {
+    const filePath = 'audios/8a086dd0-1598-41cd-8950-8694ed9f62d0/8fb90472-940b-42ff-bdc3-97ce0c39d3d8';
+    // 기본 스토리지 버킷을 가져옵니다.
+      const bucket = admin.storage().bucket();
+      const file = bucket.file(filePath);
+
+      const [exists] = await file.exists();
+
+        // 7. 파일이 있으면 공개 URL을 가져와서 배치에 업데이트 작업 추가
+        const [url] = await file.getSignedUrl({
+          action: 'read',
+          expires: '03-09-2491', // 사실상 영구적인 URL
+        });
+        console.log(url);
+
+
+}
+
+checkLoraDatabase();

@@ -84,9 +84,9 @@ class ReviewPageState extends State<ReviewListPage> {
           // 2. 'Priority' 탭일 경우 우선순위로 정렬
           if (_currentFilter == ReviewFilter.Priority) {
             filteredWords.sort((a, b) {
-              final priorityA = _reviewCalculator.getPriority(a).index;
-              final priorityB = _reviewCalculator.getPriority(b).index;
-              return priorityA.compareTo(priorityB); // Urgent(0)가 맨 위로 오도록 정렬
+              final statusA = _reviewCalculator.getStatus(a);
+              final statusB = _reviewCalculator.getStatus(b);
+              return statusA.memoryPercent.compareTo(statusB.memoryPercent); // Urgent(0)가 맨 위로 오도록 정렬
             });
           }
 
@@ -176,17 +176,46 @@ class ReviewPageState extends State<ReviewListPage> {
 
                 // --- 단어 개수 및 안내 문구 ---
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(5),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Expanded(child: Text(
-                          '- Swipe to activate/deactivate.',
-                          style: TextStyle(color: MyColors().purple, fontSize: 15)
-                      )),
-                      Icon(Icons.assistant_photo_outlined, color: MyColors().purple),
-                      Text(myWordsInList.length.toString(), style: TextStyle(fontSize: 20.0,
-                          fontWeight: FontWeight.bold,
-                          color: MyColors().purple)),
+                      IconButton(
+                        icon: Icon(Icons.info_outline_rounded, color: MyColors().purple),
+                        onPressed: () {
+                          Get.dialog(
+                            AlertDialog(
+                              title: Row(
+                                children: [
+                                  Icon(Icons.info_outline_rounded),
+                                  SizedBox(width: 10),
+                                  Text('Quick Guide'),
+                                ],
+                              ),
+                              content: const Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('💡 \nSwipe any word to toggle it active/inactive.', style: TextStyle(fontSize: 16)),
+                                  SizedBox(height: 15),
+                                  Text('💡 \nThe percentage (%) indicates your memory strength. Review words with a lower percentage first!', style: TextStyle(fontSize: 16)),
+                                ],
+                              ),
+                              actions: [
+                                TextButton(onPressed: () => Get.back(), child: const Text('OK')),
+                              ],
+                            )
+                          );
+                        },
+                      ),
+                      Row(
+                        children: [
+                          Icon(Icons.assistant_photo_outlined, color: MyColors().purple),
+                          Text(myWordsInList.length.toString(), style: TextStyle(fontSize: 20.0,
+                              fontWeight: FontWeight.bold,
+                              color: MyColors().purple)),
+                        ],
+                      )
                     ],
                   ),
                 ),
@@ -197,13 +226,13 @@ class ReviewPageState extends State<ReviewListPage> {
                       itemCount: myWordsInList.length,
                       itemBuilder: (context, index) {
                         final myWord = myWordsInList[index];
-                        final priority = _reviewCalculator.getPriority(myWord);
+                        final status = _reviewCalculator.getStatus(myWord);
                         final isActive = !inactiveWordIds.contains(myWord.id);
 
                         return ReviewWordTile(
-                          key: ValueKey(myWord.id),
+                          key: ValueKey('${myWord.id}_$isActive'),
                           myWord: myWord,
-                          priority: priority,
+                          status: status,
                           isActive: isActive,
                         );
                       },
